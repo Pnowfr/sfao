@@ -127,16 +127,44 @@ Public Class X3WebServ
     'Web service qui récupère la situation du poste
     Public Function WSGETSITPS(ByVal _cod As String, ByVal _sit As String) As WSSitPs
         Dim params As String
+        Dim retxml As String = String.Empty
         Dim json As New WSSitPs
+        Dim settings As JsonSerializerSettings
 
+        settings = New JsonSerializerSettings() With {
+                    .NullValueHandling = NullValueHandling.Ignore,
+                    .MissingMemberHandling = MissingMemberHandling.Ignore,
+                    .DateFormatString = "yyyyMMdd"
+                }
+        json.GRP1.WST = _cod
+        json.GRP1.FCY = _sit
+
+        params = ClassToJson(Of WSSitPs)(json, False, settings)
+        If X3WSC.Run("WSGETSITPS", params, retxml, True) = 1 Then
+            json = JsonToClass(Of WSSitPs)(retxml, settings)
+        End If
 
         Return json
     End Function
     'Web service qui récupère la situation des OF/Opé
     Public Function WSGETSITOF(ByVal _cod As String, ByVal _sit As String) As WSSitOF
         Dim params As String
+        Dim retxml As String = String.Empty
         Dim json As New WSSitOF
+        Dim settings As JsonSerializerSettings
 
+        settings = New JsonSerializerSettings() With {
+                    .NullValueHandling = NullValueHandling.Ignore,
+                    .MissingMemberHandling = MissingMemberHandling.Ignore,
+                    .DateFormatString = "yyyyMMdd"
+                }
+        json.GRP1.WST = _cod
+        json.GRP1.FCY = _sit
+
+        params = ClassToJson(Of WSSitOF)(json, False, settings)
+        If X3WSC.Run("WSGETSITOF", params, retxml, True) = 1 Then
+            json = JsonToClass(Of WSSitOF)(retxml, settings)
+        End If
 
         Return json
     End Function
