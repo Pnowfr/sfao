@@ -1,0 +1,28 @@
+﻿5;2021/01/25 08:43:58;Ouverture de la trace connexion
+5;2021/01/25 08:43:58;C:\Users\pno\Dropbox\Projets\SFAO\SFAO-v6-f4.0\SFAO\bin\x86\Debug PNO\Traces\Trace_Cnx_20210125_08_43_58.tra
+0;2021/01/25 08:43:58;Démarrage SFAO
+0;2021/01/25 08:44:01;Activation du timer de recherche de mise à jour
+0;2021/01/25 08:44:01;Lancement de la fenêtre de connexion
+0;2021/01/25 08:44:01;Dossiers paramétrés : 
+0;2021/01/25 08:44:01;GBIV6 http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC
+0;2021/01/25 08:44:01;GBIV12 http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/25 08:44:01;GBIV12 (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/25 08:44:01;REING http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/25 08:44:01;REING (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+2;2021/01/25 08:44:04;[VerifUpdate] Erreur de lecture du chemin des mise à jours : C:\Users\fidi\Dropbox\SFAO\SFAO-v1-f4.0\SFAO-Update ! Mise à jour désactivée !
+0;2021/01/25 08:44:20;[Login] Bouton OK
+5;2021/01/25 08:44:20;Société : BRODART PACKAGING
+5;2021/01/25 08:44:20;Site : BRODART
+5;2021/01/25 08:44:20;Dossier : GBIV6
+5;2021/01/25 08:44:20;Poste : US4
+5;2021/01/25 08:44:20;Mot de passe : Sans
+0;2021/01/25 08:44:20;Instentiation du web service
+0;2021/01/25 08:44:20;Url web services : http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC
+0;2021/01/25 08:44:23;[Login] Connexion au web services
+0;2021/01/25 08:44:23;[WSGETSITE] paramètres : {"GRP1":{"FCY":"","FCYSHO":"BRODART","FCYNAM":"","DOSSIER":"GBIV6","SOCIETE":"BRODART PACKAGING","ZRET":0,"ZMSG":""}}
+0;2021/01/25 08:44:23;[WSGETSITE] résultat : {"GRP1":{"FCY":"BRO","FCYSHO":"BRODART","FCYNAM":"BRODART S.A.S.","DOSSIER":"GBIV6","SOCIETE":"BRODART PACKAGING","ZRET":"1","ZMSG":""}}
+0;2021/01/25 08:44:23;[WSGETPOSTE] paramètres : {"GRP1":{"WST":"US4","WCRFCY":"BRO","WSTDES":"","Y_TYPOP":"","STOLOC":"","ZATELOC":"","WSTTYP":0,"ZENAFLG":0,"ZGRP":0,"ZRET":0,"ZMSG":""}}
+0;2021/01/25 08:44:24;[WSGETPOSTE] résultat : {"GRP1":{"WST":"US4","WCRFCY":"BRO","WSTDES":"USIMECA 4","Y_TYPOP":"BOB","STOLOC":"MACUS4","ZATELOC":"ATL002","WSTTYP":"1","ZENAFLG":"2","ZGRP":"1","ZRET":"1","ZMSG":""}}
+3;2021/01/25 08:44:24;Erreur : aucun événement trouvé pour le poste US4 !
+0;2021/01/25 08:44:35;Résultat Login : Cancel
+5;2021/01/25 08:44:35;Fermeture de la trace
