@@ -1,0 +1,25 @@
+﻿5;2021/01/25 06:54:29;Ouverture de la trace connexion
+5;2021/01/25 06:54:29;C:\Users\pno\Dropbox\Projets\SFAO\SFAO-v6-f4.0\SFAO\bin\x86\Debug PNO\Traces\Trace_Cnx_20210125_06_54_29.tra
+0;2021/01/25 06:54:29;Démarrage SFAO
+0;2021/01/25 06:54:32;Activation du timer de recherche de mise à jour
+0;2021/01/25 06:54:32;Lancement de la fenêtre de connexion
+0;2021/01/25 06:54:32;Dossiers paramétrés : 
+0;2021/01/25 06:54:32;GBIV6 http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC
+0;2021/01/25 06:54:32;GBIV12 http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/25 06:54:32;GBIV12 (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/25 06:54:32;REING http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/25 06:54:32;REING (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/25 06:54:34;[Login] Bouton OK
+5;2021/01/25 06:54:34;Société : BRODART PACKAGING
+5;2021/01/25 06:54:34;Site : BRODART
+5;2021/01/25 06:54:34;Dossier : GBIV6
+5;2021/01/25 06:54:34;Poste : US4
+5;2021/01/25 06:54:34;Mot de passe : Sans
+0;2021/01/25 06:54:34;Instentiation du web service
+0;2021/01/25 06:54:34;Url web services : http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC
+2;2021/01/25 06:54:35;[VerifUpdate] Erreur de lecture du chemin des mise à jours : C:\Users\fidi\Dropbox\SFAO\SFAO-v1-f4.0\SFAO-Update ! Mise à jour désactivée !
+2;2021/01/25 06:54:51;[WSDTSFAO] Exception run du web service !
+2;2021/01/25 06:54:51;Le délai d'attente de l'opération a expiré.
+3;2021/01/25 06:54:51;Erreur de connexion au dossier GBIV6 !
+0;2021/01/25 06:55:16;Résultat Login : Cancel
+5;2021/01/25 06:55:16;Fermeture de la trace

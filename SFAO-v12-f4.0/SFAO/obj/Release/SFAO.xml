@@ -1,0 +1,433 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+SFAO
+</name>
+</assembly>
+<members>
+<member name="T:SFAO.My.Resources.Resources">
+<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member>
+<member name="P:SFAO.My.Resources.Resources.ResourceManager">
+<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member>
+<member name="P:SFAO.My.Resources.Resources.Culture">
+<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member>
+<member name="P:SFAO.My.Resources.Resources._0">
+<summary>
+  Recherche une ressource localisée de type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:SFAO.My.Resources.Resources._1">
+<summary>
+  Recherche une ressource localisée de type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:SFAO.My.Resources.Resources.CNXLOG">
+<summary>
+  Recherche une chaîne localisée semblable à CNXLOG;;;;;
+IDCNX;INTEGER;PRIMARY KEY;NOT NULL;;
+SITE;VARCHAR(5);;NOT NULL;DEFAULT &quot;&quot;;
+DOSSIER;VARCHAR(15);;NOT NULL;DEFAULT &quot;&quot;;
+POSTE;VARCHAR(8);;NOT NULL;DEFAULT &quot;&quot;;
+DTDEB;VARCHAR(20);;NOT NULL;DEFAULT &quot;&quot;;
+DEBUT;INT;;NOT NULL;DEFAULT 0;
+DTFIN;VARCHAR(20);;NOT NULL;DEFAULT &quot;&quot;;        
+FIN;INT;;NULL;;.
+</summary>
+</member>
+<member name="P:SFAO.My.Resources.Resources.coin">
+<summary>
+  Recherche une ressource localisée de type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:SFAO.My.Resources.Resources.icon_sfao">
+<summary>
+  Recherche une ressource localisée de type System.Drawing.Icon semblable à (Icône).
+</summary>
+</member>
+<member name="P:SFAO.My.Resources.Resources.X3OK">
+<summary>
+  Recherche une ressource localisée de type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="T:SFAO.X3WebReference.CAdxWebServiceXmlCCService">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.#ctor">
+<remarks/>
+</member>
+<member name="E:SFAO.X3WebReference.CAdxWebServiceXmlCCService.runCompleted">
+<remarks/>
+</member>
+<member name="E:SFAO.X3WebReference.CAdxWebServiceXmlCCService.saveCompleted">
+<remarks/>
+</member>
+<member name="E:SFAO.X3WebReference.CAdxWebServiceXmlCCService.deleteCompleted">
+<remarks/>
+</member>
+<member name="E:SFAO.X3WebReference.CAdxWebServiceXmlCCService.readCompleted">
+<remarks/>
+</member>
+<member name="E:SFAO.X3WebReference.CAdxWebServiceXmlCCService.queryCompleted">
+<remarks/>
+</member>
+<member name="E:SFAO.X3WebReference.CAdxWebServiceXmlCCService.getDescriptionCompleted">
+<remarks/>
+</member>
+<member name="E:SFAO.X3WebReference.CAdxWebServiceXmlCCService.modifyCompleted">
+<remarks/>
+</member>
+<member name="E:SFAO.X3WebReference.CAdxWebServiceXmlCCService.actionObjectCompleted">
+<remarks/>
+</member>
+<member name="E:SFAO.X3WebReference.CAdxWebServiceXmlCCService.actionObjectKeysCompleted">
+<remarks/>
+</member>
+<member name="E:SFAO.X3WebReference.CAdxWebServiceXmlCCService.getDataXmlSchemaCompleted">
+<remarks/>
+</member>
+<member name="E:SFAO.X3WebReference.CAdxWebServiceXmlCCService.insertLinesCompleted">
+<remarks/>
+</member>
+<member name="E:SFAO.X3WebReference.CAdxWebServiceXmlCCService.deleteLinesCompleted">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.run(SFAO.X3WebReference.CAdxCallContext,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.runAsync(SFAO.X3WebReference.CAdxCallContext,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.runAsync(SFAO.X3WebReference.CAdxCallContext,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.save(SFAO.X3WebReference.CAdxCallContext,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.saveAsync(SFAO.X3WebReference.CAdxCallContext,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.saveAsync(SFAO.X3WebReference.CAdxCallContext,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.delete(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[])">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.deleteAsync(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[])">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.deleteAsync(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.Object)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.read(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[])">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.readAsync(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[])">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.readAsync(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.Object)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.query(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.Int32)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.queryAsync(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.Int32)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.queryAsync(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.Int32,System.Object)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.getDescription(SFAO.X3WebReference.CAdxCallContext,System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.getDescriptionAsync(SFAO.X3WebReference.CAdxCallContext,System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.getDescriptionAsync(SFAO.X3WebReference.CAdxCallContext,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.modify(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.modifyAsync(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.modifyAsync(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.actionObject(SFAO.X3WebReference.CAdxCallContext,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.actionObjectAsync(SFAO.X3WebReference.CAdxCallContext,System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.actionObjectAsync(SFAO.X3WebReference.CAdxCallContext,System.String,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.actionObjectKeys(SFAO.X3WebReference.CAdxCallContext,System.String,System.String,SFAO.X3WebReference.CAdxParamKeyValue[])">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.actionObjectKeysAsync(SFAO.X3WebReference.CAdxCallContext,System.String,System.String,SFAO.X3WebReference.CAdxParamKeyValue[])">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.actionObjectKeysAsync(SFAO.X3WebReference.CAdxCallContext,System.String,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.Object)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.getDataXmlSchema(SFAO.X3WebReference.CAdxCallContext,System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.getDataXmlSchemaAsync(SFAO.X3WebReference.CAdxCallContext,System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.getDataXmlSchemaAsync(SFAO.X3WebReference.CAdxCallContext,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.insertLines(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.insertLinesAsync(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.String,System.String,System.String)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.insertLinesAsync(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.String,System.String,System.String,System.Object)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.deleteLines(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.String,System.String[])">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.deleteLinesAsync(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.String,System.String[])">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.deleteLinesAsync(SFAO.X3WebReference.CAdxCallContext,System.String,SFAO.X3WebReference.CAdxParamKeyValue[],System.String,System.String[],System.Object)">
+<remarks/>
+</member>
+<member name="M:SFAO.X3WebReference.CAdxWebServiceXmlCCService.CancelAsync(System.Object)">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.CAdxCallContext">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxCallContext.codeLang">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxCallContext.poolAlias">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxCallContext.poolId">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxCallContext.requestConfig">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.CAdxParamKeyValue">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxParamKeyValue.key">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxParamKeyValue.value">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.CAdxTechnicalInfos">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.busy">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.changeLanguage">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.changeUserId">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.flushAdx">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.loadWebsDuration">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.nbDistributionCycle">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.poolDistribDuration">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.poolEntryIdx">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.poolExecDuration">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.poolRequestDuration">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.poolWaitDuration">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.processReport">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.processReportSize">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.reloadWebs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.resumitAfterDBOpen">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.rowInDistribStack">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.totalDuration">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.traceRequest">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxTechnicalInfos.traceRequestSize">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.CAdxMessage">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxMessage.message">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxMessage.type">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.CAdxResultXml">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxResultXml.messages">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxResultXml.resultXml">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxResultXml.status">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.CAdxResultXml.technicalInfos">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.runCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.runCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.runCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.saveCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.saveCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.saveCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.deleteCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.deleteCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.deleteCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.readCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.readCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.readCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.queryCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.queryCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.queryCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.getDescriptionCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.getDescriptionCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.getDescriptionCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.modifyCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.modifyCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.modifyCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.actionObjectCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.actionObjectCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.actionObjectCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.actionObjectKeysCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.actionObjectKeysCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.actionObjectKeysCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.getDataXmlSchemaCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.getDataXmlSchemaCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.getDataXmlSchemaCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.insertLinesCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.insertLinesCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.insertLinesCompletedEventArgs.Result">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.deleteLinesCompletedEventHandler">
+<remarks/>
+</member>
+<member name="T:SFAO.X3WebReference.deleteLinesCompletedEventArgs">
+<remarks/>
+</member>
+<member name="P:SFAO.X3WebReference.deleteLinesCompletedEventArgs.Result">
+<remarks/>
+</member>
+</members>
+</doc>
