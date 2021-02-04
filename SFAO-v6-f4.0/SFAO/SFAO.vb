@@ -503,12 +503,6 @@ Module SFAO
             Exit Sub
         End Try
 
-
-        'Vérifier si le paramètre REPUPDSFAO existe + non vide 'PNO : inutile
-        'If Param("REPUPDSFAO") = "" Then
-        ' AddParam("REPUPDSFAO", "")
-        'End If
-
         'Vérifier si dans le dossier Update (indiqué par le paramètre), on a une verssion + récente
         'Vérifier si le nom du dernier dossier de la liste est le même que la version actuelle
         Dim listVersionLength As Integer = versionslist.Count
@@ -521,12 +515,15 @@ Module SFAO
             Trace("[VerifUpdate] Version SFAO plus récente trouvée : " & lastVersion & " , lancement de la mise à jour.", FichierTrace.niveau.toujours)
             'Si on a une version + récente on vérifie si SFAO-Upd.exe est plus récent(??), si oui on le copie dans le dossier de l'appli client
             Dim repSFAO_UpdExePath As String = repUpdSfao & "\" & lastVersion
+            Dim repSFAO_UpdExe As String = repUpdSfao & "\" & lastVersion & "\" & sfaoUpdateExe
+            'Le répertoire de la version
+            Dim repertoireAppliClient As String = sfaoPath & "\" & sfaoUpdateExe
             'Vérifier si le fichier SFAO-Upd.exe existe
             If File.Exists(Path.Combine(repSFAO_UpdExePath, sfaoUpdateExe)) Then
                 Trace("[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée, " & " , copie en local.", FichierTrace.niveau.toujours)
                 'On le copie dans le dossier de l'appli client
                 Try
-                    FileIO.FileSystem.CopyDirectory(sfaoPath, repSFAO_UpdExePath)
+                    FileIO.FileSystem.CopyDirectory(repSFAO_UpdExe, repertoireAppliClient)
                 Catch ex As Exception
                     CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
                     Trace("[VerifUpdate] Erreur de copie de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)

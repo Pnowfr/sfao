@@ -4,9 +4,6 @@ Imports System.Xml
 
 Public Class Upd
     Private Sub Upd_Load(sender As Object, e As EventArgs) Handles Me.Load
-        'Pour le test : 
-        'Chemin vieille version : C:\Users\fidi\Desktop\Encours\SFAO-v1-f4.0\SFAO\bin\x86\Debug
-        'Chemin nouvelle version : C:\Users\fidi\Desktop\Encours\SFAO-v1-f4.0\Serveur-Upd
         Dim reperVieilleVersion As String = CType(My.Settings.Item("pathVieilleVersion"), String)
         Dim reperNouvelleVersion As String = CType(My.Settings.Item("pathNouvelleVersion"), String)
         Dim reperUpdSfao As String = CType(My.Settings.Item("pathConfigFile"), String)
@@ -70,8 +67,7 @@ Public Class Upd
             If lastVersion.Equals(version) Then
                 MsgBox("Pas de mise à jour disponible")
             Else
-                'Verifier si mise à jour obligatoire (bouton OK) ou facultative (boutons OK/Annuler)
-                'TODO Question à poser
+                'Verifier si mise à jour obligatoire (bouton OK) ou facultative (boutons OK/Annuler)move
                 If Not (lastVersion.Substring(1, 3).Equals(version.Substring(1, 3))) Then
                     Console.WriteLine(version.Substring(4, 3) & "-" & lastVersion.Substring(4, 3))
                     'Mise à jour obligatoire
