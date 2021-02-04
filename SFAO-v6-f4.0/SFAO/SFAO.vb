@@ -29,7 +29,7 @@ Module SFAO
         OuvreTrace()
         Trace("Démarrage SFAO")
 
-        'TODO : Tests PNO (à enlever)  
+        'TODO : Tests PNO  (à enlever)  
         'Test = True
 
         Logo.Show()                                     'Affichage du logo (sera masqué à l'affichage de la fanêtre de connexion)
