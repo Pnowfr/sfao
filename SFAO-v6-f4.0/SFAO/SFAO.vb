@@ -514,7 +514,7 @@ Module SFAO
         Else
             Trace("[VerifUpdate] Version SFAO plus récente trouvée : " & lastVersion & " , lancement de la mise à jour.", FichierTrace.niveau.toujours)
             'Si on a une version + récente on vérifie si SFAO-Upd.exe est plus récent(??), si oui on le copie dans le dossier de l'appli client
-            Dim repSFAO_UpdExePath As String = repUpdSfao & "\" & lastVersion
+            Dim repSFAO_UpdExePath As String = repUpdSfao & "\" & lastVersion & "\"
             Dim repSFAO_UpdExe As String = repUpdSfao & "\" & lastVersion & "\" & sfaoUpdateExe
             'Le répertoire de la version
             Dim repertoireAppliClient As String = sfaoPath & "\" & sfaoUpdateExe
@@ -523,7 +523,11 @@ Module SFAO
                 Trace("[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée, " & " , copie en local.", FichierTrace.niveau.toujours)
                 'On le copie dans le dossier de l'appli client
                 Try
-                    FileIO.FileSystem.CopyDirectory(repSFAO_UpdExe, repertoireAppliClient)
+                    My.Computer.FileSystem.CopyFile(
+                repSFAO_UpdExe,
+                repertoireAppliClient,
+                FileIO.UIOption.AllDialogs,
+                FileIO.UICancelOption.DoNothing)
                 Catch ex As Exception
                     CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
                     Trace("[VerifUpdate] Erreur de copie de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
@@ -534,7 +538,10 @@ Module SFAO
             'On execute SFAO-upd.exe soit le récent copié soit l'ancien déjà existant
             Try
                 Trace("[VerifUpdate] Lancement de SFAO-Upd.exe", FichierTrace.niveau.toujours)
-                proc.Start(sfaoPath & "\" & sfaoUpdateExe)
+                Dim p As New ProcessStartInfo
+                p.FileName = repertoireAppliClient
+                ' Start the process.
+                Process.Start(p)
             Catch ex As Exception
                 CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
                 Trace("[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
