@@ -1,0 +1,15 @@
+﻿5;2021/01/06 11:05:10;Ouverture de la trace connexion
+5;2021/01/06 11:05:10;C:\Users\pno\Dropbox\Projets\SFAO\SFAO-v1-f4.0\SFAO\bin\x86\Debug PNO\Traces\Trace_Cnx_20210106_11_05_10.tra
+0;2021/01/06 11:05:10;Démarrage SFAO
+0;2021/01/06 11:05:12;Activation du timer de recherche de mise à jour
+0;2021/01/06 11:05:12;Lancement de la fenêtre de connexion
+0;2021/01/06 11:05:12;Dossiers paramétrés : 
+0;2021/01/06 11:05:12;GBIV12 http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/06 11:05:13;GBIV12 (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/06 11:05:13;REING http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/06 11:05:13;REING (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+5;2021/01/06 11:05:15;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/01/06 11:05:15;[VerifUpdate] Lancement de SFAO-Upd.exe
+2;2021/01/06 11:05:16;[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour impossible !
+0;2021/01/06 11:05:41;Résultat Login : Cancel
+5;2021/01/06 11:05:41;Fermeture de la trace
