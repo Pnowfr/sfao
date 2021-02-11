@@ -180,6 +180,10 @@ C:\Projets\SFAO\SFAO-v6-f4.0\SFAO\bin\x86\Debug PNO\EntityFramework.xml
 C:\Projets\SFAO\SFAO-v6-f4.0\SFAO\bin\x86\Debug PNO\EntityFramework.SqlServer.xml
 C:\Projets\SFAO\SFAO-v6-f4.0\SFAO\bin\x86\Debug PNO\Newtonsoft.Json.xml
 C:\Projets\SFAO\SFAO-v6-f4.0\SFAO\bin\x86\Debug PNO\System.Data.SQLite.xml
+<<<<<<< HEAD
+=======
+C:\Projets\SFAO\SFAO-v6-f4.0\SFAO\obj\x86\Dbg PNO\SFAO.vbprojAssemblyReference.cache
+>>>>>>> c8f835982e5292012bc633ab0060f24a843a0b02
 C:\Projets\SFAO\SFAO-v6-f4.0\SFAO\obj\x86\Dbg PNO\SFAO.AUTOCTRL.resources
 C:\Projets\SFAO\SFAO-v6-f4.0\SFAO\obj\x86\Dbg PNO\SFAO.DEBOP.resources
 C:\Projets\SFAO\SFAO-v6-f4.0\SFAO\obj\x86\Dbg PNO\SFAO.DEBRGL.resources

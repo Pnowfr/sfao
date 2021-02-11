@@ -1,0 +1,13 @@
+﻿5;2021/01/21 16:47:34;Ouverture de la trace connexion
+5;2021/01/21 16:47:34;C:\Users\pno\Dropbox\Projets\SFAO\SFAO-v1-f4.0\SFAO\bin\x86\Debug PNO\Traces\Trace_Cnx_20210121_16_47_34.tra
+0;2021/01/21 16:47:34;Démarrage SFAO
+0;2021/01/21 16:47:36;Activation du timer de recherche de mise à jour
+0;2021/01/21 16:47:36;Lancement de la fenêtre de connexion
+0;2021/01/21 16:47:36;Dossiers paramétrés : 
+0;2021/01/21 16:47:36;GBIV6 http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC
+0;2021/01/21 16:47:36;GBIV12 http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/21 16:47:36;GBIV12 (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/21 16:47:36;REING http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/21 16:47:36;REING (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/01/21 16:47:39;Résultat Login : Cancel
+5;2021/01/21 16:47:39;Fermeture de la trace
