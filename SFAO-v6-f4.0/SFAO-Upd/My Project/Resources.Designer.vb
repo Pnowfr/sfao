@@ -61,7 +61,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Recherche une chaîne localisée semblable à C:\Users\fidi\Desktop\Encours\SFAO-v1-f4.0\SFAO\bin\x86\Release\SFAO.exe.Config.
+        '''  Recherche une chaîne localisée semblable à C:\Projets\SFAO\sfao\SFAO-v6-f4.0\SFAO\bin\x86\Release.
         '''</summary>
         Friend ReadOnly Property pathConfigFile() As String
             Get
@@ -70,7 +70,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Recherche une chaîne localisée semblable à C:\Users\fidi\Desktop\Encours\SFAO-v1-f4.0\Serveur-Upd.
+        '''  Recherche une chaîne localisée semblable à C:\Projets\SFAO\sfao\SFAO-v6-f4.0\Serveur-Upd.
         '''</summary>
         Friend ReadOnly Property pathNouvelleVersion() As String
             Get
@@ -79,7 +79,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Recherche une chaîne localisée semblable à C:\Users\fidi\Desktop\Encours\SFAO-v1-f4.0\SFAO\bin\x86\Debug.
+        '''  Recherche une chaîne localisée semblable à C:\Projets\SFAO\sfao\SFAO-v6-f4.0\SFAO\bin\x86\Debug.
         '''</summary>
         Friend ReadOnly Property pathVieilleVersion() As String
             Get
