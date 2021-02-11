@@ -4,8 +4,6 @@ Imports System.Xml
 
 Public Class Upd
     Private Sub Upd_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim reperVieilleVersion As String = CType(My.Settings.Item("pathVieilleVersion"), String)
-        Dim reperNouvelleVersion As String = CType(My.Settings.Item("pathNouvelleVersion"), String)
         Dim reperUpdSfao As String = CType(My.Settings.Item("pathConfigFile"), String)
         Dim valParamREPUPDSFAO As String = GetParamValue(reperUpdSfao, "REPUPDSFAO")
         Dim valParamREPTRACECONNEXION As String = GetParamValue(reperUpdSfao, "REPTRACECONNEXION")
@@ -58,7 +56,8 @@ Public Class Upd
         Dim lastVersion As String = versionslist(listVersionLength - 1)
 
         'Pour avoir le répertoire plus précis de la nouvelle version (inclus le fichier de la version)
-        Dim reperReelNvVersion = reperNouvelleVersion & "\" & lastVersion
+        Dim reperReelNvVersion = valParamREPUPDSFAO & "\" & lastVersion
+
         'Vérifier si l'application sfao tourne, si OK, on crée le fichier sfao.close
         If File.Exists(checkSfaoRun) Then
             File.Create(Path.Combine(sfaoPath, sfaoClose))
@@ -71,13 +70,13 @@ Public Class Upd
                 If Not (lastVersion.Substring(1, 3).Equals(version.Substring(1, 3))) Then
                     Console.WriteLine(version.Substring(4, 3) & "-" & lastVersion.Substring(4, 3))
                     'Mise à jour obligatoire
-                    MisAJourVersion(sfaoClose, reperVieilleVersion, reperReelNvVersion, checkSfaoClose, lastVersion)
+                    MisAJourVersion(sfaoClose, sfaoPath, reperReelNvVersion, checkSfaoClose, lastVersion)
                 ElseIf Not (lastVersion.Substring(4, 3).Equals(version.Substring(4, 3))) Then 'Si c'est une mise à jour non obligatoire
                     Response = MsgBox(Prompt:="Nouvelle version disponible: " + lastVersion + vbNewLine + "Voulez-vous mettre à jour vers cette nouvelle version?", Buttons:=vbYesNo)
                     If Response = vbYes Then
                         'Traiter le cas si on met à jour
                         'Mise à jour en cours
-                        MisAJourVersion(sfaoClose, reperVieilleVersion, reperReelNvVersion, checkSfaoClose, lastVersion)
+                        MisAJourVersion(sfaoClose, sfaoPath, reperReelNvVersion, checkSfaoClose, lastVersion)
                     End If
                 End If
             End If

@@ -1,15 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" UseMySettingsClassName="true">
   <Profiles />
-  <Settings>
-    <Setting Name="pathConfigFile" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Projets\SFAO\sfao\SFAO-v6-f4.0\SFAO\bin\x86\Release</Value>
-    </Setting>
-    <Setting Name="pathVieilleVersion" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Projets\SFAO\sfao\SFAO-v6-f4.0\SFAO\bin\x86\Debug</Value>
-    </Setting>
-    <Setting Name="pathNouvelleVersion" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Projets\SFAO\sfao\SFAO-v6-f4.0\Serveur-Upd</Value>
-    </Setting>
-  </Settings>
+  <Settings />
 </SettingsFile>
