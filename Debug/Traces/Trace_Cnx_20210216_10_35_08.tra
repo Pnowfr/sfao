@@ -1,0 +1,44 @@
+﻿5;2021/02/16 10:35:08;Ouverture de la trace connexion
+5;2021/02/16 10:35:08;C:\Projets\SFAO\Debug\Traces\Trace_Cnx_20210216_10_35_08.tra
+0;2021/02/16 10:35:08;Démarrage SFAO
+0;2021/02/16 10:35:11;Activation du timer de recherche de mise à jour
+0;2021/02/16 10:35:11;Lancement de la fenêtre de connexion
+0;2021/02/16 10:35:11;Dossiers paramétrés : 
+0;2021/02/16 10:35:11;GBIV6 http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC
+0;2021/02/16 10:35:11;GBIV12 http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/02/16 10:35:11;GBIV12 (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/02/16 10:35:11;REING http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/02/16 10:35:11;REING (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+5;2021/02/16 10:35:14;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/16 10:35:14;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/16 10:35:17;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/16 10:35:17;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/16 10:35:20;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/16 10:35:20;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/16 10:35:23;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/16 10:35:23;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/16 10:35:26;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/16 10:35:26;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/16 10:35:27;[VerifUpdate] Lancement de SFAO-Upd.exe
+2;2021/02/16 10:35:27;[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour désactivée !
+5;2021/02/16 10:35:30;[VerifUpdate] Lancement de SFAO-Upd.exe
+2;2021/02/16 10:35:30;[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour désactivée !
+5;2021/02/16 10:35:32;[VerifUpdate] Lancement de SFAO-Upd.exe
+2;2021/02/16 10:35:32;[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour désactivée !
+5;2021/02/16 10:35:36;[VerifUpdate] Lancement de SFAO-Upd.exe
+2;2021/02/16 10:35:36;[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour désactivée !
+5;2021/02/16 10:35:36;[VerifUpdate] Lancement de SFAO-Upd.exe
+2;2021/02/16 10:35:36;[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour désactivée !
+0;2021/02/16 10:35:42;[Login] Bouton OK
+5;2021/02/16 10:35:42;Société : BRODART PACKAGING
+5;2021/02/16 10:35:42;Site : BRODART
+5;2021/02/16 10:35:42;Dossier : GBIV6
+5;2021/02/16 10:35:42;Poste : US4
+5;2021/02/16 10:35:42;Mot de passe : Sans
+0;2021/02/16 10:35:42;Instentiation du web service
+0;2021/02/16 10:35:45;Url web services : http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC
+2;2021/02/16 10:36:03;[WSDTSFAO] Exception run du web service !
+2;2021/02/16 10:36:03;Le délai d'attente de l'opération a expiré.
+3;2021/02/16 10:36:03;Erreur de connexion au dossier GBIV6 !
+0;2021/02/16 10:36:06;Résultat Login : Cancel
+5;2021/02/16 10:36:06;Fermeture de la trace

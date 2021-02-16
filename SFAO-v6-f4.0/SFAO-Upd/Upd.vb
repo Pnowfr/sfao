@@ -4,7 +4,8 @@ Imports System.Xml
 
 Public Class Upd
     Private Sub Upd_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim reperUpdSfao As String = CType(My.Settings.Item("pathConfigFile"), String)
+        Dim sfaoPath As String = Application.StartupPath
+        Dim reperUpdSfao As String = sfaoPath.ToString & "\SFAO.exe.config"
         Dim valParamREPUPDSFAO As String = GetParamValue(reperUpdSfao, "REPUPDSFAO")
         Dim valParamREPTRACECONNEXION As String = GetParamValue(reperUpdSfao, "REPTRACECONNEXION")
         Dim valParamREPTRACESFAO As String = GetParamValue(reperUpdSfao, "REPTRACESFAO")
@@ -40,8 +41,7 @@ Public Class Upd
         'Vérifier si dans le dossier Update (indiqué par le paramètre), on a une version + récente
         Dim version As String = Application.ProductVersion
         Dim sfaoClose As String = "sfao.close.txt"
-        Dim sfaoRun As String = "sfao.run.txt"
-        Dim sfaoPath As String = Application.StartupPath
+        Dim sfaoRun As String = "sfao.run"
         Dim checkSfaoRun As String = sfaoPath & "\" & sfaoRun
         Dim checkSfaoClose As String = Path.Combine(sfaoPath, sfaoClose)
         Dim _main_Dir As New IO.DirectoryInfo(valParamREPUPDSFAO)
@@ -103,7 +103,7 @@ Public Class Upd
 
     'Méthode appelée pour mise à jour version
     Private Sub MisAJourVersion(sfaoClose As String, reperVieilleVersion As String, reperReelNvVersion As String, checkSfaoClose As String, newVersion As String)
-        Dim pathCsv As String = reperReelNvVersion & "\" & "listUpd" & newVersion & ".csv"
+        Dim pathCsv As String = reperReelNvVersion & "\" & "listUpd-" & newVersion & ".csv"
         Dim listeFichiersUpdate As New List(Of String)
         If File.Exists(checkSfaoClose) Then
             'fermer la SFAO

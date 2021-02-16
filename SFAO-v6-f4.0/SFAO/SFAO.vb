@@ -522,26 +522,57 @@ Module SFAO
             If File.Exists(Path.Combine(repSFAO_UpdExePath, sfaoUpdateExe)) Then
                 Trace("[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée, " & " , copie en local.", FichierTrace.niveau.toujours)
                 'On le copie dans le dossier de l'appli client
+                '(DEBUT commenté temporairement 1602)
                 Try
-                    My.Computer.FileSystem.CopyFile(
-                repSFAO_UpdExe,
-                repertoireAppliClient,
-                FileIO.UIOption.AllDialogs,
-                FileIO.UICancelOption.DoNothing)
+                    'My.Computer.FileSystem.CopyFile(
+                    'repSFAO_UpdExe,
+                    '     repertoireAppliClient,
+                    'FileIO.UIOption.AllDialogs,
+                    'FileIO.UICancelOption.DoNothing)
                 Catch ex As Exception
-                    CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
-                    Trace("[VerifUpdate] Erreur de copie de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
-                    Exit Sub
+                    'CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
+                    'Trace("[VerifUpdate] Erreur de copie de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
+                    'Exit Sub
+                    '(FIN commenté temporairement 1602)
                 End Try
             End If
 
             'On execute SFAO-upd.exe soit le récent copié soit l'ancien déjà existant
             Try
                 Trace("[VerifUpdate] Lancement de SFAO-Upd.exe", FichierTrace.niveau.toujours)
-                Dim p As New ProcessStartInfo
-                p.FileName = repertoireAppliClient
-                ' Start the process.
-                Process.Start(p)
+                Dim p As New ProcessStartInfo With {
+                    .FileName = repertoireAppliClient
+                }
+                ' Exécuter le SFAO-upd.exe (DEBUT commenté temporairement)
+                'Process.Start(p)
+                '(FIN commenté temporairement)
+
+                'Copie des dossiers de la nouvelle version vers l'appli client
+                'Parcours de fichiers qui sont dans le répertoire de la nouvelle version
+                Dim listFichiersNvVersion As New List(Of String)
+                Dim _dir_nvvers As New IO.DirectoryInfo(repSFAO_UpdExePath)
+                Dim fichDll As IO.FileInfo() = _dir_nvvers.GetFiles("*.dll")
+                Dim fichConfig As IO.FileInfo() = _dir_nvvers.GetFiles("*.config")
+                Dim fi As IO.FileInfo
+                Dim fiConf As IO.FileInfo
+
+                Try
+                    'Ajout des dossiers dans la liste des versions dispos dans le dossier
+                    For Each _Dir In _dir_nvvers.GetDirectories
+                        listFichiersNvVersion.Add(_Dir.Name)
+                    Next
+                    'Ajout des fichiers dll
+                    For Each fi In fichDll
+                        listFichiersNvVersion.Add(fi.Name)
+                    Next
+                    'Ajout des fichiers config
+                    For Each fiConf In fichConfig
+                        listFichiersNvVersion.Add(fiConf.Name)
+                    Next
+                Catch ex As Exception
+                    Trace("[VerifUpdate] Erreur de lecture du chemin de la nouvelle version : " & repSFAO_UpdExePath, FichierTrace.niveau.erreur)
+                    Exit Sub
+                End Try
             Catch ex As Exception
                 CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
                 Trace("[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
