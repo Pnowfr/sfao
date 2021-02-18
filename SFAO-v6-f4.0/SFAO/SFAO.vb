@@ -584,17 +584,13 @@ Module SFAO
                             Dim sDestination As String = sfaoPath & "\" & dossNv
                             Dim sSource As String = repSFAO_UpdExePath & dossNv
                             'Si un dossier du même nom existe à la destination
-                            Dim folder As New System.IO.DirectoryInfo(sDestination)
-                            If dossNv.Equals(folder.ToString) Then
-                                MessageBox.Show("found")
+                            If Not Directory.Exists(sDestination) Then
+                                Directory.CreateDirectory(sDestination)
                                 'Copie en écrasant dossier du même nom
                                 My.Computer.FileSystem.CopyDirectory(
                                 sSource, sDestination,
                                 Microsoft.VisualBasic.FileIO.UIOption.AllDialogs,
                                 Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing)
-                            Else
-                                MessageBox.Show("not found.")
-                                My.Computer.FileSystem.CopyDirectory(sSource, sfaoPath)
                             End If
                         Catch ex As Exception
                             Trace("[VerifUpdate] Erreur lors de la copie du dossier  : " & dossNv, FichierTrace.niveau.erreur)
