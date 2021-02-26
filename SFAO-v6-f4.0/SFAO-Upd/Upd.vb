@@ -166,7 +166,7 @@ Public Class Upd
                     My.Computer.FileSystem.CopyFile(
                 chemReelCompletFichAChanger,
                 chemReelCompletDestination,
-                FileIO.UIOption.AllDialogs,
+                FileIO.UIOption.OnlyErrorDialogs,
                 FileIO.UICancelOption.DoNothing)
                 Catch ex As Exception
                     Console.WriteLine(ex.Message)

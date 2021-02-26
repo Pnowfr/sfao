@@ -583,15 +583,15 @@ Module SFAO
                             'Copie du dossier dans le répertoire en écrasant les dossiers et fichiers du même nom
                             Dim sDestination As String = sfaoPath & "\" & dossNv
                             Dim sSource As String = repSFAO_UpdExePath & dossNv
-                            'Si un dossier du même nom existe à la destination
+                            'Si un dossier du même nom n'existe pas à la destination
                             If Not Directory.Exists(sDestination) Then
                                 Directory.CreateDirectory(sDestination)
-                                'Copie en écrasant dossier du même nom
-                                My.Computer.FileSystem.CopyDirectory(
-                                sSource, sDestination,
-                                Microsoft.VisualBasic.FileIO.UIOption.AllDialogs,
-                                Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing)
                             End If
+                            'On procède à la copie
+                            My.Computer.FileSystem.CopyDirectory(
+                                sSource, sDestination,
+                                Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
+                                Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException)
                         Catch ex As Exception
                             Trace("[VerifUpdate] Erreur lors de la copie du dossier  : " & dossNv, FichierTrace.niveau.erreur)
                             Exit Sub
@@ -604,20 +604,15 @@ Module SFAO
                             'Copie du ficher dans le répertoire en écrasant les dossiers et fichiers du même nom
                             Dim sDestination As String = sfaoPath & "\" & fichNv
                             Dim sSource As String = repSFAO_UpdExePath & fichNv
-                            'Si un fichier du même nom existe à la destination
-                            If File.Exists(Path.Combine(sDestination, fichNv)) Then
-
-                                'Copie en écrasant le fichier ou dossier du même nom
-                                My.Computer.FileSystem.CopyFile(
-                                sSource, sDestination,
-                                Microsoft.VisualBasic.FileIO.UIOption.AllDialogs,
-                                Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing)
-                            Else 'Sinon si le fichier n'existe pas dans le dossier de destination
-                                Dim file As New FileInfo(sSource)
-                                If file.Equals(fichNv) Then
-                                    file.CopyTo(sDestination)
-                                End If
+                            'Si un fichier du même nom n'existe pas à la destination
+                            If Not File.Exists(Path.Combine(sDestination, fichNv)) Then
+                                File.Create(sDestination)
                             End If
+                            'On procède à la copie ' A débugger 26 février 2021
+                            My.Computer.FileSystem.CopyFile(
+                                sSource, sDestination,
+                                Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
+                                Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing)
                         Catch ex As Exception
                             Trace("[VerifUpdate] Erreur lors de la copie du fichier  : " & fichNv, FichierTrace.niveau.erreur)
                             Exit Sub
