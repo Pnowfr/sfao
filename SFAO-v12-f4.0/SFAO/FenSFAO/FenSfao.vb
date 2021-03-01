@@ -17,7 +17,7 @@
     Public WSof As WSSitOF                  'classe de la situation des opérations
     Public WScp As WSSitCP                  'classe de la situation des composants
     Public DtSFAO As String
-
+    Private DblClc As Boolean
     Private _maxHeuresPresence As Decimal
 
 
@@ -97,7 +97,7 @@
         typeTrt = SFAO.Poste.GRP1.Y_TYPOP   'type traitement du poste
 
         'Affichage des infos utilisateur
-        If Not (Test) Then
+        If Not (SfaoTest) Then
             Lab2Soc.Text = SFAO.Site.GRP1.SOCIETE
             Lab2Sit.Text = SFAO.Site.GRP1.FCYSHO
             Lab2Dos.Text = SFAO.Site.GRP1.DOSSIER
@@ -256,8 +256,8 @@
         'situation des composants
         SituationCps()
 
-        'on masque du load
-        Call GifLoad(False, 1000)
+        'on masque le gif load dans 1 seconde
+        Call WaitGif(False, 1000)
     End Sub
     Private Sub SituationPoste()
         Dim i As Integer
@@ -748,14 +748,14 @@
     End Sub
 
     'Private Sub FenSfao_FontChanged(sender As Object, e As EventArgs) Handles Me.FontChanged
-    '    Debug.WriteLine("FenSfao_FontChanged")
+    '    Debug.WriteLine("Debug " & "FenSfao_FontChanged")
     'End Sub
     'Private Sub FenSfao_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-    '    'Debug.WriteLine("FenSfao_Resize")
+    '    'Debug.WriteLine("Debug " & "FenSfao_Resize")
     'End Sub
 
     'Private Sub FenSfao_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
-    '    'Debug.WriteLine("FenSfao_Paint")
+    '    'Debug.WriteLine("Debug " & "FenSfao_Paint")
     'End Sub
     Private Sub Redimentionner()
         Dim fntBtn As Font
@@ -840,7 +840,7 @@
                         End If
                     End If
                 Next
-                'Debug.WriteLine(zTailBtn.ToString & " " & totTextWidth.ToString & "-" & flowWidth.ToString)
+                'Debug.WriteLine("Debug " & zTailBtn.ToString & " " & totTextWidth.ToString & "-" & flowWidth.ToString)
                 If totTextWidth < flowWidth And textHeight <= flowHeight Then
                     zBtnOk = True
                 Else
@@ -852,7 +852,7 @@
 
             fntLabBtn = New Font("Microsoft Sans Serif", zTailBtn + 2, FontStyle.Bold)
 
-            'Debug.WriteLine(zTailBtn.ToString & " " & totTextWidth.ToString & " " & flowWidth.ToString)
+            'Debug.WriteLine("Debug " & zTailBtn.ToString & " " & totTextWidth.ToString & " " & flowWidth.ToString)
             If flowWidth - totTextWidth > 100 Then
                 zAdBtn = CInt((flowWidth - totTextWidth - 100) / nbtn)
             End If
@@ -903,7 +903,7 @@
                         End If
                     End If
                 Next
-                'Debug.WriteLine(zTailAct.ToString & " " & totTextHeight.ToString & "-" & flowLeftHeight.ToString)
+                'Debug.WriteLine("Debug " & zTailAct.ToString & " " & totTextHeight.ToString & "-" & flowLeftHeight.ToString)
                 If totTextHeight < flowLeftHeight And textActWidth <= flowLeftWidth Then
                     zActOk = True
                 Else
@@ -915,7 +915,7 @@
 
             fntLabAct = New Font("Microsoft Sans Serif", zTailAct + 2, FontStyle.Bold)
 
-            'Debug.WriteLine(zTailAct.ToString & " " & totTextHeight.ToString & " " & flowLeftHeight.ToString)
+            'Debug.WriteLine("Debug " & zTailAct.ToString & " " & totTextHeight.ToString & " " & flowLeftHeight.ToString)
 
             If nact > 0 And flowLeftHeight - totTextHeight > nact Then
                 zAdAct = CInt((flowLeftHeight - totTextHeight - nact) / nact)
@@ -948,7 +948,7 @@
                 For Each act As Button In FlowLayoutPanelLeft.Controls.OfType(Of Button)().OrderByDescending(Function(x) x.Name)
                     If act.Visible = True Then
                         n += 1
-                        'Debug.WriteLine(act.Name & " " & (act.Top + act.Height).ToString & " " & flowLeftHeight.ToString)
+                        'Debug.WriteLine("Debug " & act.Name & " " & (act.Top + act.Height).ToString & " " & flowLeftHeight.ToString)
                         If n = 1 And act.Top + act.Height < flowLeftHeight Then
                             zRstAct = flowLeftHeight - (act.Top + act.Height)
                             If zRstAct > 0 Then
@@ -1077,7 +1077,11 @@
     End Sub
     Public Sub AnimRet(ByVal WSDateTime As String)
         If WSDateTime > DtSFAO Then
-            'Debug.WriteLine("WSDateTime : " & WSDateTime)
+            If DblClc Then
+                Trace("Test WSDateTime : " & WSDateTime)
+                DblClc = False
+            End If
+
             If TimerAnim.Interval = 4000 Then
                 X3Anim(1)
             Else
@@ -1169,15 +1173,25 @@
     End Sub
 
     Private Sub PictureBoxWS_DoubleClick(sender As Object, e As EventArgs) Handles PictureBoxWS.DoubleClick
+        Dim SvgTest As Boolean
+        SvgTest = SfaoTest
+        DblClc = True
+        SfaoTest = True
+        Trace("Test connexion X3 : ")
         AnimCal(TimerAnim.Interval)
+        SfaoTest = SvgTest
     End Sub
     Public ReadOnly Property MaxHeuresPresence() As Decimal
         Get
+            Dim GZTIMWRK As String
             If Me._maxHeuresPresence = 0 Then
                 'on récupère le paramère X3 de la durée maximum de présence sur un poste
-                Me._maxHeuresPresence = CInt(X3ws.WSGETPARAM("GZTIMWRK", SFAO.Site.GRP1.FCY, ""))
+                GZTIMWRK = X3ws.WSGETPARAM("GZTIMWRK", SFAO.Site.GRP1.FCY, "")
+                If GZTIMWRK <> "" Then
+                    Me._maxHeuresPresence = CInt(GZTIMWRK)
+                End If
                 If Me._maxHeuresPresence = 0 Then
-                    Me._maxHeuresPresence = 12 'valeur par défaut
+                    Me._maxHeuresPresence = 12 'valeur par défaut 12h
                 End If
             End If
             Return Me._maxHeuresPresence
@@ -1307,7 +1321,7 @@
             Next
         End If
     End Sub
-    Public Sub GifLoad(ByVal _onoff As Boolean, Optional ByVal _wait As Integer = 10)
+    Public Sub WaitGif(ByVal _onoff As Boolean, Optional ByVal _wait As Integer = 10)
         If _onoff Then
             With PictureLoad
                 .Width = DataGridViewSitOpe.Height

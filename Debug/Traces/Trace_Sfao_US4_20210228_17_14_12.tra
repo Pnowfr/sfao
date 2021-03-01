@@ -1,0 +1,100 @@
+﻿5;2021/02/28 17:14:12;Ouverture de la trace Sfao
+5;2021/02/28 17:14:12;C:\Projets\SFAO\Debug\Traces\Trace_Sfao_US4_20210228_17_14_12.tra
+5;2021/02/28 17:14:12;Site : BRO
+5;2021/02/28 17:14:12;Dossier : REING
+5;2021/02/28 17:14:12;Poste : US4
+0;2021/02/28 17:14:12;Fonction de création/mise à jour de la base locale Sqlite
+0;2021/02/28 17:14:12;[CreationBaseLocale] : Base de donnée locale existante
+0;2021/02/28 17:14:12;Ouverture connexion à la base locale
+0;2021/02/28 17:14:12;Base locale ouverture connection avec timeout : 15
+0;2021/02/28 17:14:12;connexion base locale ouverte
+0;2021/02/28 17:14:12;connexionString : DataSource=C:\Projets\SFAO\Debug\BDL\BRODART\REING\baselocaleREING.db;Version=3;
+0;2021/02/28 17:14:12;Recupération du nombre de lignes avec des valeurs !
+0;2021/02/28 17:14:12;Rajout de la liste des tables de la base dans la listTables !
+0;2021/02/28 17:14:12;Requête pour avoir toutes les tables de la base exécutée avec réussite !
+0;2021/02/28 17:14:12;Parcours ligne par ligne du fichier csv !
+0;2021/02/28 17:14:12;La table CNXLOG existe dans la base sqlite !
+0;2021/02/28 17:14:12;DROP TABLE IF EXISTS CNXLOGTMP; CREATE TABLE CNXLOGTMP (IDCNX INTEGER PRIMARY KEY NOT NULL,SITE VARCHAR(5)  NOT NULL DEFAULT "",DOSSIER VARCHAR(15)  NOT NULL DEFAULT "",POSTE VARCHAR(8)  NOT NULL DEFAULT "",DTDEB VARCHAR(20)  NOT NULL DEFAULT "",DEBUT INT  NOT NULL DEFAULT 0,DTFIN VARCHAR(20)  NOT NULL DEFAULT "",FIN INT  NULL);
+0;2021/02/28 17:14:12;Requete pour créer une tabl temporaire CNXLOGTMP !
+0;2021/02/28 17:14:12;Parcours du tableau pour voir si PRIMARY KEY ou UNIQUE apparait dans une requête 
+0;2021/02/28 17:14:12;Création du champ en format PRIMARY KEY(__,__,...), UNIQUE(_,_,...)
+0;2021/02/28 17:14:12;Ajout des champs PK et Unique dans listChamps
+0;2021/02/28 17:14:12;Suppression de listeChamps d'un champ vide au cas où !
+0;2021/02/28 17:14:12;Récupération des champs champPk avec PK et champUnique UN !
+0;2021/02/28 17:14:12;Suppression des deux champs champPk,champUnique de la liste listeChamps temporairement !
+0;2021/02/28 17:14:12;Récupération du début de la requête debutrequ !
+0;2021/02/28 17:14:12;Transformation de la liste listeChamps en chaines séparéées par ',' pour reformer la requête !
+0;2021/02/28 17:14:12;On concatène le debutreq + req + les deux champs enlevés précédemment !
+0;2021/02/28 17:14:12;DROP TABLE IF EXISTS CNXLOGTMP; CREATE TABLE CNXLOGTMP ( IDCNX INTEGER  NOT NULL,SITE VARCHAR(5)  NOT NULL DEFAULT "",DOSSIER VARCHAR(15)  NOT NULL DEFAULT "",POSTE VARCHAR(8)  NOT NULL DEFAULT "",DTDEB VARCHAR(20)  NOT NULL DEFAULT "",DEBUT INT  NOT NULL DEFAULT 0,DTFIN VARCHAR(20)  NOT NULL DEFAULT "",FIN INT  NULL, PRIMARY KEY ( IDCNX ))
+0;2021/02/28 17:14:12;Creation de la table (nouvelle table ou table temporaire) réussie
+0;2021/02/28 17:14:12;Récupération de chaque champ de la table1 !
+0;2021/02/28 17:14:12;Récupération de chaque champ de la table2 !
+0;2021/02/28 17:14:12;On procède à la comparaison des champs des deux tables !
+0;2021/02/28 17:14:12;Lecture du fichier csv réussie et modification de la table non nécessaire !
+0;2021/02/28 17:14:12;Rajout de la liste des tables de la base dans la listTables !
+0;2021/02/28 17:14:12;Requête pour avoir toutes les tables de la base exécutée avec réussite !
+0;2021/02/28 17:14:12;Récupération de listTabSqlite, la liste des tables de la base de données 
+0;2021/02/28 17:14:12;Suppression des tables OLD et TMP
+0;2021/02/28 17:14:12;Récupération de la liste des tables du répertoire Resources
+0;2021/02/28 17:14:12;Test si une table de la base n'est pas dans la liste des tables dans Resources et la supprimer
+0;2021/02/28 17:14:12;Enregistrement connexion du poste dans la table CNXLOG
+0;2021/02/28 17:14:12;Ouverture connexion à la base locale
+0;2021/02/28 17:14:12;Connexion base locale SQLite ouverte
+0;2021/02/28 17:14:12;[ConnexionPoste] enregistrement connexion n° 12 ok
+0;2021/02/28 17:14:12;Sauvegarde de la dernière saisie dans le fichier conf
+5;2021/02/28 17:14:12;Lancement fenêtre SFAO
+0;2021/02/28 17:14:13;Initialisation des intitulés de la situation des composants
+0;2021/02/28 17:14:13;Initialisation des événements et actions du poste
+0;2021/02/28 17:14:13;Bouton F01 activé pour l'événement n° 1000 Arrivée opérateur
+0;2021/02/28 17:14:13;Bouton F02 activé pour l'événement n° 1010 Début opération
+0;2021/02/28 17:14:13;Bouton F03 activé pour l'événement n° 1030 Réglage(s)
+0;2021/02/28 17:14:13;Bouton F04 activé pour l'événement n° 1020 Matière(s) utilisées
+0;2021/02/28 17:14:13;Bouton F05 activé pour l'événement n° 1040 Production
+0;2021/02/28 17:14:13;Bouton F06 activé pour l'événement n° 1055 Déclaration automatique
+0;2021/02/28 17:14:13;Bouton F07 activé pour l'événement n° 1050 Déclaration production
+0;2021/02/28 17:14:13;Bouton F08 activé pour l'événement n° 1060 Déclaration gâche/rebut
+0;2021/02/28 17:14:13;Bouton F09 activé pour l'événement n° 1070 Démontage
+0;2021/02/28 17:14:13;Bouton F10 activé pour l'événement n° 1080 Interruption
+0;2021/02/28 17:14:13;Bouton F11 activé pour l'événement n° 1090 Fin opération
+0;2021/02/28 17:14:13;Bouton F12 activé pour l'événement n° 1100 Départ opérateur
+0;2021/02/28 17:14:13;Bouton A01 activé pour l'action n° 1282 Contresign&ature BAT
+0;2021/02/28 17:14:13;Bouton A02 activé pour l'action n° 1190 &Bilan d'opération
+0;2021/02/28 17:14:13;Bouton A03 activé pour l'action n° 1200 &Consommation matière(s)
+0;2021/02/28 17:14:13;Bouton A04 activé pour l'action n° 1180 &Derniers OF produits
+0;2021/02/28 17:14:13;Bouton A05 activé pour l'action n° 1210 R&éédition d'étiquette
+0;2021/02/28 17:14:13;Bouton A06 activé pour l'action n° 1300 Opération &hors OF
+0;2021/02/28 17:14:13;Bouton A07 activé pour l'action n° 1185 Gest&ion Impressions
+0;2021/02/28 17:14:13;Bouton A08 activé pour l'action n° 1500 Etiquettes carton (&K)
+0;2021/02/28 17:14:13;Bouton A09 activé pour l'action n° 1240 Changement de &lot
+0;2021/02/28 17:14:13;Bouton A10 activé pour l'action n° 1400 Mise e&n non-conformité
+0;2021/02/28 17:14:13;Bouton A11 activé pour l'action n° 1280 Validation &palette
+0;2021/02/28 17:14:13;Bouton A12 activé pour l'action n° 1220 &Retour matière(s) en stock
+0;2021/02/28 17:14:13;Bouton A13 activé pour l'action n° 1065 &Supprimer une déclaration
+0;2021/02/28 17:14:13;Bouton A14 activé pour l'action n° 1410 Mise au &visionnage
+0;2021/02/28 17:14:13;Bouton A15 activé pour l'action n° 1260 Opération d’OF e&xceptionnelle
+0;2021/02/28 17:14:13;Bouton A16 désactivé
+0;2021/02/28 17:14:13;Bouton A17 désactivé
+0;2021/02/28 17:14:13;Bouton A18 désactivé
+0;2021/02/28 17:14:13;Bouton A19 désactivé
+0;2021/02/28 17:14:13;Bouton A20 désactivé
+0;2021/02/28 17:14:13;SituationPoste
+0;2021/02/28 17:14:13;[WSGETSITPS] Parametres : {"GRP1":{"WST":"US4","FCY":"BRO","ZRET":0,"ZMSG":""},"GRP2":[]}
+0;2021/02/28 17:14:13;[WSGETSITPS] Resultat : {"GRP1": {"WST": "US4","FCY": "BRO","ZRET": "1","ZMSG": ""},"GRP2": [{"XEMPNUM": "167","ZEMPDES": "Patrick JAQUIER","XTYPE": "1","XTYPE_LBL": "Opérateur","XEVENT": "1040","ZEVTDES": "Production","XDATEVT": "20210209","XTIMEVT": "51771","XMFGNUM": "OFB2100619","XOPENUM": "10","ZROODES": "Bobinage","XBPCNUM": "C012465","XBPCNAM": "SUBRENAT SAS","XDATENT": "20210209","XTIMENT": "47722","ZOPEXC": "0","ZTYPOPHOF": "0"}]}
+0;2021/02/28 17:14:13;SituationOfOp
+0;2021/02/28 17:14:13;[WSGETSITOF] Parametres : {"GRP1":{"WST":"US4","FCY":"BRO","ZRET":0,"ZMSG":""},"GRP2":[]}
+0;2021/02/28 17:14:13;[WSGETSITOF] Resultat : {"GRP1": {"WST": "US4","FCY": "BRO","ZRET": "1","ZMSG": ""},"GRP2": [{"XMFGNUM": "OFB2100619","XOPENUM": "10","ZLIGITM": "1","ZITMREF": "PF062047","ZITMDES": "DECOUPE EN LAIZE 333 MM","ZMFGMST": "2","XDATEVT": "20210209","XTIMEVT": "51771","ZCPLTIM": "64.8","EXTQTY": "408000","UOM": "ML","ZQTYA": "39680","ZQTYR": "30","ZLSTPAL": "4"}]}
+0;2021/02/28 17:14:13;Affichage des indicateurs
+0;2021/02/28 17:14:13;SituationCps
+0;2021/02/28 17:14:13;[WSGETSITCP] Parametres : {"GRP1":{"WST":"US4","FCY":"BRO","Y_TYPOP":"BOB","LOCMAC":"MACUS4","LOCATE":"ATL002","ZRET":0,"ZMSG":""},"GRP2":[]}
+0;2021/02/28 17:14:13;[WSGETSITCP] Resultat : {"GRP1": {"WST": "US4","FCY": "BRO","Y_TYPOP": "BOB","LOCMAC": "MACUS4","LOCATE": "ATL002","ZRET": "1","ZMSG": ""},"GRP2": [{"XMFGNUM": "OFB2100619","XOPENUM": "10","ZITMREF": "PC011193","ZITMDES": "PACKTEXHY050C L.1370mm","ZSUPGRP": "S1","ZUOM": "ML","RETQTY": "103080","USEQTY": "3000","STOMAC": "0","STOATE": "99000","USRFLD2": ""}]}
+0;2021/02/28 17:14:15;[BtnF_Click] bouton : F02 1010
+0;2021/02/28 17:14:15;Affichage Début opération(DEBOP) événement n° 1010
+0;2021/02/28 17:14:15;Affichage fenêtre DEBOP
+0;2021/02/28 17:14:19;[WSGETPARAM] Parametres : {"GRP1":{"ZPAR":"GZTIMWRK","ZFCY":"BRO","ZUSR":"","ZVAL":""}}
+0;2021/02/28 17:14:24;[WSGETPARAM] Resultat : {"GRP1": {"ZPAR": "GZTIMWRK","ZFCY": "BRO","ZUSR": "","ZVAL": "12"}}
+0;2021/02/28 17:15:01;[BtnF_Click] résultat : Cancel
+5;2021/02/28 17:15:06;Fermeture fenêtre SFAO
+0;2021/02/28 17:15:06;Ouverture connexion à la base locale
+0;2021/02/28 17:15:06;Connexion base locale SQLite ouverte
+0;2021/02/28 17:15:06;Enregistrement déconnexion : ok 
+5;2021/02/28 17:15:06;Fermeture de la trace

@@ -39,11 +39,11 @@ Public Class X3WSV12
         x3WebSrv.Dispose()
     End Sub
 
-    Public Function Run(ByVal WebService As String, ByVal Parametres As String, ByRef Result As String) As Integer
+    Public Function Run(ByVal WebService As String, ByVal Parametres As String, ByRef Result As String, Optional WriteTrace As Boolean = False) As Integer
 
-        'TODO à enlever :
-        Debug.WriteLine(Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " " & WebService & " " & Parametres)
-        Debug.WriteLine(Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " callContext " & callContext.ToString)
+        If WriteTrace Then
+            Trace("[" & WebService & "] Parametres : " & Parametres)
+        End If
 
         Try
             resultXML = x3WebSrv.run(callContext, WebService, Parametres)
@@ -69,9 +69,71 @@ Public Class X3WSV12
             End If
             Return 0 'erreur
         Else
-            Result = resultXML.resultXml
             TraceCountErr = 0
+            Result = resultXML.resultXml
+            If WriteTrace Then
+                Trace("[" & WebService & "] Resultat : " & Result)
+            End If
             Return resultXML.status
         End If
     End Function
+
+    Public Sub RunAsync(ByVal WebService As String, ByVal Parametres As String, Optional WriteTrace As Boolean = False)
+        Dim UserState As Object
+        UserState = WebService
+
+        If WriteTrace Then
+            Trace("[" & WebService & "] Parametres : " & Parametres)
+        End If
+
+        Try
+            WsNbrAsyncInvoke += 1 'on incrémente le nombre d'appel asynchrones en attente
+            x3WebSrv.runAsync(callContext, WebService, Parametres, UserState)
+        Catch ex As Exception
+            'Exception
+            TraceCountErr += 1
+            If TraceCountErr < 10 Then
+                Trace("[" & WebService & "] Exception d'appel runAsync du web service !", FichierTrace.niveau.erreur)
+                Trace(ex.Message, FichierTrace.niveau.erreur)
+            End If
+            Exit Sub
+        End Try
+
+    End Sub
+
+    Public Sub RunAsyncCompleted(sender As Object, e As V12.runCompletedEventArgs) Handles x3WebSrv.runCompleted
+        Dim result As String = ""
+        Dim ParamRet As String()
+
+        WsNbrAsyncInvoke -= 1 'on décrémente le nmbre d'appels en attente
+
+        'Debug.WriteLine("Debug " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " RunAsyncCompleted ")
+
+        If e.Error Is Nothing Then 'si pas d'erreur
+            resultXML = e.Result    'on récupère le résultat 
+            If resultXML.status = 0 Then 'on vérifie le statut
+                'Statut en erreur (côté X3) 
+                TraceCountErr += 1
+                If TraceCountErr < 10 Then
+                    Trace("[" & e.UserState.ToString & "_ASYNC] Erreur statut du web service !", FichierTrace.niveau.erreur)
+                    For Each cadxMessage In resultXML.messages
+                        Trace(cadxMessage.message, FichierTrace.niveau.erreur)
+                    Next
+                End If
+            Else
+                TraceCountErr = 0
+                result = resultXML.resultXml
+            End If
+        Else 'on est en erreur (côté appel web service) 
+            TraceCountErr += 1
+            If TraceCountErr < 10 Then
+                Trace("[" & e.UserState.ToString & "_ASYNC] Erreur d'appel du web service !", FichierTrace.niveau.erreur)
+                Trace(e.Error.Message, FichierTrace.niveau.erreur)
+            End If
+            x3WebSrv.CancelAsync(e.UserState)
+        End If
+        ParamRet = {e.UserState.ToString, result}
+        CallByName(X3ws.X3WSCA, "RunAsyncCompleted", Microsoft.VisualBasic.CallType.Method, ParamRet)
+
+    End Sub
 End Class

@@ -134,8 +134,8 @@ Public Class SOROP
             End If
         Next
 
-        'affichage du load
-        Call FenSfao.GifLoad(True, 100)
+        'affichage le load dans 100 ms
+        Call FenSfao.WaitGif(True, 100)
 
         Trace("Code Matricule saisi : " & MTextBoxMatr.Text)
         Trace("Nom : " & TextBoxNom.Text)
@@ -165,6 +165,8 @@ Public Class SOROP
         Else
             'la fin de l'événement en cours n'a pas été validée on ne peut pas faire la sortie opérateur
             Trace("Enregistrement du départ impossible ! Vous devez d'abord terminer l'événement en cours. ", FichierTrace.niveau.avertissement)
+            'On masque le load dans 0.5s
+            Call FenSfao.WaitGif(False, 500)
         End If
         Exit Sub
 
@@ -176,6 +178,8 @@ ErreurSorop:
         FenSfao.Etat("Erreur d'enregistrement du départ !", 1, 5000)
         Me.DialogResult = DialogResult.Abort
         Me.Close()
+        'On masque le load dans 0.5s
+        Call FenSfao.WaitGif(False, 500)
     End Sub
 
 End Class

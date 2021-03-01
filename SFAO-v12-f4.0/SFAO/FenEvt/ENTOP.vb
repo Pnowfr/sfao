@@ -220,7 +220,7 @@ Public Class ENTOP
         Dim retMsg As String = ""
 
         'on déclenche la validation dela zone copie.chevauchement
-        If ComboBoxCopSitChev.Enabled() AndAlso ComboBoxCopSitChev.Text = "" Then
+        If ComboBoxCopSitChev.Enabled() AndAlso ComboBoxCopSitChev.Visible = True AndAlso ComboBoxCopSitChev.Text = "" Then
             ComboBoxCopSitChev.Select()
             Exit Sub
         End If
@@ -232,8 +232,8 @@ Public Class ENTOP
             End If
         Next
 
-        'affichage du load
-        Call FenSfao.GifLoad(True, 100)
+        'affichage du load dans 100 ms
+        Call FenSfao.WaitGif(True, 100)
 
         Trace("Code Matricule saisi : " & MTextBoxMatr.Text)
         Trace("Nom : " & TextBoxNom.Text)
@@ -277,6 +277,8 @@ ErreurEntop:
         FenSfao.Etat("Erreur d'enregistrement de l'arrivée !", 1, 5000)
         Me.DialogResult = DialogResult.Abort
         Me.Close()
+        'On masque le load dans 0.5s
+        Call FenSfao.WaitGif(False, 500)
     End Sub
 
 End Class
