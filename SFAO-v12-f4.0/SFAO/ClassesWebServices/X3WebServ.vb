@@ -262,9 +262,17 @@ Public Class X3WebServ
     Public Function WSEntOp(ByVal _site As String, ByVal _poste As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByRef _retmsg As String) As Boolean
         Dim par As Object
         Dim params As String
+        Dim retxml As String = String.Empty
+        Dim json As JObject
         Dim ret As Boolean = False
 
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
 
+        If X3WSC.Run("WSENTOP", params, retxml, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CBool(CInt(json.SelectToken("GRP1").SelectToken("ZRET")))
+        End If
         Return ret
     End Function
     'web service qui enregistre une copie de situation
@@ -287,7 +295,7 @@ Public Class X3WebServ
         par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZRET = 0, .ZMSG = ""}}
         params = JsonConvert.SerializeObject(par)
 
-        If X3WSC.Run("WSSOROP", params, retxml, False) = 1 Then
+        If X3WSC.Run("WSSOROP", params, retxml, True) = 1 Then
             json = JObject.Parse(retxml)
             ret = CBool(CInt(json.SelectToken("GRP1").SelectToken("ZRET")))
         End If
