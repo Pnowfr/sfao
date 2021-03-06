@@ -1217,7 +1217,7 @@
     Public Sub CtrlMatrDuree(ByVal _matr As Integer, ByRef _msgErr As String, ByRef _textBoxNom As String, ByRef _duree As Integer)
         Dim present As Boolean
         Dim i As Integer
-        'On parcourt la situation du poste pour vérifier si le matricule saisi est bien présent sur ce poste
+        'On parcourt la situation du poste pour vérifier si le matricule saisi est bien présent sur ce poste (contrairement à la V6 on peut faire une sortie de n'importe quel type d'opérateur)
         For i = 0 To WSsp.GRP2.Count - 1
             If WSsp.GRP2(i).XEMPNUM > 0 AndAlso WSsp.GRP2(i).XEMPNUM = _matr Then
                 _textBoxNom = WSsp.GRP2(i).ZEMPDES

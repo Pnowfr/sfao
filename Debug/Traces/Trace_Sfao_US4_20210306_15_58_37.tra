@@ -1,0 +1,134 @@
+﻿5;2021/03/06 15:58:37;Ouverture de la trace Sfao
+5;2021/03/06 15:58:37;C:\Projets\SFAO\Debug\Traces\Trace_Sfao_US4_20210306_15_58_37.tra
+5;2021/03/06 15:58:37;Site : BRO
+5;2021/03/06 15:58:37;Dossier : REING
+5;2021/03/06 15:58:37;Poste : US4
+0;2021/03/06 15:58:37;Fonction de création/mise à jour de la base locale Sqlite
+0;2021/03/06 15:58:37;[CreationBaseLocale] : Base de donnée locale existante
+0;2021/03/06 15:58:37;Ouverture connexion à la base locale
+0;2021/03/06 15:58:37;Base locale ouverture connection avec timeout : 15
+0;2021/03/06 15:58:38;connexion base locale ouverte
+0;2021/03/06 15:58:38;connexionString : DataSource=C:\Projets\SFAO\Debug\BDL\BRODART\REING\baselocaleREING.db;Version=3;
+0;2021/03/06 15:58:38;Recupération du nombre de lignes avec des valeurs !
+0;2021/03/06 15:58:38;Rajout de la liste des tables de la base dans la listTables !
+0;2021/03/06 15:58:38;Requête pour avoir toutes les tables de la base exécutée avec réussite !
+0;2021/03/06 15:58:38;Parcours ligne par ligne du fichier csv !
+0;2021/03/06 15:58:38;La table CNXLOG existe dans la base sqlite !
+0;2021/03/06 15:58:38;DROP TABLE IF EXISTS CNXLOGTMP; CREATE TABLE CNXLOGTMP (IDCNX INTEGER PRIMARY KEY NOT NULL,SITE VARCHAR(5)  NOT NULL DEFAULT "",DOSSIER VARCHAR(15)  NOT NULL DEFAULT "",POSTE VARCHAR(8)  NOT NULL DEFAULT "",DTDEB VARCHAR(20)  NOT NULL DEFAULT "",DEBUT INT  NOT NULL DEFAULT 0,DTFIN VARCHAR(20)  NOT NULL DEFAULT "",FIN INT  NULL);
+0;2021/03/06 15:58:38;Requete pour créer une tabl temporaire CNXLOGTMP !
+0;2021/03/06 15:58:38;Parcours du tableau pour voir si PRIMARY KEY ou UNIQUE apparait dans une requête 
+0;2021/03/06 15:58:38;Création du champ en format PRIMARY KEY(__,__,...), UNIQUE(_,_,...)
+0;2021/03/06 15:58:38;Ajout des champs PK et Unique dans listChamps
+0;2021/03/06 15:58:38;Suppression de listeChamps d'un champ vide au cas où !
+0;2021/03/06 15:58:38;Récupération des champs champPk avec PK et champUnique UN !
+0;2021/03/06 15:58:38;Suppression des deux champs champPk,champUnique de la liste listeChamps temporairement !
+0;2021/03/06 15:58:38;Récupération du début de la requête debutrequ !
+0;2021/03/06 15:58:38;Transformation de la liste listeChamps en chaines séparéées par ',' pour reformer la requête !
+0;2021/03/06 15:58:38;On concatène le debutreq + req + les deux champs enlevés précédemment !
+0;2021/03/06 15:58:38;DROP TABLE IF EXISTS CNXLOGTMP; CREATE TABLE CNXLOGTMP ( IDCNX INTEGER  NOT NULL,SITE VARCHAR(5)  NOT NULL DEFAULT "",DOSSIER VARCHAR(15)  NOT NULL DEFAULT "",POSTE VARCHAR(8)  NOT NULL DEFAULT "",DTDEB VARCHAR(20)  NOT NULL DEFAULT "",DEBUT INT  NOT NULL DEFAULT 0,DTFIN VARCHAR(20)  NOT NULL DEFAULT "",FIN INT  NULL, PRIMARY KEY ( IDCNX ))
+0;2021/03/06 15:58:38;Creation de la table (nouvelle table ou table temporaire) réussie
+0;2021/03/06 15:58:38;Récupération de chaque champ de la table1 !
+0;2021/03/06 15:58:38;Récupération de chaque champ de la table2 !
+0;2021/03/06 15:58:38;On procède à la comparaison des champs des deux tables !
+0;2021/03/06 15:58:38;Lecture du fichier csv réussie et modification de la table non nécessaire !
+0;2021/03/06 15:58:38;Rajout de la liste des tables de la base dans la listTables !
+0;2021/03/06 15:58:38;Requête pour avoir toutes les tables de la base exécutée avec réussite !
+0;2021/03/06 15:58:38;Récupération de listTabSqlite, la liste des tables de la base de données 
+0;2021/03/06 15:58:38;Suppression des tables OLD et TMP
+0;2021/03/06 15:58:38;Récupération de la liste des tables du répertoire Resources
+0;2021/03/06 15:58:38;Test si une table de la base n'est pas dans la liste des tables dans Resources et la supprimer
+0;2021/03/06 15:58:38;Enregistrement connexion du poste dans la table CNXLOG
+0;2021/03/06 15:58:38;Ouverture connexion à la base locale
+0;2021/03/06 15:58:38;Connexion base locale SQLite ouverte
+0;2021/03/06 15:58:38;[ConnexionPoste] enregistrement connexion n° 28 ok
+0;2021/03/06 15:58:38;Sauvegarde de la dernière saisie dans le fichier conf
+5;2021/03/06 15:58:38;Lancement fenêtre SFAO
+0;2021/03/06 15:58:38;Initialisation des intitulés de la situation des composants
+0;2021/03/06 15:58:38;Initialisation des événements et actions du poste
+0;2021/03/06 15:58:38;Bouton F01 activé pour l'événement n° 1000 Arrivée opérateur
+0;2021/03/06 15:58:38;Bouton F02 activé pour l'événement n° 1010 Début opération
+0;2021/03/06 15:58:38;Bouton F03 activé pour l'événement n° 1030 Réglage(s)
+0;2021/03/06 15:58:38;Bouton F04 activé pour l'événement n° 1020 Matière(s) utilisées
+0;2021/03/06 15:58:38;Bouton F05 activé pour l'événement n° 1040 Production
+0;2021/03/06 15:58:38;Bouton F06 activé pour l'événement n° 1055 Déclaration automatique
+0;2021/03/06 15:58:38;Bouton F07 activé pour l'événement n° 1050 Déclaration production
+0;2021/03/06 15:58:38;Bouton F08 activé pour l'événement n° 1060 Déclaration gâche/rebut
+0;2021/03/06 15:58:38;Bouton F09 activé pour l'événement n° 1070 Démontage
+0;2021/03/06 15:58:38;Bouton F10 activé pour l'événement n° 1080 Interruption
+0;2021/03/06 15:58:38;Bouton F11 activé pour l'événement n° 1090 Fin opération
+0;2021/03/06 15:58:38;Bouton F12 activé pour l'événement n° 1100 Départ opérateur
+0;2021/03/06 15:58:38;Bouton A01 activé pour l'action n° 1282 Contresign&ature BAT
+0;2021/03/06 15:58:38;Bouton A02 activé pour l'action n° 1190 &Bilan d'opération
+0;2021/03/06 15:58:38;Bouton A03 activé pour l'action n° 1200 &Consommation matière(s)
+0;2021/03/06 15:58:38;Bouton A04 activé pour l'action n° 1180 &Derniers OF produits
+0;2021/03/06 15:58:38;Bouton A05 activé pour l'action n° 1210 R&éédition d'étiquette
+0;2021/03/06 15:58:38;Bouton A06 activé pour l'action n° 1300 Opération &hors OF
+0;2021/03/06 15:58:38;Bouton A07 activé pour l'action n° 1185 Gest&ion Impressions
+0;2021/03/06 15:58:38;Bouton A08 activé pour l'action n° 1500 Etiquettes carton (&K)
+0;2021/03/06 15:58:38;Bouton A09 activé pour l'action n° 1240 Changement de &lot
+0;2021/03/06 15:58:38;Bouton A10 activé pour l'action n° 1400 Mise e&n non-conformité
+0;2021/03/06 15:58:38;Bouton A11 activé pour l'action n° 1280 Validation &palette
+0;2021/03/06 15:58:38;Bouton A12 activé pour l'action n° 1220 &Retour matière(s) en stock
+0;2021/03/06 15:58:38;Bouton A13 activé pour l'action n° 1065 &Supprimer une déclaration
+0;2021/03/06 15:58:38;Bouton A14 activé pour l'action n° 1410 Mise au &visionnage
+0;2021/03/06 15:58:38;Bouton A15 activé pour l'action n° 1260 Opération d’OF e&xceptionnelle
+0;2021/03/06 15:58:38;Bouton A16 désactivé
+0;2021/03/06 15:58:38;Bouton A17 désactivé
+0;2021/03/06 15:58:38;Bouton A18 désactivé
+0;2021/03/06 15:58:38;Bouton A19 désactivé
+0;2021/03/06 15:58:38;Bouton A20 désactivé
+0;2021/03/06 15:58:38;SituationPoste
+0;2021/03/06 15:58:38;[WSGETSITPS] Parametres : {"GRP1":{"WST":"US4","FCY":"BRO","ZRET":0,"ZMSG":""},"GRP2":[]}
+0;2021/03/06 15:58:38;[WSGETSITPS] Resultat : {"GRP1": {"WST": "US4","FCY": "BRO","ZRET": "1","ZMSG": ""},"GRP2": [{"XEMPNUM": "89","ZEMPDES": "Piotr Nowaczynski","XTYPE": null,"XTYPE_LBL": "","XEVENT": "1000","ZEVTDES": "Arrivée","XDATEVT": "20210304","XTIMEVT": "45376","XMFGNUM": "","XOPENUM": "0","ZROODES": "","XBPCNUM": "","XBPCNAM": "","XDATENT": "20210304","XTIMENT": "45376","ZOPEXC": "0","ZTYPOPHOF": "0"}]}
+0;2021/03/06 15:58:38;SituationOfOp
+0;2021/03/06 15:58:38;[WSGETSITOF] Parametres : {"GRP1":{"WST":"US4","FCY":"BRO","ZRET":0,"ZMSG":""},"GRP2":[]}
+0;2021/03/06 15:58:38;[WSGETSITOF] Resultat : {"GRP1": {"WST": "US4","FCY": "BRO","ZRET": "0","ZMSG": "Aucune opération trouvé !"},"GRP2": []}
+0;2021/03/06 15:58:38;Affichage des indicateurs
+0;2021/03/06 15:58:38;SituationCps
+0;2021/03/06 15:58:38;[WSGETSITCP] Parametres : {"GRP1":{"WST":"US4","FCY":"BRO","Y_TYPOP":"BOB","LOCMAC":"MACUS4","LOCATE":"ATL002","ZRET":0,"ZMSG":""},"GRP2":[]}
+0;2021/03/06 15:58:38;[WSGETSITCP] Resultat : {"GRP1": {"WST": "US4","FCY": "BRO","Y_TYPOP": "BOB","LOCMAC": "MACUS4","LOCATE": "ATL002","ZRET": "0","ZMSG": "Aucun composant trouvé !"},"GRP2": []}
+0;2021/03/06 15:58:46;[BtnF_Click] bouton : F12 1100
+0;2021/03/06 15:58:46;Affichage Départ opérateur(SOROP) événement n° 1100
+0;2021/03/06 15:58:46;Affichage fenêtre SOROP
+0;2021/03/06 15:58:48;Code Matricule saisi : 89
+0;2021/03/06 15:58:48;Nom : Piotr Nowaczynski
+0;2021/03/06 15:58:48;[WSSOROP] Parametres : {"GRP1":{"ZFCY":"BRO","ZPOSTE":"US4","ZEMPNUM":89,"ZEVTNUM":1100,"ZRET":0,"ZMSG":""}}
+0;2021/03/06 15:58:49;[WSSOROP] Resultat : {"GRP1": {"ZFCY": "BRO","ZPOSTE": "US4","ZEMPNUM": "89","ZEVTNUM": "1100","ZRET": "1","ZMSG": ""}}
+0;2021/03/06 15:58:49;[BtnF_Click] résultat : OK
+0;2021/03/06 15:58:49;SituationPoste
+0;2021/03/06 15:58:49;[WSGETSITPS] Parametres : {"GRP1":{"WST":"US4","FCY":"BRO","ZRET":0,"ZMSG":""},"GRP2":[]}
+0;2021/03/06 15:58:49;[WSGETSITPS] Resultat : {"GRP1": {"WST": "US4","FCY": "BRO","ZRET": "1","ZMSG": ""},"GRP2": [{"XEMPNUM": "89","ZEMPDES": "Piotr Nowaczynski","XTYPE": null,"XTYPE_LBL": "","XEVENT": "1000","ZEVTDES": "Arrivée","XDATEVT": "20210304","XTIMEVT": "45376","XMFGNUM": "","XOPENUM": "0","ZROODES": "","XBPCNUM": "","XBPCNAM": "","XDATENT": "20210304","XTIMENT": "45376","ZOPEXC": "0","ZTYPOPHOF": "0"}]}
+0;2021/03/06 15:58:49;SituationOfOp
+0;2021/03/06 15:58:49;[WSGETSITOF] Parametres : {"GRP1":{"WST":"US4","FCY":"BRO","ZRET":0,"ZMSG":""},"GRP2":[]}
+0;2021/03/06 15:58:49;[WSGETSITOF] Resultat : {"GRP1": {"WST": "US4","FCY": "BRO","ZRET": "0","ZMSG": "Aucune opération trouvé !"},"GRP2": []}
+0;2021/03/06 15:58:49;Affichage des indicateurs
+0;2021/03/06 15:58:49;SituationCps
+0;2021/03/06 15:58:49;[WSGETSITCP] Parametres : {"GRP1":{"WST":"US4","FCY":"BRO","Y_TYPOP":"BOB","LOCMAC":"MACUS4","LOCATE":"ATL002","ZRET":0,"ZMSG":""},"GRP2":[]}
+0;2021/03/06 15:58:49;[WSGETSITCP] Resultat : {"GRP1": {"WST": "US4","FCY": "BRO","Y_TYPOP": "BOB","LOCMAC": "MACUS4","LOCATE": "ATL002","ZRET": "0","ZMSG": "Aucun composant trouvé !"},"GRP2": []}
+0;2021/03/06 15:59:39;[BtnF_Click] bouton : F12 1100
+0;2021/03/06 15:59:39;Affichage Départ opérateur(SOROP) événement n° 1100
+0;2021/03/06 15:59:39;Affichage fenêtre SOROP
+0;2021/03/06 15:59:41;Code Matricule saisi : 89
+0;2021/03/06 15:59:41;Nom : Piotr Nowaczynski
+0;2021/03/06 15:59:41;[WSSOROP] Parametres : {"GRP1":{"ZFCY":"BRO","ZPOSTE":"US4","ZEMPNUM":89,"ZEVTNUM":1100,"ZRET":0,"ZMSG":""}}
+0;2021/03/06 15:59:42;[WSSOROP] Resultat : {"GRP1": {"ZFCY": "BRO","ZPOSTE": "US4","ZEMPNUM": "89","ZEVTNUM": "1100","ZRET": "1","ZMSG": ""}}
+0;2021/03/06 15:59:42;[BtnF_Click] résultat : OK
+0;2021/03/06 15:59:42;SituationPoste
+0;2021/03/06 15:59:42;[WSGETSITPS] Parametres : {"GRP1":{"WST":"US4","FCY":"BRO","ZRET":0,"ZMSG":""},"GRP2":[]}
+0;2021/03/06 15:59:42;[WSGETSITPS] Resultat : {"GRP1": {"WST": "US4","FCY": "BRO","ZRET": "1","ZMSG": ""},"GRP2": [{"XEMPNUM": "89","ZEMPDES": "Piotr Nowaczynski","XTYPE": null,"XTYPE_LBL": "","XEVENT": "1000","ZEVTDES": "Arrivée","XDATEVT": "20210304","XTIMEVT": "45376","XMFGNUM": "","XOPENUM": "0","ZROODES": "","XBPCNUM": "","XBPCNAM": "","XDATENT": "20210304","XTIMENT": "45376","ZOPEXC": "0","ZTYPOPHOF": "0"}]}
+0;2021/03/06 15:59:42;SituationOfOp
+0;2021/03/06 15:59:42;[WSGETSITOF] Parametres : {"GRP1":{"WST":"US4","FCY":"BRO","ZRET":0,"ZMSG":""},"GRP2":[]}
+0;2021/03/06 15:59:42;[WSGETSITOF] Resultat : {"GRP1": {"WST": "US4","FCY": "BRO","ZRET": "0","ZMSG": "Aucune opération trouvé !"},"GRP2": []}
+0;2021/03/06 15:59:42;Affichage des indicateurs
+0;2021/03/06 15:59:42;SituationCps
+0;2021/03/06 15:59:42;[WSGETSITCP] Parametres : {"GRP1":{"WST":"US4","FCY":"BRO","Y_TYPOP":"BOB","LOCMAC":"MACUS4","LOCATE":"ATL002","ZRET":0,"ZMSG":""},"GRP2":[]}
+0;2021/03/06 15:59:42;[WSGETSITCP] Resultat : {"GRP1": {"WST": "US4","FCY": "BRO","Y_TYPOP": "BOB","LOCMAC": "MACUS4","LOCATE": "ATL002","ZRET": "0","ZMSG": "Aucun composant trouvé !"},"GRP2": []}
+0;2021/03/06 16:02:52;[BtnF_Click] bouton : F12 1100
+0;2021/03/06 16:02:52;Affichage Départ opérateur(SOROP) événement n° 1100
+0;2021/03/06 16:02:52;Affichage fenêtre SOROP
+0;2021/03/06 16:03:00;[BtnF_Click] résultat : Cancel
+5;2021/03/06 16:03:11;Fermeture fenêtre SFAO
+0;2021/03/06 16:03:11;Ouverture connexion à la base locale
+0;2021/03/06 16:03:11;Connexion base locale SQLite ouverte
+0;2021/03/06 16:03:11;Enregistrement déconnexion : ok 
+5;2021/03/06 16:03:11;Fermeture de la trace

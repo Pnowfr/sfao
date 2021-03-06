@@ -10,7 +10,7 @@ Public Class SOROP
         Trace("Affichage fenêtre SOROP")
 
 
-        'Si un seul opérateur présent sur le poste on prérempli le code matricule + nom et on calcule le temps de présence
+        'Si un seul opérateur présent sur le poste on prérempli le code matricule + nom et on calcule le temps de présence (contrairement à la V6 on peut faire une sortie de n'importe quel type d'opérateur)
         For i = 0 To FenSfao.WSsp.GRP2.Count - 1
             If FenSfao.WSsp.GRP2(i).XEMPNUM > 0 Then
                 If MTextBoxMatr.Text = "" Then
@@ -103,7 +103,7 @@ Public Class SOROP
         Dim TpsPres As Integer
         Dim xevent As Integer
 
-        'On vérifie la présence de l'opérateur est la durée 
+        'On vérifie la présence de l'opérateur et la durée 
         FenSfao.CtrlMatrDuree(matr, MsgErr, TextBoxNom.Text, TpsPres)
         If MsgErr = "" Then
             TextBoxTps.Text = AFF_TPS_JHM(TpsPres)
