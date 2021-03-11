@@ -1,0 +1,29 @@
+﻿5;2021/02/16 10:34:29;Ouverture de la trace connexion
+5;2021/02/16 10:34:29;C:\Projets\SFAO\Debug\Traces\Trace_Cnx_20210216_10_34_29.tra
+0;2021/02/16 10:34:29;Démarrage SFAO
+0;2021/02/16 10:34:31;Activation du timer de recherche de mise à jour
+0;2021/02/16 10:34:31;Lancement de la fenêtre de connexion
+0;2021/02/16 10:34:31;Dossiers paramétrés : 
+0;2021/02/16 10:34:31;GBIV6 http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC
+0;2021/02/16 10:34:31;GBIV12 http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/02/16 10:34:31;GBIV12 (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/02/16 10:34:31;REING http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/02/16 10:34:31;REING (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+5;2021/02/16 10:34:34;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/16 10:34:34;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/16 10:34:37;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/16 10:34:37;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/16 10:34:40;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/16 10:34:40;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/16 10:34:43;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/16 10:34:43;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/16 10:34:45;[VerifUpdate] Lancement de SFAO-Upd.exe
+2;2021/02/16 10:34:46;[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour désactivée !
+5;2021/02/16 10:34:48;[VerifUpdate] Lancement de SFAO-Upd.exe
+2;2021/02/16 10:34:48;[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour désactivée !
+5;2021/02/16 10:34:48;[VerifUpdate] Lancement de SFAO-Upd.exe
+2;2021/02/16 10:34:48;[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour désactivée !
+5;2021/02/16 10:34:48;[VerifUpdate] Lancement de SFAO-Upd.exe
+2;2021/02/16 10:34:48;[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour désactivée !
+0;2021/02/16 10:34:52;Résultat Login : Cancel
+5;2021/02/16 10:34:52;Fermeture de la trace

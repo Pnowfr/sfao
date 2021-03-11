@@ -128,7 +128,7 @@ Public Class WSEvtGRP2
     Public Property XSFAOKEY As String
     Public Property XORDRE As Integer
     Public Property ZTYPEMSG As TypeMsg
-    Public Property ZTYPEMSG_LBL As String
+    Public Property ZTYPEMSG_LBL As String 'menu local 5201
     Sub New()
         MSGNUM = 0
         DESLNG = String.Empty

@@ -1,0 +1,93 @@
+﻿5;2021/02/24 08:35:01;Ouverture de la trace connexion
+5;2021/02/24 08:35:01;C:\Projets\SFAO\Debug\Traces\Trace_Cnx_20210224_08_35_01.tra
+0;2021/02/24 08:35:01;Démarrage SFAO
+0;2021/02/24 08:35:04;Activation du timer de recherche de mise à jour
+0;2021/02/24 08:35:04;Lancement de la fenêtre de connexion
+0;2021/02/24 08:35:04;Dossiers paramétrés : 
+0;2021/02/24 08:35:04;GBIV6 http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC
+0;2021/02/24 08:35:04;GBIV12 http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/02/24 08:35:04;GBIV12 (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/02/24 08:35:04;REING http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+0;2021/02/24 08:35:04;REING (ext) http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC
+5;2021/02/24 08:35:07;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:07;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:07;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:10;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:10;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:10;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:13;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:13;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:13;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:16;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:16;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:16;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:19;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:19;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:19;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:22;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:22;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:22;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:25;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:25;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:25;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:28;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:28;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:28;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:31;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:31;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:31;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:34;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:34;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:34;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:37;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:37;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:37;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:40;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:40;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:40;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:43;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:43;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:43;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:46;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:46;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:46;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:49;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:49;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:49;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:52;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:52;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:52;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:55;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:55;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:55;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:35:58;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:35:58;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:35:58;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:36:01;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:36:01;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:36:01;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:36:04;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:36:04;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:36:04;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:36:07;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:36:07;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:36:07;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:36:10;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:36:10;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:36:10;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:36:13;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:36:13;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:36:13;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:36:16;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:36:16;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:36:16;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:36:19;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:36:19;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:36:19;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:36:22;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:36:22;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:36:22;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:36:25;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0 , lancement de la mise à jour.
+5;2021/02/24 08:36:25;[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée,  , copie en local.
+5;2021/02/24 08:36:25;[VerifUpdate] Lancement de SFAO-Upd.exe
+5;2021/02/24 08:36:28;[VerifUpdate] Version SFAO plus récente trouvée : 1.1.0.0

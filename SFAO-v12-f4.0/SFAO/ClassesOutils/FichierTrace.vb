@@ -63,7 +63,7 @@ Public Class FichierTrace
                     My.Computer.FileSystem.CreateDirectory(repertoire)
                 Catch ex As Exception
                     'en cas d'erreur on désactive la trace
-                    Debug.WriteLine("Erreur ouverture fichier trace !")
+                    Console.WriteLine("Erreur ouverture fichier trace !")
                     MsgBox("Erreur d'ouverture du fichier trace : " & repertoire & " !", MsgBoxStyle.Exclamation) 'message erreur !
                     repertoire = ""
                     traceactive = False
@@ -100,7 +100,7 @@ Public Class FichierTrace
             Try
                 file = My.Computer.FileSystem.OpenTextFileWriter(repertoire & "\" & fichier, True)
             Catch ex As Exception
-                Debug.WriteLine("Erreur ouverture fichier trace !")
+                Console.WriteLine("Erreur ouverture fichier trace !")
                 MsgBox("Erreur d'ouverture du fichier trace : " & repertoire & "\" & fichier & " !", MsgBoxStyle.Exclamation) 'message erreur !
                 repertoire = ""
                 traceactive = False
@@ -117,19 +117,19 @@ Public Class FichierTrace
 
         If traceactive Then
             Try
-                'on écrit une nouvelle ligne de trace
-                If niveau >= niveauTrace Then
+                'on écrit une nouvelle ligne de trace en fonction du niveau paramètré ou si on est en test
+                If niveau >= niveauTrace Or SfaoTest Then
                     'Dans le fichier on supprime les retour chariot et les tab
                     file.WriteLine(CInt(niveau).ToString & ";" & Date.Now.ToString("yyyy/MM/dd HH:mm:ss") & ";" & message.Replace(vbCr, "").Replace(vbLf, "").Replace(vbTab, ""))
                 End If
             Catch ex As Exception
-                Debug.WriteLine("Une erreur est survenue au cours de l'écriture de la trace !")
-                Debug.WriteLine(ex.Message)
+                Console.WriteLine("Une erreur est survenue au cours de l'écriture de la trace !")
+                Console.WriteLine(ex.Message)
             End Try
         End If
 
         'dans tous les cas on écrit dans la console pour le débuggage
-        Debug.WriteLine(CInt(niveau).ToString & " " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss") & " " & message)
+        Console.WriteLine(CInt(niveau).ToString & " " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss") & " " & message)
 
         If niveau = 1 Then
             MsgBox(message, MsgBoxStyle.Information) 'message info
@@ -181,7 +181,8 @@ Public Class FichierTrace
                 p.StartInfo = New ProcessStartInfo("notepad.exe", FichierEnCours)
                 p.Start()
             Catch ex As Exception
-                Debug.WriteLine(ex.Message)
+                Console.WriteLine("[AfficheTrace] : Exception !")
+                Console.WriteLine(ex.Message)
             End Try
         End If
     End Sub

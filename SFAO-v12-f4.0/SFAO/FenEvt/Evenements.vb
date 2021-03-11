@@ -44,15 +44,15 @@
                 'MsgBox("Test ZPL 2 ")
                 'Dim labelFileName As String
                 'labelFileName = "test.zpl"
-                'Debug.WriteLine(Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & "début impression fichier ZPL")
+                'Debug.WriteLine("Debug " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & "début impression fichier ZPL")
                 'Dim filename As String = System.IO.Path.GetFileName("test.zpl")
                 'System.IO.File.Copy(
                 '        labelFileName,
                 '        "\\192.168.0.154\PRBPNOZ4X2\" & filename)
-                'Debug.WriteLine(Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & "fin impression fichier ZPL")
+                'Debug.WriteLine("Debug " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & "fin impression fichier ZPL")
 
                 ''ZPL.SendStringToPrinter("\\192.168.0.154\PRBPNOZ4X2", "^XA^LH30, 30 \ n ^ FO20, 10 ^ ADN, 90, 50 ^ AD ^ FDTEST ZPL^FS\n^XZ")
-                'Debug.WriteLine(Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & "début impression code ZPL")
+                'Debug.WriteLine("Debug " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & "début impression code ZPL")
                 'ZPL.SendStringToPrinter("\\192.168.0.154\PRBPNOZ4X2", "^XA~TA0~JSO^LT0^MMT^MNW^MTT^PON^PMN^LH0,0^JMA^PR4,4^MD0^JUS^LRN^CI0^XZ
                 '                        ^XA^LL0406
                 '                        ^PW812
@@ -69,7 +69,7 @@
                 '                        ^BY2,3,81^FT39,346^BCN,,Y,N
                 '                        ^FD>:TEST-PNO-128->51234^FS
                 '                        ^PQ1,0,1,Y^XZ")
-                'Debug.WriteLine(Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & "fin impression code ZPL")
+                'Debug.WriteLine("Debug " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & "fin impression code ZPL")
 
                 'Case 1070
 

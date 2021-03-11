@@ -13,7 +13,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Suivi de fabrication assisté par ordinateur")>
 <Assembly: AssemblyCompany("SFAO")>
 <Assembly: AssemblyProduct("SFAO")>
-<Assembly: AssemblyCopyright("Copyright ©  2020")>
+<Assembly: AssemblyCopyright("Copyright © 2020")>
 <Assembly: AssemblyTrademark("SFAO")>
 
 <Assembly: ComVisible(True)>

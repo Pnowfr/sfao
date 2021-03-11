@@ -10,7 +10,7 @@ Public Class SOROP
         Trace("Affichage fenêtre SOROP")
 
 
-        'Si un seul opérateur présent sur le poste on prérempli le code matricule + nom et on calcule le temps de présence
+        'Si un seul opérateur présent sur le poste on prérempli le code matricule + nom et on calcule le temps de présence (contrairement à la V6 on peut faire une sortie de n'importe quel type d'opérateur)
         For i = 0 To FenSfao.WSsp.GRP2.Count - 1
             If FenSfao.WSsp.GRP2(i).XEMPNUM > 0 Then
                 If MTextBoxMatr.Text = "" Then
@@ -103,7 +103,7 @@ Public Class SOROP
         Dim TpsPres As Integer
         Dim xevent As Integer
 
-        'On vérifie la présence de l'opérateur est la durée 
+        'On vérifie la présence de l'opérateur et la durée 
         FenSfao.CtrlMatrDuree(matr, MsgErr, TextBoxNom.Text, TpsPres)
         If MsgErr = "" Then
             TextBoxTps.Text = AFF_TPS_JHM(TpsPres)
@@ -134,8 +134,8 @@ Public Class SOROP
             End If
         Next
 
-        'affichage du load
-        Call FenSfao.GifLoad(True, 100)
+        'affichage le load dans 100 ms
+        Call FenSfao.WaitGif(True, 100)
 
         Trace("Code Matricule saisi : " & MTextBoxMatr.Text)
         Trace("Nom : " & TextBoxNom.Text)
@@ -165,6 +165,8 @@ Public Class SOROP
         Else
             'la fin de l'événement en cours n'a pas été validée on ne peut pas faire la sortie opérateur
             Trace("Enregistrement du départ impossible ! Vous devez d'abord terminer l'événement en cours. ", FichierTrace.niveau.avertissement)
+            'On masque le load dans 0.5s
+            Call FenSfao.WaitGif(False, 500)
         End If
         Exit Sub
 
@@ -176,6 +178,8 @@ ErreurSorop:
         FenSfao.Etat("Erreur d'enregistrement du départ !", 1, 5000)
         Me.DialogResult = DialogResult.Abort
         Me.Close()
+        'On masque le load dans 0.5s
+        Call FenSfao.WaitGif(False, 500)
     End Sub
 
 End Class
