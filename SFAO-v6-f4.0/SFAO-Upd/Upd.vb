@@ -4,7 +4,7 @@ Imports System.Xml
 
 Public Class Upd
     Private Sub Upd_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim reperUpdSfao As String = CType(My.Settings.Item("pathConfigFile"), String)
+        Dim reperUpdSfao As String = Application.StartupPath.ToString & "\SFAO.exe.config"
         Dim valParamREPUPDSFAO As String = GetParamValue(reperUpdSfao, "REPUPDSFAO")
         Dim valParamREPTRACECONNEXION As String = GetParamValue(reperUpdSfao, "REPTRACECONNEXION")
         Dim valParamREPTRACESFAO As String = GetParamValue(reperUpdSfao, "REPTRACESFAO")
