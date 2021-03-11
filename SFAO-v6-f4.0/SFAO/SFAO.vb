@@ -1,6 +1,7 @@
 ﻿Imports System.Configuration
 Imports System.IO
 Imports System.Text
+Imports System.Runtime.InteropServices
 
 Module SFAO
     Public Test As Boolean                              'Variable pour les tests
@@ -509,7 +510,7 @@ Module SFAO
         Dim lastVersion As String = versionslist(listVersionLength - 1)
         'Vérifier si une mise à jour est disponible
         If lastVersion.Equals(version) Then
-            'MsgBox(Prompt:="Pas de version plus récente") pas de message ! le contrôle se fait toutes les 30 secondes !!! 
+            'MsgBox(Prompt:="Pas de version plus récente") pas de message ! le contrôle se fait toutes les 30 secondes !!!
             Debug.WriteLine("Debug " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " [VerifUpdate] Pas de version plus récente")
         Else
             Trace("[VerifUpdate] Version SFAO plus récente trouvée : " & lastVersion & " , lancement de la mise à jour.", FichierTrace.niveau.toujours)
@@ -608,11 +609,14 @@ Module SFAO
                             If Not File.Exists(Path.Combine(sDestination, fichNv)) Then
                                 File.Create(sDestination)
                             End If
-                            'On procède à la copie ' A débugger 26 février 2021
-                            My.Computer.FileSystem.CopyFile(
-                                sSource, sDestination,
-                                Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
-                                Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing)
+                            'On procède à la copie '
+                            'My.Computer.FileSystem.CopyFile(
+                            'sSource, sDestination,
+                            'Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
+                            'Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing)
+
+                            'Appel à la procédure CopyFiles --- Ajout du 11 mars 2021
+                            CopyFiles(sSource, sDestination)
                         Catch ex As Exception
                             Trace("[VerifUpdate] Erreur lors de la copie du fichier  : " & fichNv, FichierTrace.niveau.erreur)
                             Exit Sub
@@ -630,4 +634,50 @@ Module SFAO
             End Try
         End If
     End Sub
+
+    'Enum opération sur les fichiers --- Ajout du 11 mars 2021
+    Private Enum FO_Func As Short
+        FO_COPY = &H2
+        FO_DELETE = &H3
+        FO_MOVE = &H1
+        FO_RENAME = &H4
+    End Enum
+
+    'L'API SHFILEOPSTRUCT copie, déplace, renomme ou supprime un objet du système de fichiers -----Ajout du 11 mars 2021
+    Private Structure SHFILEOPSTRUCT
+
+        Public hwnd As IntPtr
+        Public wFunc As FO_Func
+        <MarshalAs(UnmanagedType.LPWStr)>
+        Public pFrom As String
+        <MarshalAs(UnmanagedType.LPWStr)>
+        Public pTo As String
+        Public fFlags As UShort
+        Public fAnyOperationsAborted As Boolean
+        Public hNameMappings As IntPtr
+        <MarshalAs(UnmanagedType.LPWStr)>
+        Public lpszProgressTitle As String
+
+    End Structure
+
+    <DllImport("shell32.dll", CharSet:=CharSet.Unicode)>
+    Private Function SHFileOperation(
+       <[In]> ByRef lpFileOp As SHFILEOPSTRUCT) As Integer
+    End Function
+
+    Private _ShFile As SHFILEOPSTRUCT
+
+    'procédure de copie de fichiers  ---- Ajout du 11 mars 2021
+    Public Sub CopyFiles(ByVal sSource As String,
+         ByVal sTarget As String)
+        Try
+            _ShFile.wFunc = FO_Func.FO_COPY
+            _ShFile.pFrom = sSource
+            _ShFile.pTo = sTarget
+            SHFileOperation(_ShFile)
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+    End Sub
+
 End Module
