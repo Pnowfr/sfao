@@ -13,9 +13,9 @@ Module SFAO
     Public Site As New WSSite                           'classe desinfos du site connecté
     Public Poste As New WSPoste                         'classe des infos du poste connecté
     Public Events As New WSEvt                          'classe des infos des événements du poste
-    Private FichTrace As FichierTrace                   'classe de gestion des traces
     Public Phases As New List(Of Phase)                 'classe des phases
     Public UpdateTimer As Timer                         'timer de recherche de mise à jour
+    Private FichTrace As FichierTrace                   'classe de gestion des traces
     Private IDCnx As Integer                            'identifiant de connection à la base locale
     Private CheckUpd As Boolean = True                  'variable de gestion de mise à jour auto 
     Public Sub Main()
@@ -42,7 +42,7 @@ Module SFAO
         End If
 
         Application.DoEvents()
-        SFAO.Sleep(1500)
+        SFAO.Sleep(1000)    'Temps d'affichage du logo
 
         'TODO: Logo à réactiver
         Logo.Hide()                                     'on cache le logo avant l'affichage de la fenêtre de connexion
@@ -51,7 +51,7 @@ Module SFAO
         'Actie timer de vérification des mise à jour
         Trace("Activation du timer de recherche de mise à jour")
         UpdateTimer = New Timer()
-        UpdateTimer.Interval = 3000
+        UpdateTimer.Interval = 5000
         AddHandler UpdateTimer.Tick, AddressOf UpdateTimer_tick
         UpdateTimer.Start()
 
@@ -59,7 +59,7 @@ Module SFAO
         ResultLogin = Login.ShowDialog()                'la connexion à la base locale est instencié 
         Login.Dispose()
 
-        Trace("Résultat Login : " & ResultLogin.ToString)
+        Trace("Résultat Login : " & ResultLogin.ToString, FichierTrace.niveau.toujours)
 
         'Fermeture du fichier de trace connexion
         FermeTrace()
@@ -476,7 +476,9 @@ Module SFAO
             Application.Exit() 'on quitte 
             End
         Else
-            If CheckUpd Then
+            'TODO PNO: VerifUpdate Désactvé tant q'il y a des bugs...
+
+            If CheckUpd And False Then
                 Call VerifUpdate()
             End If
         End If
@@ -488,7 +490,6 @@ Module SFAO
         Dim versionslist As New List(Of String)
         Dim version As String = Application.ProductVersion  'La version actuelle
         Dim repUpdSfao As String = Param("REPUPDSFAO")      'Le répertoire des updates
-
 
         If repUpdSfao = "" Then
             CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
