@@ -481,6 +481,7 @@ Module SFAO
             End If
         End If
     End Sub
+
     Private Sub VerifUpdate()
         Dim _Dir As DirectoryInfo
         Dim sfaoUpdateExe As String = "SFAO-Upd.exe"
@@ -515,7 +516,7 @@ Module SFAO
         Dim lastVersion As String = versionslist(listVersionLength - 1)
         'Vérifier si une mise à jour est disponible
         If lastVersion.Equals(version) Then
-            'MsgBox(Prompt:="Pas de version plus récente") pas de message ! le contrôle se fait toutes les 30 secondes !!! 
+            'MsgBox(Prompt:="Pas de version plus récente") pas de message ! le contrôle se fait toutes les 30 secondes !!!
             Debug.WriteLine("Debug " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " [VerifUpdate] Pas de version plus récente")
         Else
             Trace("[VerifUpdate] Version SFAO plus récente trouvée : " & lastVersion & " , lancement de la mise à jour.", FichierTrace.niveau.toujours)
@@ -530,11 +531,7 @@ Module SFAO
                 'On le copie dans le dossier de l'appli client
                 '(DEBUT commenté temporairement 1602)
                 Try
-                    'My.Computer.FileSystem.CopyFile(
-                    'repSFAO_UpdExe,
-                    '     repertoireAppliClient,
-                    'FileIO.UIOption.AllDialogs,
-                    'FileIO.UICancelOption.DoNothing)
+                    'File.Copy(repSFAO_UpdExe, repertoireAppliClient)
                 Catch ex As Exception
                     'CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
                     'Trace("[VerifUpdate] Erreur de copie de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
@@ -584,20 +581,16 @@ Module SFAO
                     Next
 
                     'Copie des dossiers de la liste vers le répertoire de l'application actuelle
+                    Trace("Lancement fenêtre Copie", FichierTrace.niveau.toujours)
+                    FormCopie.Visible = True
                     For Each dossNv As String In listDossiersNvVersion
                         Try
-                            'Copie du dossier dans le répertoire en écrasant les dossiers et fichiers du même nom
                             Dim sDestination As String = sfaoPath & "\" & dossNv
                             Dim sSource As String = repSFAO_UpdExePath & dossNv
-                            'Si un dossier du même nom n'existe pas à la destination
-                            If Not Directory.Exists(sDestination) Then
-                                Directory.CreateDirectory(sDestination)
-                            End If
-                            'On procède à la copie
-                            My.Computer.FileSystem.CopyDirectory(
-                                sSource, sDestination,
-                                Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
-                                Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException)
+
+                            'fonction récursive pour copier les dossiers et fichiers
+                            CopyDirectory(sSource, sDestination)
+
                         Catch ex As Exception
                             Trace("[VerifUpdate] Erreur lors de la copie du dossier  : " & dossNv, FichierTrace.niveau.erreur)
                             Exit Sub
@@ -614,17 +607,22 @@ Module SFAO
                             If Not File.Exists(Path.Combine(sDestination, fichNv)) Then
                                 File.Create(sDestination)
                             End If
-                            'On procède à la copie ' A débugger 26 février 2021
-                            My.Computer.FileSystem.CopyFile(
-                                sSource, sDestination,
-                                Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
-                                Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing)
+
+                            'On supprime le vieux fichier
+                            File.Delete(sDestination)
+                            'On remplace par le nouveau
+                            File.Copy(sSource, sDestination)
+                            Trace("Lancement fenêtre Copie", FichierTrace.niveau.toujours)
+                            FormCopie.Show()
+
                         Catch ex As Exception
+                            MsgBox("Erreur lors dela copie :" & ex.Message)
                             Trace("[VerifUpdate] Erreur lors de la copie du fichier  : " & fichNv, FichierTrace.niveau.erreur)
                             Exit Sub
                         End Try
                     Next
-
+                    FormCopie.Visible = False
+                    FormFinCopie.Visible = True
                 Catch ex As Exception
                     Trace("[VerifUpdate] Erreur de lecture du chemin de la nouvelle version : " & repSFAO_UpdExePath, FichierTrace.niveau.erreur)
                     Exit Sub
@@ -635,5 +633,29 @@ Module SFAO
                 Exit Sub
             End Try
         End If
+    End Sub
+
+    'Fonction récursive pour la copie des dossiers, sous dossiers etc...
+    Public Sub CopyDirectory(ByVal sourcePath As String, ByVal destinationPath As String)
+        Dim sourceDirectoryInfo As New DirectoryInfo(sourcePath)
+
+        ' Si le dossier de destination n'existe pas, le créer
+        If Not Directory.Exists(destinationPath) Then
+            Directory.CreateDirectory(destinationPath)
+        End If
+
+        Dim fileSystemInfo As FileSystemInfo
+        For Each fileSystemInfo In sourceDirectoryInfo.GetFileSystemInfos
+            Dim destinationFileName As String =
+                Path.Combine(destinationPath, fileSystemInfo.Name)
+
+            ' Maintenant, vérifier si c'est un dossier ou un fichier et faire les actions correspondantes
+            If TypeOf fileSystemInfo Is System.IO.FileInfo Then
+                File.Copy(fileSystemInfo.FullName, destinationFileName, True)
+            Else
+                ' Appeler la méthode récursivement si nécessaire
+                CopyDirectory(fileSystemInfo.FullName, destinationFileName)
+            End If
+        Next
     End Sub
 End Module

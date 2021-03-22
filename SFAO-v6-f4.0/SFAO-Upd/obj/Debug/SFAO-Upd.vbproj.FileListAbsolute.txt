@@ -31,7 +31,3 @@ C:\Projets\SFAO\SFAO-v6-f4.0\SFAO-Upd\obj\Debug\SFAO-Upd.vbproj.GenerateResource
 C:\Projets\SFAO\SFAO-v6-f4.0\SFAO-Upd\obj\Debug\SFAO-Upd.vbproj.CoreCompileInputs.cache
 C:\Projets\SFAO\SFAO-v6-f4.0\SFAO-Upd\obj\Debug\SFAO-Upd.exe
 C:\Projets\SFAO\SFAO-v6-f4.0\SFAO-Upd\obj\Debug\SFAO-Upd.pdb
-C:\Projets\SFAO\Debug\SFAO-Upd.exe.config
-C:\Projets\SFAO\Debug\SFAO-Upd.exe
-C:\Projets\SFAO\Debug\SFAO-Upd.pdb
-C:\Projets\SFAO\SFAO-v6-f4.0\SFAO-Upd\obj\Debug\SFAO-Upd.vbprojAssemblyReference.cache

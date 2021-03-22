@@ -1,7 +1,7 @@
 ﻿Imports System.Configuration
 Imports System.IO
 Imports System.Text
-Imports System.Runtime.InteropServices
+Imports System.Runtime.InteropServices  ' Ajout du 11 mars 2021
 
 Module SFAO
     Public Test As Boolean                              'Variable pour les tests
