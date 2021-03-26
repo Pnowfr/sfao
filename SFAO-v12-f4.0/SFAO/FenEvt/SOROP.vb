@@ -158,6 +158,7 @@ Public Class SOROP
             End Try
 
             If Me.DialogResult = DialogResult.OK Then
+                Trace("Sortie opérateur réalisée sans erreur.")
                 Me.Close()
             Else
                 GoTo ErreurSorop

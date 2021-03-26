@@ -675,9 +675,9 @@
                 .Refresh()
             End With
 
-            Trace("[BtnF_Click] bouton : " & btn.Name & " " & btn.Tag.ToString)
+            Trace("[BtnF_Click] bouton fonction : " & btn.Name & " " & btn.Tag.ToString)
             Result = Evenements.AfficheEvt(CInt(btn.Tag)) 'appel de la fonction d'affichage des début d'événements
-            Trace("[BtnF_Click] résultat : " & Result.ToString)
+            Trace("[BtnF_Click] résultat fonction : " & Result.ToString)
 
             If Result = DialogResult.OK Then
                 'Récupération et affichage de la situation du poste
@@ -704,9 +704,9 @@
                 .Refresh()
             End With
 
-            Trace("[BtnA_Click] bouton : " & btn.Name & " " & btn.Tag.ToString)
+            Trace("[BtnA_Click] bouton action : " & btn.Name & " " & btn.Tag.ToString)
             Result = Evenements.AfficheEvt(CInt(btn.Tag)) 'appel de la fonction d'affichage des début d'événements
-            Trace("[BtnA_Click] résultat : " & Result.ToString)
+            Trace("[BtnA_Click] résultat action : " & Result.ToString)
 
             If Result = DialogResult.OK Then
                 'Récupération et affichage de la situation du poste
