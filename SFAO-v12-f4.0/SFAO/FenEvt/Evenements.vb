@@ -1,4 +1,8 @@
-﻿Module Evenements
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'
+'------------------------------------------------------------------------------------------------------------------------
+Module Evenements
     'Fonction qui déclenche l'affichage d'un événement, par défaut c'est une événement de début. pour un événement de fin on peut indiquer l'événement appelant
     Public Function AfficheEvt(ByVal NumEvt As Integer, Optional ByVal DebFin As String = "D", Optional ByVal EvtEnCours As Integer = 0) As DialogResult
         AfficheEvt = DialogResult.None

@@ -1,4 +1,8 @@
-﻿Imports System.Security.Cryptography
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'
+'------------------------------------------------------------------------------------------------------------------------
+Imports System.Security.Cryptography
 
 Public NotInheritable Class Crypt3Des
     Private TripleDes As New TripleDESCryptoServiceProvider

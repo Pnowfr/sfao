@@ -1,4 +1,8 @@
-﻿Imports System.Net
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'
+'------------------------------------------------------------------------------------------------------------------------
+Imports System.Net
 Imports V12 = SFAO.X3WebReferenceV12
 Public Class X3WSV12
     Private WithEvents x3WebSrv As CAdxWebServiceXmlCCServiceBasicAuth

@@ -1,4 +1,8 @@
-﻿Public Class FormFinCopie
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'
+'------------------------------------------------------------------------------------------------------------------------
+Public Class FormFinCopie
     Private Sub FormFinCopie_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ProgressBar1.Minimum = 0
         ProgressBar1.Maximum = 100

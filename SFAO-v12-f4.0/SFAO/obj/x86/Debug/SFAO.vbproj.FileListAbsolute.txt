@@ -85,7 +85,6 @@ C:\Projets\SFAO\Debug\SFAO.exe.config
 C:\Projets\SFAO\Debug\SFAO.exe
 C:\Projets\SFAO\Debug\SFAO.pdb
 C:\Projets\SFAO\Debug\SFAO.xml
-C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.vbprojAssemblyReference.cache
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.AUTOCTRL.resources
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.DEBOP.resources
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.DEBRGL.resources

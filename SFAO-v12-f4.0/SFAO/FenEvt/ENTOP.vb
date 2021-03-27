@@ -1,4 +1,8 @@
-﻿Imports System.ComponentModel
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'
+'------------------------------------------------------------------------------------------------------------------------
+Imports System.ComponentModel
 Public Class ENTOP
     Private tm As WSMatr
     Private zwslsev As WSLstEvt

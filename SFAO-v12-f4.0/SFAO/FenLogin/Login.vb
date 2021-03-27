@@ -1,4 +1,8 @@
-﻿Imports System.Configuration
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'
+'------------------------------------------------------------------------------------------------------------------------
+Imports System.Configuration
 Imports System.Text.RegularExpressions
 Public Class Login
 

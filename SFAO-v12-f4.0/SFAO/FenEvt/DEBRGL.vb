@@ -1,4 +1,8 @@
-﻿Imports System.ComponentModel
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'
+'------------------------------------------------------------------------------------------------------------------------
+Imports System.ComponentModel
 Imports System.Text.RegularExpressions
 Public Class DEBRGL
     Private ofop As WSOFOPInfo

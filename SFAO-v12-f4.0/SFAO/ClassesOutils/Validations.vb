@@ -1,4 +1,9 @@
-﻿Imports System.Text.RegularExpressions
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'
+'------------------------------------------------------------------------------------------------------------------------
+
+Imports System.Text.RegularExpressions
 Module Validations
     Public Enum ValidationType
         Only_Numbers = 1

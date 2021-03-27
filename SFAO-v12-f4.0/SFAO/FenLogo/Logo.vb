@@ -1,4 +1,8 @@
-﻿Public NotInheritable Class Logo
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'
+'------------------------------------------------------------------------------------------------------------------------
+Public NotInheritable Class Logo
 
     Private Sub Logo_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.TransparencyKey = Color.LightBlue

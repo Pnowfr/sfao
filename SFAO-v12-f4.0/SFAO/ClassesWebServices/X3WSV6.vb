@@ -1,4 +1,8 @@
-﻿Imports System.Net
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'
+'------------------------------------------------------------------------------------------------------------------------
+Imports System.Net
 Imports V6 = SFAO.X3WebReferenceV6
 Public Class X3WSV6
     Private WithEvents x3WebSrv As V6.CAdxWebServiceXmlCCService

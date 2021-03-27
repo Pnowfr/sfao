@@ -1,4 +1,9 @@
-﻿Imports System.IO
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'27/03/21 PNO Ajout test si fichier trace existant
+'
+'------------------------------------------------------------------------------------------------------------------------
+Imports System.IO
 
 Public Class FichierTrace
     Private traceactive As Boolean

@@ -1,4 +1,8 @@
-﻿Public Class FenSfao
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'
+'------------------------------------------------------------------------------------------------------------------------
+Public Class FenSfao
     'Déclaration des variables pour le mouvement et déplacement de la form
     Private Enum TypeMouv
         Null
