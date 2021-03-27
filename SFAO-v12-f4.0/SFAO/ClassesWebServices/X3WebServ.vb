@@ -27,9 +27,10 @@ Public Class X3WebServ
         Dim json As JObject
         Dim retxml As String = String.Empty
         Dim ret As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
         params = "{""GRP1"":{""ZRET"":""""}}"
 
-        If X3WSC.Run("WSDTSFAO", params, retxml, False) = 1 Then
+        If X3WSC.Run("WSDTSFAO", params, retxml, MsgErrWs, False) = 1 Then
             json = JObject.Parse(retxml)
             'ret = json("GRP1")("ZRET").ToString
             ret = json.SelectToken("GRP1").SelectToken("ZRET").ToString
@@ -54,6 +55,7 @@ Public Class X3WebServ
     Public Function WSGETPARAM(ByVal zpar As String, ByVal zfcy As String, ByVal zusr As String) As String
         Dim retour As String = String.Empty
         Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
         Dim jsonobj As JObject
         Dim deja As Boolean = False
         'on vérifie si le parmètre a déjà été enregistré dans la collection ParamX3
@@ -82,7 +84,7 @@ Public Class X3WebServ
             jsonpar.GRP1.ZUSR = zusr
 
             params = ClassToJson(Of WSParam)(jsonpar, False, settings)
-            If X3WSC.Run("WSGETPARAM", params, retxml, True) = 1 Then
+            If X3WSC.Run("WSGETPARAM", params, retxml, MsgErrWs, True) = 1 Then
                 jsonobj = JObject.Parse(retxml)
                 retour = jsonobj.SelectToken("GRP1").SelectToken("ZVAL").ToString
             End If
@@ -94,6 +96,7 @@ Public Class X3WebServ
     Public Function WSGETSITE(ByVal _cod As String, ByVal _desc As String, ByVal _desl As String, ByRef _doss As String, ByVal _soc As String) As WSSite
         Dim params As String
         Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
         Dim json As New WSSite
         Dim settings As JsonSerializerSettings
 
@@ -110,8 +113,11 @@ Public Class X3WebServ
 
         params = ClassToJson(Of WSSite)(json, False, settings)
 
-        If X3WSC.Run("WSGETSITE", params, retxml, True) = 1 Then
+        If X3WSC.Run("WSGETSITE", params, retxml, MsgErrWs, True) = 1 Then
             json = JsonToClass(Of WSSite)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
         End If
 
         Return json
@@ -121,6 +127,7 @@ Public Class X3WebServ
     Public Function WSGETPOSTE(ByVal _cod As String, ByVal _site As String) As WSPoste
         Dim params As String
         Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
         Dim json As New WSPoste
 
         Dim settings As JsonSerializerSettings
@@ -135,8 +142,11 @@ Public Class X3WebServ
 
         params = ClassToJson(Of WSPoste)(json, False, settings)
 
-        If X3WSC.Run("WSGETPOSTE", params, retxml, True) = 1 Then
+        If X3WSC.Run("WSGETPOSTE", params, retxml, MsgErrWs, True) = 1 Then
             json = JsonToClass(Of WSPoste)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
         End If
 
         Return json
@@ -146,6 +156,7 @@ Public Class X3WebServ
     Public Function WSGETEVT(ByVal _cod As String) As WSEvt
         Dim params As String
         Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
         Dim json As New WSEvt
         Dim settings As JsonSerializerSettings
 
@@ -157,8 +168,11 @@ Public Class X3WebServ
         json.GRP1.WST = _cod
 
         params = ClassToJson(Of WSEvt)(json, False, settings)
-        If X3WSC.Run("WSGETEVT", params, retxml, True) = 1 Then
+        If X3WSC.Run("WSGETEVT", params, retxml, MsgErrWs, True) = 1 Then
             json = JsonToClass(Of WSEvt)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
         End If
 
         Return json
@@ -167,6 +181,7 @@ Public Class X3WebServ
     Public Function WSGETSITPS(ByVal _cod As String, ByVal _sit As String) As WSSitPs
         Dim params As String
         Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
         Dim json As New WSSitPs
         Dim settings As JsonSerializerSettings
 
@@ -179,8 +194,11 @@ Public Class X3WebServ
         json.GRP1.FCY = _sit
 
         params = ClassToJson(Of WSSitPs)(json, False, settings)
-        If X3WSC.Run("WSGETSITPS", params, retxml, True) = 1 Then
+        If X3WSC.Run("WSGETSITPS", params, retxml, MsgErrWs, True) = 1 Then
             json = JsonToClass(Of WSSitPs)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
         End If
 
         Return json
@@ -189,6 +207,7 @@ Public Class X3WebServ
     Public Function WSGETSITOF(ByVal _cod As String, ByVal _sit As String) As WSSitOF
         Dim params As String
         Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
         Dim json As New WSSitOF
         Dim settings As JsonSerializerSettings
 
@@ -202,8 +221,11 @@ Public Class X3WebServ
         json.GRP1.FCY = _sit
 
         params = ClassToJson(Of WSSitOF)(json, False, settings)
-        If X3WSC.Run("WSGETSITOF", params, retxml, True) = 1 Then
+        If X3WSC.Run("WSGETSITOF", params, retxml, MsgErrWs, True) = 1 Then
             json = JsonToClass(Of WSSitOF)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
         End If
 
         Return json
@@ -212,6 +234,7 @@ Public Class X3WebServ
     Public Function WSGETSITCP(ByVal _cod As String, ByVal _sit As String, ByVal _typop As String, ByVal _locmac As String, ByVal _locate As String) As WSSitCP
         Dim params As String
         Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
         Dim json As New WSSitCP
         Dim settings As JsonSerializerSettings
 
@@ -228,8 +251,11 @@ Public Class X3WebServ
         json.GRP1.LOCATE = _locate
 
         params = ClassToJson(Of WSSitCP)(json, False, settings)
-        If X3WSC.Run("WSGETSITCP", params, retxml, True) = 1 Then
+        If X3WSC.Run("WSGETSITCP", params, retxml, MsgErrWs, True) = 1 Then
             json = JsonToClass(Of WSSitCP)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
         End If
 
         Return json
@@ -239,6 +265,7 @@ Public Class X3WebServ
         Dim params As String
         Dim json As New WSMatr
         Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
         Dim settings As JsonSerializerSettings
 
         settings = New JsonSerializerSettings() With {
@@ -250,8 +277,11 @@ Public Class X3WebServ
         json.GRP1.ZEMPNUM = _matr
 
         params = ClassToJson(Of WSMatr)(json, False, settings)
-        If X3WSC.Run("WSGETMATR", params, retxml, True) = 1 Then
+        If X3WSC.Run("WSGETMATR", params, retxml, MsgErrWs, True) = 1 Then
             json = JsonToClass(Of WSMatr)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
         End If
         Return json
     End Function
@@ -261,13 +291,14 @@ Public Class X3WebServ
         Dim par As Object
         Dim params As String
         Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
         Dim json As JObject
         Dim ret As Boolean = False
 
         par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZRET = 0, .ZMSG = ""}}
         params = JsonConvert.SerializeObject(par)
 
-        If X3WSC.Run("WSENTOP", params, retxml, True) = 1 Then
+        If X3WSC.Run("WSENTOP", params, retxml, MsgErrWs, True) = 1 Then
             json = JObject.Parse(retxml)
             ret = CBool(CInt(json.SelectToken("GRP1").SelectToken("ZRET")))
         End If
@@ -287,13 +318,14 @@ Public Class X3WebServ
         Dim par As Object
         Dim params As String
         Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
         Dim json As JObject
         Dim ret As Boolean = False
 
         par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZRET = 0, .ZMSG = ""}}
         params = JsonConvert.SerializeObject(par)
 
-        If X3WSC.Run("WSSOROP", params, retxml, True) = 1 Then
+        If X3WSC.Run("WSSOROP", params, retxml, MsgErrWs, True) = 1 Then
             json = JObject.Parse(retxml)
             ret = CBool(CInt(json.SelectToken("GRP1").SelectToken("ZRET")))
         End If
@@ -302,8 +334,27 @@ Public Class X3WebServ
 
     'Web service qui récupère les infos de l'OF/OP 
     Public Function WSOFOPInfo(ByVal _fcy As String, ByVal _of As String, ByVal _op As Integer, ByVal _typop As String) As WSOFOPInfo
-        'Dim params As String
+        Dim params As String
         Dim json As New WSOFOPInfo
+        Dim settings As JsonSerializerSettings
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+
+        settings = New JsonSerializerSettings() With {
+                    .NullValueHandling = NullValueHandling.Ignore,
+                    .MissingMemberHandling = MissingMemberHandling.Ignore
+                }
+        json.GRP1.ZFCY = _fcy
+        json.GRP1.ZMFGNUM = _of
+        json.GRP1.ZOPENUM = _op
+        json.GRP1.ZTYPOP = _typop 'type du poste
+        params = ClassToJson(Of WSOFOPInfo)(json, False, settings)
+        If X3WSC.Run("WSOFOPINFO", params, retxml, MsgErrWs, True) = 1 Then
+            json = JsonToClass(Of WSOFOPInfo)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
+        End If
 
         Return json
     End Function

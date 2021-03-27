@@ -26,13 +26,13 @@ Public Class X3WSClass
         End Select
     End Sub
 
-    Public Function Run(ByVal WebService As String, ByVal Parametres As String, ByRef Result As String, Optional WriteTrace As Boolean = False) As Integer
+    Public Function Run(ByVal WebService As String, ByVal Parametres As String, ByRef Result As String, ByRef MsgErr As String, Optional WriteTrace As Boolean = False) As Integer
         Dim ret As Integer
         Select Case WSv
             Case "V6"
-                'ret = WS6.Run(WebService, Parametres, Result)
+                'ret = WS6.Run(WebService, Parametres, MsgErr, Result)
             Case "V12"
-                ret = WS12.Run(WebService, Parametres, Result, WriteTrace)
+                ret = WS12.Run(WebService, Parametres, Result, MsgErr, WriteTrace)
         End Select
         Return ret
     End Function

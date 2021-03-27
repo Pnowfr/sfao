@@ -110,7 +110,7 @@ Public Class Login
         End If
 
         'TODO Temporaire à enlever !!!
-        ComboBoxDos.SelectedIndex = 2
+        ComboBoxDos.SelectedIndex = 3
 
         TextBoxPoste.Text = SFAO.Param("POSTE")
         If SFAO.Param("MULTIPOSTE") <> "VRAI" And TextBoxPoste.Text <> "" Then
@@ -218,7 +218,7 @@ Public Class Login
                 Trace("Test du ping IP : " + IPweb)
                 If My.Computer.Network.Ping(IPweb) Then
 
-                    'TODO contrôler si le web service répond
+                    'TODO contrôler si le web service est actif 
 
 
                     Try
