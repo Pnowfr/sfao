@@ -7,61 +7,78 @@ Imports System.IO
 Imports System.Text
 
 Module SFAO
+    '---------------------------------------------------------------------------------------------------------------------------------------------------------'
+    '-------------------------------------------------------- Classes ou varaibles publiques -----------------------------------------------------------------'
+    '------------------------------------------------------- accessibles dans tout le projet -----------------------------------------------------------------'
+    '---------------------------------------------------------------------------------------------------------------------------------------------------------'
+
     Public SfaoTest As Boolean                          'Variable pour les tests
-    Public ConnLoc As ConnexionLocaleSqlLite            'classe pour la base locale sqlite (non instentié car au 1er ancement on n'a pas la connexion string)
+    Public ConnLoc As ConnexionLocaleSqlLite            'classe pour la base locale sqlite (non instentié car au 1er lancement on n'a pas la connexion string)
     Public Logo As New Logo                             'classe pour l'affichage du logo
     Public Crypt As New Crypt3Des                       'classe pour le chiffrement / déchiffrement des mots de passe
-    Public X3ws As X3WebServ                            'classe des web services X3 (ne pas instentier imédiatement)
+    Public X3ws As X3WebServ                            'classe des web services X3 (ne pas instentié imédiatement)
     Public WsNbrAsyncInvoke As Integer                  'Variable qui permet de compter les appels de web services asynchrones en attente 
     Public ParamX3 As New List(Of ParamWS)              'classe pour la liste des paramètres provenants des web services X3
-    Public Site As New WSSite                           'classe desinfos du site connecté
+    Public Site As New WSSite                           'classe des infos du site connecté
     Public Poste As New WSPoste                         'classe des infos du poste connecté
     Public Events As New WSEvt                          'classe des infos des événements du poste
-    Private FichTrace As FichierTrace                   'classe de gestion des traces
-    Public Phases As New List(Of Phase)                 'classe des phases
+    Public Phases As New List(Of Phase)                 'classe des phases existantes
     Public UpdateTimer As Timer                         'timer de recherche de mise à jour
+
+    '---------------------------------------------------------------------------------------------------------------------------------------------------------'
+    '-------------------------------------------------------- Classes ou varaibles privées -------------------------------------------------------------------'
+    '----------------------------------------------------- accessibles seulement dans SFAO.vb ----------------------------------------------------------------'
+    '---------------------------------------------------------------------------------------------------------------------------------------------------------'
+
+    Private FichTrace As FichierTrace                   'classe de gestion des traces
     Private IDCnx As Integer                            'identifiant de connection à la base locale
     Private CheckUpd As Boolean = True                  'variable de gestion de mise à jour auto 
+
+
+    '---------------------------------------------------------------------------------------------------------------------------------------------------------'
+    '----------------------------------------------------------------------- MAIN ----------------------------------------------------------------------------'
+    '---------------------------------------------------------------- Démarrage de la SFAO -------------------------------------------------------------------'
+    '---------------------------------------------------------------------------------------------------------------------------------------------------------'
     Public Sub Main()
         Dim ResultLogin As DialogResult
 
-        'Enregistrer fichier sfao.run
+        'Enregistrer fichier sfao.run ce fichier permet à upd-sfao de savoir si la sfao est en cours d'execution 
         System.IO.File.Create("sfao.run").Dispose()
 
-        'Ouverture trace connexion
+        'Ouverture de la trace connexion
         FichTrace = New FichierTrace(FichierTrace.typeTrace.connexion)
         OuvreTrace()
-        Trace("Démarrage SFAO")
+        Trace("Démarrage SFAO") '1er message de la trace
 
+        'Affichage du logo (sera masqué à l'affichage de la fanêtre de connexion)
+        Logo.Show()
 
-        Logo.Show()                                     'Affichage du logo (sera masqué à l'affichage de la fanêtre de connexion)
+        'Génération du fichier sfao.exe.conf lors du 1er lancement de la SFAO c'est le fichier qui contient tous les paramètres locaux
+        GenFichierConf()
 
-        GenFichierConf()                                'Génération du fichier conf lors du 1er lancement 
-
-        'Le test SFAO peut être activé par paramètre
+        'Le test SFAO peut être activé par paramètre à utiliser pour afficher des traces de débug ou messages destinées au débuggage
         If Param("SFAOTEST") = "VRAI" Then
             SfaoTest = True
         Else
             SfaoTest = False
         End If
 
-        Application.DoEvents()
-        SFAO.Sleep(1500)
+        Application.DoEvents() 'Rafraichit l'application
+        SFAO.Sleep(1500)       'Temps d'affichage du logo TODO : voir si on passe en paramètre local ?
 
-        'TODO: Logo à réactiver
-        Logo.Hide()                                     'on cache le logo avant l'affichage de la fenêtre de connexion
-        Logo.Dispose()
+        Logo.Hide()            'on cache le logo avant l'affichage de la fenêtre de connexion
+        Logo.Dispose()         'on libère le logo de la mémoire
 
         'Actie timer de vérification des mise à jour
         Trace("Activation du timer de recherche de mise à jour")
         UpdateTimer = New Timer()
-        UpdateTimer.Interval = 3000
+        UpdateTimer.Interval = 3000                                 'TODO passer le temps de vérification d'existance d'une nouvelle version en paramètre
         AddHandler UpdateTimer.Tick, AddressOf UpdateTimer_tick
         UpdateTimer.Start()
 
         Trace("Lancement de la fenêtre de connexion")
-        ResultLogin = Login.ShowDialog()                'la connexion à la base locale est instencié 
-        Login.Dispose()
+        ResultLogin = Login.ShowDialog()                'Affichage de la fenêtre de connexion  + on instentie les webservices 
+        Login.Dispose()                                 'on libère le login de la mémoire        
 
         Trace("Résultat Login : " & ResultLogin.ToString)
 
@@ -70,14 +87,14 @@ Module SFAO
 
         If ResultLogin = DialogResult.OK Then
 
-            'Ouverture trace SFAO
+            'Ouverture trace SFAO pur le poste connecté
             FichTrace = New FichierTrace(FichierTrace.typeTrace.sfao)
             OuvreTrace()
             Trace("Site : " & SFAO.Site.GRP1.FCY, FichierTrace.niveau.toujours)
             Trace("Dossier : " & SFAO.Site.GRP1.DOSSIER, FichierTrace.niveau.toujours)
             Trace("Poste : " & SFAO.Poste.GRP1.WST, FichierTrace.niveau.toujours)
 
-            ConnLoc = New ConnexionLocaleSqlLite            'on instentie la connexion locale
+            ConnLoc = New ConnexionLocaleSqlLite            'on instentie la connexion locale SQLite
 
             Trace("Fonction de création/mise à jour de la base locale Sqlite")
             If ConnLoc.ControleBaseLocale = True Then       'Création/mise à jour de la base locale Sqlite
@@ -124,6 +141,11 @@ Module SFAO
         System.IO.File.Delete("sfao.run")
     End Sub
 
+    '-------------------------------------------------------------------------------------------------------------------------------------------------------------'
+    '---------------------------------------------------------------------- METHODES PUBLIQUES -------------------------------------------------------------------'
+    '-----------------------------------------------------------------Peuvent être appelées du projet entier -----------------------------------------------------'
+    '-------------------------------------------------------------------------------------------------------------------------------------------------------------'
+
     'Appel à la méthode pour ouvrir le fichier de traces
     Public Sub OuvreTrace()
         FichTrace.OuvreTrace()
@@ -144,119 +166,7 @@ Module SFAO
         FichTrace.FermeTrace()
     End Sub
 
-    'génération du fichier de paramètres si non existant
-    Private Sub GenFichierConf()
-        'Enregistrement de la connexion string pour la base locale
 
-        Dim DefaultConnectionStringLocale As String = "DataSource={0}\{1}\{2}\{3}\baselocale{3}.db;Version=3;"
-
-        Try
-            If ConfigurationManager.ConnectionStrings("ConnexionLocale") Is Nothing Then
-                AddConnectionString("ConnexionLocale", DefaultConnectionStringLocale, "System.Data.SQLite")
-                Trace("Création du paramètres connexionString <ConnexionLocale> dans le fichier conf")
-            End If
-        Catch ex As Exception
-
-            AddConnectionString("ConnexionLocale", DefaultConnectionStringLocale, "System.Data.SQLite")
-            Trace("Création du paramètres connexionString <ConnexionLocale> dans le fichier conf")
-
-        End Try
-
-        'ajout des paramètres 
-        Try
-            AddPar("SFAOTEST", "FAUX")
-            AddPar("SOCIETE", "BRODART PACKAGING")
-
-            'TODO (plus tard) ajouter le site en fonction de la plage IP locale
-            AddPar("SITE", "BRODART")
-            'AddPar("SITE", "TILWEL")
-
-            AddPar("POSTE", "")
-            AddPar("MULTIPOSTE", "FAUX")
-            AddPar("SANSMOTDEPASSE", "VRAI")
-            AddPar("MOTDEPASSE", Crypt.Crypte("SFAO"))
-            AddPar("REPBASELOCALE", "BDL")
-            AddPar("REPTBLCSV", "Resources")
-            AddPar("TRACECONNEXION", "VRAI")
-            AddPar("TRACESFAO", "VRAI")
-            AddPar("REPTRACECONNEXION", "Traces")
-            AddPar("REPTRACESFAO", "Traces")
-            AddPar("NIVEAUTRACE", "0")
-            AddPar("REPUPDSFAO", "")
-
-            'paramètres par dossier : 
-            AddPar("WEBSERVEURPOOLALIAS", "GBIV6", "GBIV6")
-            AddPar("WEBSERVEURVERSION", "V6", "GBIV6")
-            AddPar("WEBSERVEURLANG", "FRA", "GBIV6")
-            AddPar("WEBSERVEURURL", "http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC", "GBIV6")
-            AddPar("WEBSERVEURUSER", "web", "GBIV12")
-            AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV6")
-            AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV6")
-            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV6")
-            AddPar("WEBSERVEURTIMTEST", "180000", "GBIV6")
-
-            AddPar("WEBSERVEURPOOLALIAS", "GBIV12", "GBIV12")
-            AddPar("WEBSERVEURVERSION", "V12", "GBIV12")
-            AddPar("WEBSERVEURLANG", "FRA", "GBIV12")
-            AddPar("WEBSERVEURURL", "http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC", "GBIV12")
-            AddPar("WEBSERVEURUSER", "web", "GBIV12")
-            AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV12")
-            AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV12")
-            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV12")
-            AddPar("WEBSERVEURTIMTEST", "180000", "GBIV12")
-
-            'TODO Connexion externe pour les tests à enlever
-            AddPar("WEBSERVEURPOOLALIAS", "GBIV12", "GBIV12 (ext)")
-            AddPar("WEBSERVEURVERSION", "V12", "GBIV12 (ext)")
-            AddPar("WEBSERVEURLANG", "FRA", "GBIV12 (ext)")
-            AddPar("WEBSERVEURURL", "http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC", "GBIV12 (ext)")
-            AddPar("WEBSERVEURUSER", "web", "REING (ext)")
-            AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV12 (ext)")
-            AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV12 (ext)")
-            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV12 (ext)")
-            AddPar("WEBSERVEURTIMTEST", "180000", "GBIV12 (ext)")
-
-            AddPar("WEBSERVEURPOOLALIAS", "REING", "REING")
-            AddPar("WEBSERVEURLANG", "FRA", "REING")
-            AddPar("WEBSERVEURURL", "http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC", "REING")
-            AddPar("WEBSERVEURUSER", "web", "REING")
-            AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "REING")
-            AddPar("WEBSERVEURTIMEOUT", "15000", "REING")
-            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "REING")
-            AddPar("WEBSERVEURTIMTEST", "180000", "REING")
-
-            'TODO Connexion externe pour les tests à enlever
-            AddPar("WEBSERVEURPOOLALIAS", "REING", "REING (ext)")
-            AddPar("WEBSERVEURLANG", "FRA", "REING (ext)")
-            AddPar("WEBSERVEURURL", "http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC", "REING (ext)")
-            AddPar("WEBSERVEURUSER", "web", "REING (ext)")
-            AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "REING (ext)")
-            AddPar("WEBSERVEURTIMEOUT", "15000", "REING (ext)")
-            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "REING (ext)")
-            AddPar("WEBSERVEURTIMTEST", "180000", "REING (ext)")
-
-        Catch ex As Exception
-            Trace("Erreur: impossible d'ajouter des paramètres dans le fichier conf!", FichierTrace.niveau.erreur)
-        End Try
-    End Sub
-
-    Private Sub SaveDerniereSaisi()
-
-        Try
-            If SFAO.Site.GRP1.FCYSHO <> "" Then
-                AddPar("LASTSITE", SFAO.Site.GRP1.FCYSHO)
-            End If
-            If SFAO.Site.GRP1.DOSSIER <> "" Then
-                AddPar("LASTDOSSIER", SFAO.Site.GRP1.DOSSIER)
-            End If
-            If SFAO.Poste.GRP1.WST <> "" Then
-                AddPar("LASTPOSTE", SFAO.Poste.GRP1.WST)
-            End If
-            Trace("Sauvegarde de la dernière saisie dans le fichier conf")
-        Catch ex As Exception
-            Trace("Erreur: impossible d'ajouter les paramètres de la dernière saisie dans le fichier conf!", FichierTrace.niveau.erreur)
-        End Try
-    End Sub
     'enregistrement d'un paramètre connexion string 
     Public Sub AddConnectionString(name As String, connectionString As String, providerName As String)
         Dim configFile As Configuration
@@ -450,10 +360,12 @@ Module SFAO
                 AFF_UNIT = UNIT
         End Select
     End Function
-    Public Sub Sleep(ByVal time As Integer)
+
+    'attend x milisecondes avec hachage de y milisecondes 
+    Public Sub Sleep(ByVal time As Integer, Optional hash As Integer = 100)
         Dim i As Integer
-        For i = 0 To CInt(time / 10)
-            Threading.Thread.Sleep(10)
+        For i = 0 To CInt(time / hash)
+            Threading.Thread.Sleep(hash)
             Application.DoEvents()
         Next
     End Sub
@@ -483,85 +395,6 @@ Module SFAO
             If CheckUpd Then
                 Call VerifUpdate()
             End If
-        End If
-    End Sub
-
-    Private Sub VerifUpdate()
-        Dim _Dir As DirectoryInfo
-        Dim sfaoUpdateExe As String = "SFAO-Upd.exe"
-        Dim sfaoPath As String = Application.StartupPath    'Le répertoire de l'application actuelle
-        Dim versionslist As New List(Of String)
-        Dim version As String = Application.ProductVersion  'La version actuelle
-        Dim repUpdSfao As String = Param("REPUPDSFAO")      'Le répertoire des updates
-
-        If repUpdSfao = "" Then
-            CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
-            Trace("[VerifUpdate] La paramètre REPUPDSFAO du chemin des mise à jours est vide ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
-            Exit Sub
-        End If
-
-        Dim _main_Dir As New IO.DirectoryInfo(repUpdSfao)
-
-        Try
-            'Ajout dans la liste des versions dispos dans le dossier
-            For Each _Dir In _main_Dir.GetDirectories
-                versionslist.Add(_Dir.Name)
-            Next
-        Catch ex As Exception
-            CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
-            Trace("[VerifUpdate] Erreur de lecture du chemin des mise à jours : " & repUpdSfao & " ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
-            Exit Sub
-        End Try
-
-        'Vérifier si dans le dossier Update (indiqué par le paramètre), on a une verssion + récente
-        'Vérifier si le nom du dernier dossier de la liste est le même que la version actuelle
-        Dim listVersionLength As Integer = versionslist.Count
-        Dim lastVersion As String = versionslist(listVersionLength - 1)
-        'Vérifier si une mise à jour est disponible
-        If lastVersion.Equals(version) Then
-            'MsgBox(Prompt:="Pas de version plus récente") pas de message ! le contrôle se fait toutes les 30 secondes !!!
-            Debug.WriteLine("Debug " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " [VerifUpdate] Pas de version plus récente")
-        Else
-            Trace("[VerifUpdate] Version SFAO plus récente trouvée : " & lastVersion & " , lancement de la mise à jour.", FichierTrace.niveau.toujours)
-            'Si on a une version + récente on vérifie si SFAO-Upd.exe est plus récent(??), si oui on le copie dans le dossier de l'appli client
-            Dim repSFAO_UpdExePath As String = repUpdSfao & "\" & lastVersion & "\"
-            Dim repSFAO_UpdExe As String = repUpdSfao & "\" & lastVersion & "\" & sfaoUpdateExe
-            'Le répertoire de la version
-            Dim repertoireAppliClient As String = sfaoPath & "\" & sfaoUpdateExe
-            'Vérifier si le fichier SFAO-Upd.exe existe
-            If File.Exists(Path.Combine(repSFAO_UpdExePath, sfaoUpdateExe)) Then
-                Trace("[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée, " & " , copie en local.", FichierTrace.niveau.toujours)
-                'On le copie dans le dossier de l'appli client
-                Try
-                    'On procède à la copie du fichier'
-                    File.Copy(repSFAO_UpdExe, repertoireAppliClient, overwrite:=True)
-                Catch ex As Exception
-                    CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
-                    Trace("[VerifUpdate] Erreur de copie de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
-                    Exit Sub
-                End Try
-            End If
-
-            'On execute SFAO-upd.exe soit le récent copié soit l'ancien déjà existant
-            Trace("[VerifUpdate] Lancement de SFAO-Upd.exe", FichierTrace.niveau.toujours)
-            Dim p As New ProcessStartInfo With {
-                .FileName = repertoireAppliClient
-            }
-            'On arrête SFAO
-            Application.Exit()
-            ' Exécuter le SFAO-upd.exe
-            'Process.Start(p) //Commenté temporairement pour l'instant,ça provoque un bug
-
-
-            'Copie des dossiers de la nouvelle version vers l'appli client
-            'Appel à la procédure qui copie des dossiers et fichiers du répertoire de la nv version vers l'actuelle version
-            Try
-                CopieDossetFich(repSFAO_UpdExePath, sfaoPath)
-
-            Catch ex As Exception
-                MsgBox(" Erreur de lecture du chemin de la nouvelle version : " & repSFAO_UpdExePath & ex.Message)
-                Exit Sub
-            End Try
         End If
     End Sub
 
@@ -650,4 +483,207 @@ Module SFAO
             End If
         Next
     End Sub
+
+    '-------------------------------------------------------------------------------------------------------------------------------------------------------'
+    '-------------------------------------------------------------------- METHODES PRIVEES -----------------------------------------------------------------'
+    '-------------------------------------------------------- Ne pevent être executé que depuis SFAO.vb ----------------------------------------------------'
+    '-------------------------------------------------------------------------------------------------------------------------------------------------------'
+
+    'génération du fichier de paramètres si non existant
+    Private Sub GenFichierConf()
+
+        'Enregistrement de la connexion string pour la base locale
+        Dim DefaultConnectionStringLocale As String = "DataSource={0}\{1}\{2}\{3}\baselocale{3}.db;Version=3;"
+        Try
+            If ConfigurationManager.ConnectionStrings("ConnexionLocale") Is Nothing Then
+                AddConnectionString("ConnexionLocale", DefaultConnectionStringLocale, "System.Data.SQLite")
+                Trace("Création du paramètres connexionString <ConnexionLocale> dans le fichier conf")
+            End If
+        Catch ex As Exception
+            AddConnectionString("ConnexionLocale", DefaultConnectionStringLocale, "System.Data.SQLite")
+            Trace("Création du paramètres connexionString <ConnexionLocale> dans le fichier conf")
+        End Try
+
+        'ajout des paramètres 
+        Try
+            AddPar("SFAOTEST", "FAUX")
+            AddPar("SOCIETE", "BRODART PACKAGING")
+
+            'TODO (plus tard) ajouter le site en fonction de la plage IP locale
+            AddPar("SITE", "BRODART")
+            'AddPar("SITE", "TILWEL")
+
+            AddPar("POSTE", "")
+            AddPar("MULTIPOSTE", "FAUX")
+            AddPar("SANSMOTDEPASSE", "VRAI")
+            AddPar("MOTDEPASSE", Crypt.Crypte("SFAO"))
+            AddPar("REPBASELOCALE", "BDL")
+            AddPar("REPTBLCSV", "Resources")
+            AddPar("TRACECONNEXION", "VRAI")
+            AddPar("TRACESFAO", "VRAI")
+            AddPar("REPTRACECONNEXION", "Traces")
+            AddPar("REPTRACESFAO", "Traces")
+            AddPar("NIVEAUTRACE", "0")
+            AddPar("REPUPDSFAO", "")
+
+            'paramètres par dossier : 
+
+            'TODO PNO : dossier GBIV6 à enlever plus tard : 
+            AddPar("WEBSERVEURPOOLALIAS", "GBIV6", "GBIV6")
+            AddPar("WEBSERVEURVERSION", "V6", "GBIV6")
+            AddPar("WEBSERVEURLANG", "FRA", "GBIV6")
+            AddPar("WEBSERVEURURL", "http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC", "GBIV6")
+            AddPar("WEBSERVEURUSER", "web", "GBIV12")
+            AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV6")
+            AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV6")
+            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV6")
+            AddPar("WEBSERVEURTIMTEST", "180000", "GBIV6")
+
+            'Dossier prod V12 : 
+            AddPar("WEBSERVEURPOOLALIAS", "GBIV12", "GBIV12")
+            AddPar("WEBSERVEURVERSION", "V12", "GBIV12")
+            AddPar("WEBSERVEURLANG", "FRA", "GBIV12")
+            AddPar("WEBSERVEURURL", "http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC", "GBIV12")
+            AddPar("WEBSERVEURUSER", "web", "GBIV12")
+            AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV12")
+            AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV12")
+            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV12")
+            AddPar("WEBSERVEURTIMTEST", "180000", "GBIV12")
+
+            'TODO Connexion externe pour les tests à enlever plus tard
+            AddPar("WEBSERVEURPOOLALIAS", "GBIV12", "GBIV12 (ext)")
+            AddPar("WEBSERVEURVERSION", "V12", "GBIV12 (ext)")
+            AddPar("WEBSERVEURLANG", "FRA", "GBIV12 (ext)")
+            AddPar("WEBSERVEURURL", "http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC", "GBIV12 (ext)")
+            AddPar("WEBSERVEURUSER", "web", "REING (ext)")
+            AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV12 (ext)")
+            AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV12 (ext)")
+            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV12 (ext)")
+            AddPar("WEBSERVEURTIMTEST", "180000", "GBIV12 (ext)")
+
+            'Dossier de test de la V12
+            AddPar("WEBSERVEURPOOLALIAS", "REING", "REING")
+            AddPar("WEBSERVEURLANG", "FRA", "REING")
+            AddPar("WEBSERVEURURL", "http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC", "REING")
+            AddPar("WEBSERVEURUSER", "web", "REING")
+            AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "REING")
+            AddPar("WEBSERVEURTIMEOUT", "15000", "REING")
+            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "REING")
+            AddPar("WEBSERVEURTIMTEST", "180000", "REING")
+
+            'TODO Connexion externe pour les tests à enlever
+            AddPar("WEBSERVEURPOOLALIAS", "REING", "REING (ext)")
+            AddPar("WEBSERVEURLANG", "FRA", "REING (ext)")
+            AddPar("WEBSERVEURURL", "http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC", "REING (ext)")
+            AddPar("WEBSERVEURUSER", "web", "REING (ext)")
+            AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "REING (ext)")
+            AddPar("WEBSERVEURTIMEOUT", "15000", "REING (ext)")
+            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "REING (ext)")
+            AddPar("WEBSERVEURTIMTEST", "180000", "REING (ext)")
+
+        Catch ex As Exception
+            Trace("Erreur: impossible d'ajouter des paramètres dans le fichier conf!", FichierTrace.niveau.erreur)
+        End Try
+    End Sub
+
+    'méthode qui sauvegarde le dernier site/poste/dossier dans le fichier SFAO.exe.conf
+    Private Sub SaveDerniereSaisi()
+        Try
+            If SFAO.Site.GRP1.FCYSHO <> "" Then
+                AddPar("LASTSITE", SFAO.Site.GRP1.FCYSHO)
+            End If
+            If SFAO.Site.GRP1.DOSSIER <> "" Then
+                AddPar("LASTDOSSIER", SFAO.Site.GRP1.DOSSIER)
+            End If
+            If SFAO.Poste.GRP1.WST <> "" Then
+                AddPar("LASTPOSTE", SFAO.Poste.GRP1.WST)
+            End If
+            Trace("Sauvegarde de la dernière saisie dans le fichier conf")
+        Catch ex As Exception
+            Trace("Erreur: impossible d'ajouter les paramètres de la dernière saisie dans le fichier conf!", FichierTrace.niveau.erreur)
+        End Try
+    End Sub
+
+    'Méthode qui verifie si une nouvelle version existe et aussi si un nouveau fichier SFAO-upd.exe existe et dans ce cas remplace l'actuel par le nouveau
+    'en fonction de la version la mise à jour peut être facultative ou obligatoire
+    Private Sub VerifUpdate()
+        Dim _Dir As DirectoryInfo
+        Dim sfaoUpdateExe As String = "SFAO-Upd.exe"
+        Dim sfaoPath As String = Application.StartupPath    'Le répertoire de l'application actuelle
+        Dim versionslist As New List(Of String)
+        Dim version As String = Application.ProductVersion  'La version actuelle
+        Dim repUpdSfao As String = Param("REPUPDSFAO")      'Le répertoire des updates
+
+        If repUpdSfao = "" Then
+            CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
+            Trace("[VerifUpdate] La paramètre REPUPDSFAO du chemin des mise à jours est vide ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
+            Exit Sub
+        End If
+
+        Dim _main_Dir As New IO.DirectoryInfo(repUpdSfao)
+
+        Try
+            'Ajout dans la liste des versions dispos dans le dossier
+            For Each _Dir In _main_Dir.GetDirectories
+                versionslist.Add(_Dir.Name)
+            Next
+        Catch ex As Exception
+            CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
+            Trace("[VerifUpdate] Erreur de lecture du chemin des mise à jours : " & repUpdSfao & " ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
+            Exit Sub
+        End Try
+
+        'Vérifier si dans le dossier Update (indiqué par le paramètre), on a une verssion + récente
+        'Vérifier si le nom du dernier dossier de la liste est le même que la version actuelle
+        Dim listVersionLength As Integer = versionslist.Count
+        Dim lastVersion As String = versionslist(listVersionLength - 1)
+        'Vérifier si une mise à jour est disponible
+        If lastVersion.Equals(version) Then
+            'MsgBox(Prompt:="Pas de version plus récente") pas de message ! le contrôle se fait toutes les 30 secondes !!!
+            Debug.WriteLine("Debug " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " [VerifUpdate] Pas de version plus récente")
+        Else
+            Trace("[VerifUpdate] Version SFAO plus récente trouvée : " & lastVersion & " , lancement de la mise à jour.", FichierTrace.niveau.toujours)
+            'Si on a une version + récente on vérifie si SFAO-Upd.exe est plus récent(??), si oui on le copie dans le dossier de l'appli client
+            Dim repSFAO_UpdExePath As String = repUpdSfao & "\" & lastVersion & "\"
+            Dim repSFAO_UpdExe As String = repUpdSfao & "\" & lastVersion & "\" & sfaoUpdateExe
+            'Le répertoire de la version
+            Dim repertoireAppliClient As String = sfaoPath & "\" & sfaoUpdateExe
+            'Vérifier si le fichier SFAO-Upd.exe existe
+            If File.Exists(Path.Combine(repSFAO_UpdExePath, sfaoUpdateExe)) Then
+                Trace("[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée, " & " , copie en local.", FichierTrace.niveau.toujours)
+                'On le copie dans le dossier de l'appli client
+                Try
+                    'On procède à la copie du fichier'
+                    File.Copy(repSFAO_UpdExe, repertoireAppliClient, overwrite:=True)
+                Catch ex As Exception
+                    CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
+                    Trace("[VerifUpdate] Erreur de copie de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
+                    Exit Sub
+                End Try
+            End If
+
+            'On execute SFAO-upd.exe soit le récent copié soit l'ancien déjà existant
+            Trace("[VerifUpdate] Lancement de SFAO-Upd.exe", FichierTrace.niveau.toujours)
+            Dim p As New ProcessStartInfo With {
+                .FileName = repertoireAppliClient
+            }
+            'On arrête SFAO
+            Application.Exit()
+            ' Exécuter le SFAO-upd.exe
+            'Process.Start(p) //Commenté temporairement pour l'instant,ça provoque un bug
+
+
+            'Copie des dossiers de la nouvelle version vers l'appli client
+            'Appel à la procédure qui copie des dossiers et fichiers du répertoire de la nv version vers l'actuelle version
+            Try
+                CopieDossetFich(repSFAO_UpdExePath, sfaoPath)
+
+            Catch ex As Exception
+                MsgBox(" Erreur de lecture du chemin de la nouvelle version : " & repSFAO_UpdExePath & ex.Message)
+                Exit Sub
+            End Try
+        End If
+    End Sub
+
+
 End Module
