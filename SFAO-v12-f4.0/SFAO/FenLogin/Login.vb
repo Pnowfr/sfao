@@ -212,6 +212,7 @@ Public Class Login
             End If
 
             'Contrôle du ping
+            Trace("Test du ping IP : " + IPweb)
             If My.Computer.Network.Ping(IPweb) Then
 
                 'TODO contrôler si le web service répond
@@ -304,6 +305,7 @@ Public Class Login
                     Trace("Erreur de connexion au dossier " & dossier & " !", FichierTrace.niveau.alerte)
                 End If
             Else
+                Trace("Erreur du test du ping IP: " & IPweb & " !", FichierTrace.niveau.erreur)
                 Trace("Connexion au serveur du dossier " & ComboBoxDos.Text & " impossible !", FichierTrace.niveau.alerte)
             End If
         Else
