@@ -13,9 +13,9 @@ Module SFAO
     Public Site As New WSSite                           'classe desinfos du site connecté
     Public Poste As New WSPoste                         'classe des infos du poste connecté
     Public Events As New WSEvt                          'classe des infos des événements du poste
+    Private FichTrace As FichierTrace                   'classe de gestion des traces
     Public Phases As New List(Of Phase)                 'classe des phases
     Public UpdateTimer As Timer                         'timer de recherche de mise à jour
-    Private FichTrace As FichierTrace                   'classe de gestion des traces
     Private IDCnx As Integer                            'identifiant de connection à la base locale
     Private CheckUpd As Boolean = True                  'variable de gestion de mise à jour auto 
     Public Sub Main()
@@ -42,7 +42,7 @@ Module SFAO
         End If
 
         Application.DoEvents()
-        SFAO.Sleep(1000)    'Temps d'affichage du logo
+        SFAO.Sleep(1500)
 
         'TODO: Logo à réactiver
         Logo.Hide()                                     'on cache le logo avant l'affichage de la fenêtre de connexion
@@ -51,7 +51,7 @@ Module SFAO
         'Actie timer de vérification des mise à jour
         Trace("Activation du timer de recherche de mise à jour")
         UpdateTimer = New Timer()
-        UpdateTimer.Interval = 5000
+        UpdateTimer.Interval = 3000
         AddHandler UpdateTimer.Tick, AddressOf UpdateTimer_tick
         UpdateTimer.Start()
 
@@ -59,7 +59,7 @@ Module SFAO
         ResultLogin = Login.ShowDialog()                'la connexion à la base locale est instencié 
         Login.Dispose()
 
-        Trace("Résultat Login : " & ResultLogin.ToString, FichierTrace.niveau.toujours)
+        Trace("Résultat Login : " & ResultLogin.ToString)
 
         'Fermeture du fichier de trace connexion
         FermeTrace()
@@ -476,13 +476,12 @@ Module SFAO
             Application.Exit() 'on quitte 
             End
         Else
-            'TODO PNO: VerifUpdate Désactvé tant q'il y a des bugs...
-
-            If CheckUpd And False Then
+            If CheckUpd Then
                 Call VerifUpdate()
             End If
         End If
     End Sub
+
     Private Sub VerifUpdate()
         Dim _Dir As DirectoryInfo
         Dim sfaoUpdateExe As String = "SFAO-Upd.exe"
@@ -516,7 +515,7 @@ Module SFAO
         Dim lastVersion As String = versionslist(listVersionLength - 1)
         'Vérifier si une mise à jour est disponible
         If lastVersion.Equals(version) Then
-            'MsgBox(Prompt:="Pas de version plus récente") pas de message ! le contrôle se fait toutes les 30 secondes !!! 
+            'MsgBox(Prompt:="Pas de version plus récente") pas de message ! le contrôle se fait toutes les 30 secondes !!!
             Debug.WriteLine("Debug " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " [VerifUpdate] Pas de version plus récente")
         Else
             Trace("[VerifUpdate] Version SFAO plus récente trouvée : " & lastVersion & " , lancement de la mise à jour.", FichierTrace.niveau.toujours)
@@ -529,112 +528,122 @@ Module SFAO
             If File.Exists(Path.Combine(repSFAO_UpdExePath, sfaoUpdateExe)) Then
                 Trace("[VerifUpdate] Nouveau SFAO-Upd.exe  trouvée, " & " , copie en local.", FichierTrace.niveau.toujours)
                 'On le copie dans le dossier de l'appli client
-                '(DEBUT commenté temporairement 1602)
                 Try
-                    'My.Computer.FileSystem.CopyFile(
-                    'repSFAO_UpdExe,
-                    '     repertoireAppliClient,
-                    'FileIO.UIOption.AllDialogs,
-                    'FileIO.UICancelOption.DoNothing)
+                    'On procède à la copie du fichier'
+                    File.Copy(repSFAO_UpdExe, repertoireAppliClient, overwrite:=True)
                 Catch ex As Exception
-                    'CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
-                    'Trace("[VerifUpdate] Erreur de copie de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
-                    'Exit Sub
-                    '(FIN commenté temporairement 1602)
+                    CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
+                    Trace("[VerifUpdate] Erreur de copie de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
+                    Exit Sub
                 End Try
             End If
 
             'On execute SFAO-upd.exe soit le récent copié soit l'ancien déjà existant
+            Trace("[VerifUpdate] Lancement de SFAO-Upd.exe", FichierTrace.niveau.toujours)
+            Dim p As New ProcessStartInfo With {
+                .FileName = repertoireAppliClient
+            }
+            'On arrête SFAO
+            Application.Exit()
+            ' Exécuter le SFAO-upd.exe
+            'Process.Start(p) //Commenté temporairement pour l'instant,ça provoque un bug
+
+
+            'Copie des dossiers de la nouvelle version vers l'appli client
+            'Appel à la procédure qui copie des dossiers et fichiers du répertoire de la nv version vers l'actuelle version
             Try
-                Trace("[VerifUpdate] Lancement de SFAO-Upd.exe", FichierTrace.niveau.toujours)
-                Dim p As New ProcessStartInfo With {
-                    .FileName = repertoireAppliClient
-                }
-                ' Exécuter le SFAO-upd.exe (DEBUT commenté temporairement)
-                'Process.Start(p)
-                '(FIN commenté temporairement)
+                CopieDossetFich(repSFAO_UpdExePath, sfaoPath)
 
-                'Copie des dossiers de la nouvelle version vers l'appli client
-                'Parcours de fichiers qui sont dans le répertoire de la nouvelle version
-                Dim listFichiersNvVersion As New List(Of String)  'Liste qui va contenir les fichiers de la nouvelle version
-                Dim listDossiersNvVersion As New List(Of String)  'Liste qui va contenir les dossiers de la nouvelle version
-                Dim _dir_nvvers As New IO.DirectoryInfo(repSFAO_UpdExePath)
-                Dim fichDll As IO.FileInfo() = _dir_nvvers.GetFiles("*.dll")
-                Dim fichConfig As IO.FileInfo() = _dir_nvvers.GetFiles("*.config")
-                Dim fichXml As IO.FileInfo() = _dir_nvvers.GetFiles("*.xml")
-                Dim fi As IO.FileInfo
-                Dim fiConf As IO.FileInfo
-                Dim fiXml As IO.FileInfo
-
-                Try
-                    'Ajout des dossiers dans la liste des versions
-                    For Each _Dir In _dir_nvvers.GetDirectories
-                        listDossiersNvVersion.Add(_Dir.Name)
-                    Next
-                    'Ajout des fichiers dll
-                    For Each fi In fichDll
-                        listFichiersNvVersion.Add(fi.Name)
-                    Next
-                    'Ajout des fichiers config
-                    For Each fiConf In fichConfig
-                        listFichiersNvVersion.Add(fiConf.Name)
-                    Next
-                    'Ajout des fichiers xml
-                    For Each fiXml In fichXml
-                        listFichiersNvVersion.Add(fiXml.Name)
-                    Next
-
-                    'Copie des dossiers de la liste vers le répertoire de l'application actuelle
-                    For Each dossNv As String In listDossiersNvVersion
-                        Try
-                            'Copie du dossier dans le répertoire en écrasant les dossiers et fichiers du même nom
-                            Dim sDestination As String = sfaoPath & "\" & dossNv
-                            Dim sSource As String = repSFAO_UpdExePath & dossNv
-                            'Si un dossier du même nom n'existe pas à la destination
-                            If Not Directory.Exists(sDestination) Then
-                                Directory.CreateDirectory(sDestination)
-                            End If
-                            'On procède à la copie
-                            My.Computer.FileSystem.CopyDirectory(
-                                sSource, sDestination,
-                                Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
-                                Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException)
-                        Catch ex As Exception
-                            Trace("[VerifUpdate] Erreur lors de la copie du dossier  : " & dossNv, FichierTrace.niveau.erreur)
-                            Exit Sub
-                        End Try
-                    Next
-
-                    'Copie des fichiers de la liste vers le répertoire de l'application actuelle
-                    For Each fichNv As String In listFichiersNvVersion
-                        Try
-                            'Copie du ficher dans le répertoire en écrasant les dossiers et fichiers du même nom
-                            Dim sDestination As String = sfaoPath & "\" & fichNv
-                            Dim sSource As String = repSFAO_UpdExePath & fichNv
-                            'Si un fichier du même nom n'existe pas à la destination
-                            If Not File.Exists(Path.Combine(sDestination, fichNv)) Then
-                                File.Create(sDestination)
-                            End If
-                            'On procède à la copie ' A débugger 26 février 2021
-                            My.Computer.FileSystem.CopyFile(
-                                sSource, sDestination,
-                                Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
-                                Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing)
-                        Catch ex As Exception
-                            Trace("[VerifUpdate] Erreur lors de la copie du fichier  : " & fichNv, FichierTrace.niveau.erreur)
-                            Exit Sub
-                        End Try
-                    Next
-
-                Catch ex As Exception
-                    Trace("[VerifUpdate] Erreur de lecture du chemin de la nouvelle version : " & repSFAO_UpdExePath, FichierTrace.niveau.erreur)
-                    Exit Sub
-                End Try
             Catch ex As Exception
-                CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
-                Trace("[VerifUpdate] Erreur de lancement de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
+                MsgBox(" Erreur de lecture du chemin de la nouvelle version : " & repSFAO_UpdExePath & ex.Message)
                 Exit Sub
             End Try
         End If
+    End Sub
+
+    'procédure qui copie des dossiers et fichiers du répertoire de la nv version vers l'actuelle version
+    Public Sub CopieDossetFich(repSFAO_UpdExePath As String, sfaoPath As String)
+        Dim _Dir As DirectoryInfo
+        Dim listFichiersNvVersion As New List(Of String)  'Liste qui va contenir les fichiers de la nouvelle version
+        Dim listDossiersNvVersion As New List(Of String)  'Liste qui va contenir les dossiers de la nouvelle version
+        Dim _dir_nvvers As New IO.DirectoryInfo(repSFAO_UpdExePath)
+        Dim fichDll As IO.FileInfo() = _dir_nvvers.GetFiles("*.dll")
+        Dim fichConfig As IO.FileInfo() = _dir_nvvers.GetFiles("*.config")
+        Dim fichXml As IO.FileInfo() = _dir_nvvers.GetFiles("*.xml")
+        Dim fi As IO.FileInfo
+        Dim fiConf As IO.FileInfo
+        Dim fiXml As IO.FileInfo
+
+        'Ajout des dossiers dans la liste des versions
+        For Each _Dir In _dir_nvvers.GetDirectories
+            listDossiersNvVersion.Add(_Dir.Name)
+        Next
+        'Ajout des fichiers dll
+        For Each fi In fichDll
+            listFichiersNvVersion.Add(fi.Name)
+        Next
+        'Ajout des fichiers config
+        For Each fiConf In fichConfig
+            listFichiersNvVersion.Add(fiConf.Name)
+        Next
+        'Ajout des fichiers xml
+        For Each fiXml In fichXml
+            listFichiersNvVersion.Add(fiXml.Name)
+        Next
+
+        'Copie des dossiers de la liste vers le répertoire de l'application actuelle
+        For Each dossNv As String In listDossiersNvVersion
+            Try
+                Dim sDestination As String = sfaoPath & "\" & dossNv
+                Dim sSource As String = repSFAO_UpdExePath & dossNv
+
+                'fonction récursive pour copier les dossiers et fichiers
+                CopyDirectory(sSource, sDestination)
+
+            Catch ex As Exception
+                MsgBox(" Erreur lors de la copie du dossier  : " & ex.Message)
+                Exit Sub
+            End Try
+        Next
+
+        'Copie des fichiers de la liste vers le répertoire de l'application actuelle
+        For Each fichNv As String In listFichiersNvVersion
+            Try
+                'Copie du ficher dans le répertoire en écrasant les dossiers et fichiers du même nom
+                Dim sDestination As String = sfaoPath & "\" & fichNv
+                Dim sSource As String = repSFAO_UpdExePath & fichNv
+
+                'On procède à la copie des fichiers'
+                File.Copy(sSource, sDestination, overwrite:=True)
+
+            Catch ex As Exception
+                MsgBox(" Erreur lors de la copie du fichier  : " & fichNv & ex.Message)
+                Exit Sub
+            End Try
+        Next
+    End Sub
+
+    'Fonction récursive pour la copie des dossiers, sous dossiers etc...
+    Public Sub CopyDirectory(ByVal sourcePath As String, ByVal destinationPath As String)
+        Dim sourceDirectoryInfo As New DirectoryInfo(sourcePath)
+
+        ' Si le dossier de destination n'existe pas, le créer
+        If Not Directory.Exists(destinationPath) Then
+            Directory.CreateDirectory(destinationPath)
+        End If
+
+        Dim fileSystemInfo As FileSystemInfo
+        For Each fileSystemInfo In sourceDirectoryInfo.GetFileSystemInfos
+            Dim destinationFileName As String =
+                Path.Combine(destinationPath, fileSystemInfo.Name)
+
+            ' Maintenant, vérifier si c'est un dossier ou un fichier et faire les actions correspondantes
+            If TypeOf fileSystemInfo Is System.IO.FileInfo Then
+                File.Copy(fileSystemInfo.FullName, destinationFileName, True)
+            Else
+                ' Appeler la méthode récursivement si nécessaire
+                CopyDirectory(fileSystemInfo.FullName, destinationFileName)
+            End If
+        Next
     End Sub
 End Module
