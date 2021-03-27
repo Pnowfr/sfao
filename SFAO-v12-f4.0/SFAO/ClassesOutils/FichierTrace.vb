@@ -1,6 +1,6 @@
 ﻿'------------------------------------------------------------------------------------------------------------------------
 'Modifications:
-'27/03/21 PNO Ajout test si fichier trace existant
+'[270321PNO] Ajout test si fichier trace existant
 '
 '------------------------------------------------------------------------------------------------------------------------
 Imports System.IO
@@ -87,6 +87,8 @@ Public Class FichierTrace
     Public Sub OuvreTrace()
         Dim typtr As String
         Dim typtrace As String
+        Dim numfil As Integer = 0               '270321PNO.n
+        Dim addfil As String = String.Empty     '270321PNO.n
         If traceactive Then
 
             If tracetype = typeTrace.connexion Then
@@ -100,8 +102,15 @@ Public Class FichierTrace
                 typtr = "Sfao_"
             End If
 
+            '270321PNO.sn
+            fichier = "Trace_" & typtr & DateTime.Now.ToString("yyyyMMdd_HH_mm_ss")
+            Do While My.Computer.FileSystem.FileExists(repertoire & "\" & fichier & addfil & ".tra")
+                numfil += 1
+                addfil = "_" & numfil.ToString
+            Loop
+            fichier += addfil & ".tra"
+            '270321PNO.en
 
-            fichier = "Trace_" & typtr & DateTime.Now.ToString("yyyyMMdd_HH_mm_ss") & ".tra"
             Try
                 file = My.Computer.FileSystem.OpenTextFileWriter(repertoire & "\" & fichier, True)
             Catch ex As Exception
