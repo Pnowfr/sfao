@@ -1,4 +1,8 @@
-﻿Imports System.Text
+﻿'------------------------------------------------------------------------------------------------------------------------
+'Modifications:
+'
+'------------------------------------------------------------------------------------------------------------------------
+Imports System.Text
 Module Fnc
     'fonction qui retire tous les caractères spéciaux d'une chaine
     Public Function RemoveAccents(ByVal s As String) As String
@@ -17,7 +21,7 @@ Module Fnc
 
     'Fonction qui affiche la date et l'heure selon le format SFAO
     Public Function AffDateHeure(ByVal _date As Date, ByVal _time As Integer) As String
-        If _date = CDate("1/1/0001") OrElse _date = CDate("31/12/1599") Then 'date nulle 15991231
+        If _date = CDate("1/1/0001") OrElse _date = CDate("31/12/1599") Then 'date nulle dans X3 =  15991231
             Return String.Empty
         ElseIf _date <> Now.Date Then
             Return _date.ToString("dd/MM") + " " + ZHM(_time)
@@ -95,4 +99,5 @@ Module Fnc
                 AFF_UNIT = UNIT
         End Select
     End Function
+
 End Module
