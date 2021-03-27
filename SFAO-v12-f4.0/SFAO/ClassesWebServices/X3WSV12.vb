@@ -25,8 +25,10 @@ Public Class X3WSV12
                 callContext.poolAlias = SFAO.ParamDos("WEBSERVEURPOOLALIAS", dossier)
                 callContext.requestConfig = SFAO.ParamDos("WEBSERVEURPARAM", dossier)
 
-                Debug.WriteLine(Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " WEBSERVEURUSER " & SFAO.ParamDos("WEBSERVEURUSER", dossier))
-                Debug.WriteLine(Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " WEBSERVEURPWD " & SFAO.ParamDos("WEBSERVEURPWD", dossier)) '& Crypt.Decrypt(SFAO.ParamDos("WEBSERVEURPWD", dossier)))
+                If SFAO.SfaoTest = True Then
+                    Debug.WriteLine(Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " WEBSERVEURUSER " & SFAO.ParamDos("WEBSERVEURUSER", dossier))
+                    Debug.WriteLine(Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " WEBSERVEURPWD " & SFAO.ParamDos("WEBSERVEURPWD", dossier)) '& Crypt.Decrypt(SFAO.ParamDos("WEBSERVEURPWD", dossier)))
+                End If
 
                 x3WebSrv.Credentials = New NetworkCredential(SFAO.ParamDos("WEBSERVEURUSER", dossier), Crypt.Decrypt(SFAO.ParamDos("WEBSERVEURPWD", dossier)))
                 x3WebSrv.PreAuthenticate = True
@@ -43,7 +45,7 @@ Public Class X3WSV12
         x3WebSrv.Dispose()
     End Sub
 
-    Public Function Run(ByVal WebService As String, ByVal Parametres As String, ByRef Result As String, Optional WriteTrace As Boolean = False) As Integer
+    Public Function Run(ByVal WebService As String, ByVal Parametres As String, ByRef Result As String, ByRef MsgErr As String, Optional WriteTrace As Boolean = False) As Integer
 
         If WriteTrace Then
             Trace("[" & WebService & "] Parametres : " & Parametres)
@@ -57,6 +59,7 @@ Public Class X3WSV12
             If TraceCountErr < 10 Then
                 Trace("[" & WebService & "] Exception run du web service !", FichierTrace.niveau.erreur)
                 Trace(ex.Message, FichierTrace.niveau.erreur)
+                MsgErr = "Exception run du web service !"
             End If
             Return -1 'Exception
 
@@ -65,10 +68,13 @@ Public Class X3WSV12
         If resultXML.status = 0 Then
             'Erreur
             TraceCountErr += 1
+
             If TraceCountErr < 10 Then
                 Trace("[" & WebService & "] Erreur statut du web service !", FichierTrace.niveau.erreur)
+                MsgErr = "Erreur du web service ! "
                 For Each cadxMessage In resultXML.messages
                     Trace(cadxMessage.message, FichierTrace.niveau.erreur)
+                    'MsgErr += cadxMessage.message
                 Next
             End If
             Return 0 'erreur

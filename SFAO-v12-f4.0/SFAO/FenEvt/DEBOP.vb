@@ -1,6 +1,6 @@
 ﻿'------------------------------------------------------------------------------------------------------------------------
 'Modifications:
-'
+'[270321PNO] : ajout du séparateur //
 '------------------------------------------------------------------------------------------------------------------------
 
 Imports System.ComponentModel
@@ -147,7 +147,8 @@ Public Class DEBOP
     'Méthode qui contrôle la saisie de l'OF
     Private Sub TextBoxOF_Validating(sender As Object, e As CancelEventArgs) Handles TextBoxOF.Validating
         'Console.WriteLine("TextBoxOF_Validating")
-        If TextBoxOF.Tag Is Nothing Then
+        'If TextBoxOF.Tag Is Nothing Then                                                   '270321PNO.o
+        If TextBoxOF.Tag Is Nothing OrElse TextBoxOF.Tag.ToString = String.Empty Then       '270321PNO.n
             OFOP_Validating(TextBoxOF.Text, MaskedTextBoxOP.Text, "OF")
         End If
         If TextBoxOF.Tag IsNot Nothing AndAlso TextBoxOF.Tag.ToString <> "" Then
@@ -211,9 +212,26 @@ Public Class DEBOP
                     'Console.WriteLine("OFOP_Validating OF vide")
                 Else
                     m = Regex.Match(_of, pattern, RegexOptions.None) 'on vérifie si l'OF contient autre chose que des lettres majuscules, des chifres et slash
-                    'on doit valider le code OF : pas plus long que 20c et un seul /
-                    If Len(_of) > 20 OrElse _of.Count(Function(c As Char) c = "/") >= 2 OrElse m.Success = False Then
+                    'on doit valider le code OF : pas plus long que 20c et un seul / ou un double slash // ! 
+                    'If Len(_of) > 20 OrElse _of.Count(Function(c As Char) c = "/") >= 2 OrElse m.Success = False Then
+                    If Len(_of) > 21 OrElse _of.Count(Function(c As Char) c = "/") >= 3 OrElse m.Success = False Then
                         TextBoxOF.Tag = "Format de l'OF incorrect !"
+
+                    ElseIf _of.Count(Function(c As Char) c = "/") = 2 Then 'si l'of contient deux //  '270321PNO.sn
+                        t = _of
+                        p = InStr(t, "//") + 1
+                        'Si la zone OF contient l'OF+OP sous forme OFXXXXXX//50 on sépare l'OF et on copie l'OP dans la zone OP
+                        If p > 0 Then
+                            _of = Strings.Left(t, p - 2)
+                            _op = Strings.Right(t, Len(t) - p)
+                            t = _of
+                        End If
+
+                        If Len(t) > 0 And Len(t) <= 5 And IsNumeric(t) Then 'si dans l'OF on a que des chifres
+                            'si on a saisi le n° simple de l'OF (ex : 1234) on le transforme en OFB2001234 en utilisant le site et l'année en cours
+                            _of = "OF" & Strings.Left(SFAO.Site.GRP1.FCY, 1) & Now.ToString("yy") & StrDup(5 - Len(t), "0") & t
+                        End If
+                        '270321PNO.en
                     ElseIf _of.Count(Function(c As Char) c = "/") <= 1 Then 'si l'of contient aucun ou un /
                         t = _of
                         p = InStr(t, "/")
@@ -240,6 +258,7 @@ Public Class DEBOP
                 Else
                     Try
                         'on fait valider le code OF/OP par le web service
+                        Trace("Lancement du web service WSOFOPInfo")
                         ofop = X3ws.WSOFOPInfo(SFAO.Site.GRP1.FCY, _of, nop, SFAO.Poste.GRP1.Y_TYPOP)
 
                     Catch ex As Exception
