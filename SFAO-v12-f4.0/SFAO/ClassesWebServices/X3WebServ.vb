@@ -1,6 +1,6 @@
 ﻿'------------------------------------------------------------------------------------------------------------------------
 'Modifications:
-'
+'[270321DEV] Test
 '------------------------------------------------------------------------------------------------------------------------
 
 Imports Newtonsoft.Json
@@ -255,14 +255,7 @@ Public Class X3WebServ
         End If
         Return json
     End Function
-    'Web service qui récupère le dernier OF/Opé/évt du poste
-    Public Function WSGETLSTEV(ByVal _site As String, ByVal _poste As String) As WSLstEvt
-        'Dim params As String
-        Dim json As New WSLstEvt
 
-
-        Return json
-    End Function
     'Web service qui enregistre une entrée d'opérateur
     Public Function WSEntOp(ByVal _site As String, ByVal _poste As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByRef _retmsg As String) As Boolean
         Dim par As Object
@@ -314,7 +307,14 @@ Public Class X3WebServ
 
         Return json
     End Function
+    'Web service qui récupère le dernier OF/Opé/évt du poste
+    Public Function WSGETLSTEV(ByVal _site As String, ByVal _poste As String) As WSLstEvt
+        'Dim params As String
+        Dim json As New WSLstEvt
 
+
+        Return json
+    End Function
     'Web service qui enregistre un début d'opération
     Public Function WSDEBOPE(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByVal _of As String, ByVal _op As Integer, ByRef _retmsg As String) As Integer
         'Dim par As Object
