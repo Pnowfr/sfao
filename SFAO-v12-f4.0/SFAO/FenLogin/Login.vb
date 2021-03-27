@@ -1,9 +1,11 @@
 ﻿'------------------------------------------------------------------------------------------------------------------------
 'Modifications:
+'[270321PNO] : ajout vérif si si le serveur web est accessible et démarré
 '
 '------------------------------------------------------------------------------------------------------------------------
 Imports System.Configuration
 Imports System.Text.RegularExpressions
+Imports System.Net
 Public Class Login
 
     'Déclaration des variables pour le mouvement et déplacement de la form
@@ -108,7 +110,7 @@ Public Class Login
         End If
 
         'TODO Temporaire à enlever !!!
-        ComboBoxDos.SelectedIndex = 0
+        ComboBoxDos.SelectedIndex = 3
 
         TextBoxPoste.Text = SFAO.Param("POSTE")
         If SFAO.Param("MULTIPOSTE") <> "VRAI" And TextBoxPoste.Text <> "" Then
@@ -121,7 +123,7 @@ Public Class Login
             TextBoxMdp.Enabled = False
         End If
 
-        Application.DoEvents()
+        Application.DoEvents() 'Raffraichit l'écran
 
         'sélection du 1er champ vide
         If TextBoxSoc.Text = "" Then
@@ -178,9 +180,12 @@ Public Class Login
     Private Sub BtnCnxOk_Click(sender As Object, e As EventArgs) Handles BtnCnxOk.Click
         Dim dossier As String
         Dim version As String
+        Dim URLweb As String
+        Dim IPweb As String
+        Dim s As Integer
         Dim CnxOk As Boolean
 
-        Trace("[Login] Bouton OK")
+        Trace("[Login] Click Bouton OK")
         Trace("Société : " & TextBoxSoc.Text, FichierTrace.niveau.toujours)
         Trace("Site : " & TextBoxSit.Text, FichierTrace.niveau.toujours)
         Trace("Dossier : " & ComboBoxDos.Text, FichierTrace.niveau.toujours)
@@ -195,94 +200,114 @@ Public Class Login
         'On vérifie si les champs sont saisis
         If Not Check_Champs() Then Exit Sub
 
-        dossier = Regex.Match(ComboBoxDos.Text, "^\S{0,}").Value
-        version = ParamDos("WEBSERVEURVERSION", ComboBoxDos.Text)
-        'TODO : contrôler si serveur injoignable (pas de ping) ou si web service non démarré !
-
-        Try
-            'On instencie les web services 
-            Trace("Instentiation du web service")
-
-            X3ws = New X3WebServ(ComboBoxDos.Text, version)
-            'X3ws = New X3WebServices(ComboBoxDos.Text)
-
-            'La première connexion qui ouvre le web serice côté X3 prends quelques secondes !
-
-            SFAO.Sleep(1000) 'attente de 1 secondes
-
-            'on contrôle si le web service répond
-            If X3ws.WSDTSFAO() <> "" Then
-                CnxOk = True
-                Trace("[Login] Connexion au web services")
+        dossier = Regex.Match(ComboBoxDos.Text, "^\S{0,}").Value    'permet d'enlever (ext) du dossier affiché
+        version = ParamDos("WEBSERVEURVERSION", ComboBoxDos.Text)   'récupère la version V6 ou V12 des paramètres du dossier
+        URLweb = ParamDos("WEBSERVEURURL", ComboBoxDos.Text)        'récupère l'URL du serveur web des paramètres du dossier
+        If URLweb <> "" Then
+            'L'IP est entre les premiers // et le / suivant et peut contenir un port :xxxxxx
+            s = URLweb.IndexOf("//") + 1
+            IPweb = URLweb.Substring(s + 1, URLweb.IndexOf("/", s + 1) - s - 1)
+            If IPweb.Contains(":") Then
+                IPweb = IPweb.Substring(0, IPweb.IndexOf(":"))
             End If
-        Catch ex As Exception
-            Trace("Connexion au web service du dossier " & ComboBoxDos.Text & " impossible !", FichierTrace.niveau.erreur)
-            Trace(ex.Message, FichierTrace.niveau.erreur)
-        End Try
 
-        'Si la connexion à l'ERP est possible
-        If CnxOk = True Then
+            'Contrôle du ping
+            If My.Computer.Network.Ping(IPweb) Then
 
-            Try
-                SFAO.Site = X3ws.WSGETSITE("", "", TextBoxSit.Text, dossier, TextBoxSoc.Text)
-            Catch ex As Exception
-                Trace("Erreur de connexion au web service !", FichierTrace.niveau.alerte)
-                Trace("[WSGETSITE] : " & ex.Message, FichierTrace.niveau.erreur)
-            End Try
+                'TODO contrôler si le web service répond
 
-            If SFAO.Site.GRP1.FCY <> "" Then
-                'on récupère les infos du poste
+
                 Try
-                    SFAO.Poste = X3ws.WSGETPOSTE(TextBoxPoste.Text, SFAO.Site.GRP1.FCY)
+                    'On instencie les web services 
+                    Trace("Instentiation du web service")
+
+                    X3ws = New X3WebServ(ComboBoxDos.Text, version)
+
+                    'La première connexion qui démarre le web serice côté X3 prends quelques secondes ! (si le pool est en démarrage auto)
+                    SFAO.Sleep(1000) 'attente de 1 secondes
+
+                    'on contrôle si le web service répond
+                    If X3ws.WSDTSFAO() <> "" Then
+                        CnxOk = True
+                        Trace("[Login] Connexion au web service ok")
+                    End If
                 Catch ex As Exception
-                    Trace("Erreur de connexion au web service !", FichierTrace.niveau.alerte)
-                    Trace("[WSGETPOSTE] : " & ex.Message, FichierTrace.niveau.erreur)
+                    Trace("Connexion au web service du dossier " & ComboBoxDos.Text & " impossible !", FichierTrace.niveau.erreur)
+                    Trace(ex.Message, FichierTrace.niveau.erreur)
                 End Try
 
-                If SFAO.Poste.GRP1.ZRET = 1 Then
-                    If SFAO.Poste.GRP1.ZENAFLG <> 2 Then
-                        Trace("Erreur : poste " & TextBoxPoste.Text & " inactif !", FichierTrace.niveau.alerte)
-                    ElseIf SFAO.Poste.GRP1.ZGRP = 2 Then
-                        Trace("Erreur : poste de type groupe non autorisé " & TextBoxPoste.Text & " !", FichierTrace.niveau.alerte)
-                    ElseIf SFAO.Poste.GRP1.WSTTYP = PosteWs.TypePost.Sous_traitance Then
-                        Trace("Erreur : poste de type sous-traitance non autorisé " & TextBoxPoste.Text & " !", FichierTrace.niveau.alerte)
-                    Else
-                        'récupération des événements rattachés au poste
+                'Si la connexion au web service est possible
+                If CnxOk = True Then
+
+                    Try
+                        'on récupère les infos du site
+                        SFAO.Site = X3ws.WSGETSITE("", "", TextBoxSit.Text, dossier, TextBoxSoc.Text)
+                    Catch ex As Exception
+                        Trace("Erreur de connexion au web service !", FichierTrace.niveau.alerte)
+                        Trace("[WSGETSITE] : " & ex.Message, FichierTrace.niveau.erreur)
+                    End Try
+
+                    If SFAO.Site.GRP1.FCY <> "" Then
                         Try
-                            SFAO.Events = X3ws.WSGETEVT(TextBoxPoste.Text)
+                            'on récupère les infos du poste
+                            SFAO.Poste = X3ws.WSGETPOSTE(TextBoxPoste.Text, SFAO.Site.GRP1.FCY)
                         Catch ex As Exception
                             Trace("Erreur de connexion au web service !", FichierTrace.niveau.alerte)
-                            Trace("[WSGETEVT] : " & ex.Message, FichierTrace.niveau.erreur)
+                            Trace("[WSGETPOSTE] : " & ex.Message, FichierTrace.niveau.erreur)
                         End Try
 
-                        If SFAO.Events.GRP2.Count > 0 Then
-                            'Contrôle du mot de passe
-                            If SFAO.Param("SANSMOTDEPASSE") <> "VRAI" AndAlso SFAO.Param("MOTDEPASSE") <> "" Then
-                                If TextBoxMdp.Text.ToUpper = Crypt.Decrypt(SFAO.Param("MOTDEPASSE")).ToUpper Then
-                                    Me.DialogResult = DialogResult.OK
-                                Else
-                                    Trace("Mot de passe incorrect !", FichierTrace.niveau.avertissement)
-                                End If
+                        If SFAO.Poste.GRP1.ZRET = 1 Then
+                            If SFAO.Poste.GRP1.ZENAFLG <> 2 Then
+                                Trace("Erreur : poste " & TextBoxPoste.Text & " inactif !", FichierTrace.niveau.alerte)
+                            ElseIf SFAO.Poste.GRP1.ZGRP = 2 Then
+                                Trace("Erreur : poste de type groupe non autorisé " & TextBoxPoste.Text & " !", FichierTrace.niveau.alerte)
+                            ElseIf SFAO.Poste.GRP1.WSTTYP = PosteWs.TypePost.Sous_traitance Then
+                                Trace("Erreur : poste de type sous-traitance non autorisé " & TextBoxPoste.Text & " !", FichierTrace.niveau.alerte)
                             Else
-                                Me.DialogResult = DialogResult.OK
-                            End If
+                                Try
+                                    'récupération des événements rattachés au poste
+                                    SFAO.Events = X3ws.WSGETEVT(TextBoxPoste.Text)
+                                Catch ex As Exception
+                                    Trace("Erreur de connexion au web service !", FichierTrace.niveau.alerte)
+                                    Trace("[WSGETEVT] : " & ex.Message, FichierTrace.niveau.erreur)
+                                End Try
 
-                            If Me.DialogResult = DialogResult.OK Then
-                                Me.Close()
-                            End If
+                                'si on a des événements 
+                                If SFAO.Events.GRP2.Count > 0 Then
+                                    'Contrôle du mot de passe si saisie avec mot de passe (géré en paramètre local)
+                                    If SFAO.Param("SANSMOTDEPASSE") <> "VRAI" AndAlso SFAO.Param("MOTDEPASSE") <> "" Then
+                                        If TextBoxMdp.Text.ToUpper = Crypt.Decrypt(SFAO.Param("MOTDEPASSE")).ToUpper Then
+                                            Me.DialogResult = DialogResult.OK
+                                        Else
+                                            Trace("Mot de passe incorrect !", FichierTrace.niveau.avertissement)
+                                        End If
+                                    Else
+                                        'Si non on autorise le login
+                                        Me.DialogResult = DialogResult.OK
+                                    End If
 
+                                    If Me.DialogResult = DialogResult.OK Then
+                                        Trace("[Login] Connexion ok")
+                                        Me.Close()
+                                    End If
+                                Else
+                                    Trace("Erreur : aucun événement trouvé pour le poste " & TextBoxPoste.Text & " !", FichierTrace.niveau.alerte)
+                                End If
+                            End If
                         Else
-                            Trace("Erreur : aucun événement trouvé pour le poste " & TextBoxPoste.Text & " !", FichierTrace.niveau.alerte)
+                            Trace("Erreur : poste " & TextBoxPoste.Text & " inconnu sur le site " & TextBoxSit.Text & " !", FichierTrace.niveau.alerte)
                         End If
+                    Else
+                        Trace("Erreur : site " & TextBoxSit.Text & " inconnu sur le dossier " & dossier & " !", FichierTrace.niveau.alerte)
                     End If
                 Else
-                    Trace("Erreur : poste " & TextBoxPoste.Text & " inconnu sur le site " & TextBoxSit.Text & " !", FichierTrace.niveau.alerte)
+                    Trace("Erreur de connexion au dossier " & dossier & " !", FichierTrace.niveau.alerte)
                 End If
             Else
-                Trace("Erreur : site " & TextBoxSit.Text & " inconnu sur le dossier " & dossier & " !", FichierTrace.niveau.alerte)
+                Trace("Connexion au serveur du dossier " & ComboBoxDos.Text & " impossible !", FichierTrace.niveau.alerte)
             End If
         Else
-            Trace("Erreur de connexion au dossier " & dossier & " !", FichierTrace.niveau.alerte)
+            Trace("L'URL du serveur web n'est pas indiquée dans les paramètres de ce dossier ! ", FichierTrace.niveau.critique)
         End If
 
     End Sub
