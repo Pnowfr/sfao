@@ -32,7 +32,7 @@ Module SFAO
 
     Private FichTrace As FichierTrace                   'classe de gestion des traces
     Private IDCnx As Integer                            'identifiant de connection à la base locale
-    Private CheckUpd As Boolean = True                  'variable de gestion de mise à jour auto 
+    Private UpdSFAO As Boolean                          'variable de gestion de mise à jour auto 
 
 
     '---------------------------------------------------------------------------------------------------------------------------------------------------------'
@@ -63,6 +63,13 @@ Module SFAO
             SfaoTest = False
         End If
 
+        'On gère l'activation des mise à jour par un paramètre
+        If Param("UPDSFAO") = "VRAI" Then
+            UpdSFAO = True
+        Else
+            UpdSFAO = False
+        End If
+
         Application.DoEvents() 'Rafraichit l'application
         SFAO.Sleep(1500)       'Temps d'affichage du logo TODO : voir si on passe en paramètre local ?
 
@@ -70,11 +77,13 @@ Module SFAO
         Logo.Dispose()         'on libère le logo de la mémoire
 
         'Actie timer de vérification des mise à jour
-        Trace("Activation du timer de recherche de mise à jour")
-        UpdateTimer = New Timer()
-        UpdateTimer.Interval = 3000                                 'TODO passer le temps de vérification d'existance d'une nouvelle version en paramètre
-        AddHandler UpdateTimer.Tick, AddressOf UpdateTimer_tick
-        UpdateTimer.Start()
+        If UpdSFAO Then
+            Trace("Activation du timer de recherche de mise à jour")
+            UpdateTimer = New Timer()
+            UpdateTimer.Interval = 3000                                 'TODO passer le temps de vérification d'existance d'une nouvelle version en paramètre
+            AddHandler UpdateTimer.Tick, AddressOf UpdateTimer_tick
+            UpdateTimer.Start()
+        End If
 
         Trace("Lancement de la fenêtre de connexion")
         ResultLogin = Login.ShowDialog()                'Affichage de la fenêtre de connexion  + on instentie les webservices 
@@ -348,6 +357,7 @@ Module SFAO
             AddPar("REPTRACECONNEXION", "Traces")
             AddPar("REPTRACESFAO", "Traces")
             AddPar("NIVEAUTRACE", "0")
+            AddPar("UPDSFAO", "VRAI")
             AddPar("REPUPDSFAO", "")
 
             'paramètres par dossier : 
@@ -360,8 +370,8 @@ Module SFAO
             AddPar("WEBSERVEURUSER", "web", "GBIV12")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV6")
             AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV6")
-            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV6")
             AddPar("WEBSERVEURTIMTEST", "180000", "GBIV6")
+            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV6")
 
             'Dossier prod V12 : 
             AddPar("WEBSERVEURPOOLALIAS", "GBIV12", "GBIV12")
@@ -371,8 +381,8 @@ Module SFAO
             AddPar("WEBSERVEURUSER", "web", "GBIV12")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV12")
             AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV12")
-            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV12")
             AddPar("WEBSERVEURTIMTEST", "180000", "GBIV12")
+            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV12")
 
             'TODO Connexion externe pour les tests à enlever plus tard
             AddPar("WEBSERVEURPOOLALIAS", "GBIV12", "GBIV12 (ext)")
@@ -382,28 +392,30 @@ Module SFAO
             AddPar("WEBSERVEURUSER", "web", "REING (ext)")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV12 (ext)")
             AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV12 (ext)")
-            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV12 (ext)")
             AddPar("WEBSERVEURTIMTEST", "180000", "GBIV12 (ext)")
+            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV12 (ext)")
 
             'Dossier de test de la V12
             AddPar("WEBSERVEURPOOLALIAS", "REING", "REING")
+            AddPar("WEBSERVEURVERSION", "V12", "REING")
             AddPar("WEBSERVEURLANG", "FRA", "REING")
             AddPar("WEBSERVEURURL", "http://192.168.0.204/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC", "REING")
             AddPar("WEBSERVEURUSER", "web", "REING")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "REING")
             AddPar("WEBSERVEURTIMEOUT", "15000", "REING")
-            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "REING")
             AddPar("WEBSERVEURTIMTEST", "180000", "REING")
+            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "REING")
 
             'TODO Connexion externe pour les tests à enlever
             AddPar("WEBSERVEURPOOLALIAS", "REING", "REING (ext)")
+            AddPar("WEBSERVEURVERSION", "V12", "REING (ext)")
             AddPar("WEBSERVEURLANG", "FRA", "REING (ext)")
             AddPar("WEBSERVEURURL", "http://77.158.76.196/soap-generic/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC", "REING (ext)")
             AddPar("WEBSERVEURUSER", "web", "REING (ext)")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "REING (ext)")
             AddPar("WEBSERVEURTIMEOUT", "15000", "REING (ext)")
-            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "REING (ext)")
             AddPar("WEBSERVEURTIMTEST", "180000", "REING (ext)")
+            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "REING (ext)")
 
         Catch ex As Exception
             Trace("Erreur: impossible d'ajouter des paramètres dans le fichier conf!", FichierTrace.niveau.erreur)
@@ -509,7 +521,7 @@ Module SFAO
             Application.Exit() 'on quitte 
             End
         Else
-            If CheckUpd Then
+            If UpdSFAO Then
                 Call VerifUpdate()
             End If
         End If
@@ -527,7 +539,7 @@ Module SFAO
         Dim repUpdSfao As String = Param("REPUPDSFAO")      'Le répertoire des updates
 
         If repUpdSfao = "" Then
-            CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
+            UpdSFAO = False 'on ne refait plus de vérifications de mise à jours dans cette session
             Trace("[VerifUpdate] La paramètre REPUPDSFAO du chemin des mise à jours est vide ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
             Exit Sub
         End If
@@ -540,7 +552,7 @@ Module SFAO
                 versionslist.Add(_Dir.Name)
             Next
         Catch ex As Exception
-            CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
+            UpdSFAO = False 'on ne refait plus de vérifications de mise à jours dans cette session
             Trace("[VerifUpdate] Erreur de lecture du chemin des mise à jours : " & repUpdSfao & " ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
             Exit Sub
         End Try
@@ -568,7 +580,7 @@ Module SFAO
                     'On procède à la copie du fichier'
                     File.Copy(repSFAO_UpdExe, repertoireAppliClient, overwrite:=True)
                 Catch ex As Exception
-                    CheckUpd = False 'on ne refait plus de vérifications de mise à jours dans cette session
+                    UpdSFAO = False 'on ne refait plus de vérifications de mise à jours dans cette session
                     Trace("[VerifUpdate] Erreur de copie de SFAO-Upd.exe ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
                     Exit Sub
                 End Try
