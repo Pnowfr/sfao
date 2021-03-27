@@ -257,7 +257,7 @@ Public Class X3WebServ
     End Function
     'Web service qui récupère le dernier OF/Opé/évt du poste
     Public Function WSGETLSTEV(ByVal _site As String, ByVal _poste As String) As WSLstEvt
-        Dim params As String
+        'Dim params As String
         Dim json As New WSLstEvt
 
 
@@ -282,8 +282,8 @@ Public Class X3WebServ
     End Function
     'web service qui enregistre une copie de situation
     Public Function WSCopSit(ByVal _site As String, ByVal _poste As String, ByVal _empdst As Integer, ByVal _empori As Integer, ByRef _retmsg As String) As Boolean
-        Dim par As Object
-        Dim params As String
+        'Dim par As Object
+        'Dim params As String
         Dim ret As Boolean = False
 
         Return ret
@@ -309,7 +309,7 @@ Public Class X3WebServ
 
     'Web service qui récupère les infos de l'OF/OP 
     Public Function WSOFOPInfo(ByVal _fcy As String, ByVal _of As String, ByVal _op As Integer, ByVal _typop As String) As WSOFOPInfo
-        Dim params As String
+        'Dim params As String
         Dim json As New WSOFOPInfo
 
         Return json
@@ -317,8 +317,8 @@ Public Class X3WebServ
 
     'Web service qui enregistre un début d'opération
     Public Function WSDEBOPE(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByVal _of As String, ByVal _op As Integer, ByRef _retmsg As String) As Integer
-        Dim par As Object
-        Dim params As String
+        'Dim par As Object
+        'Dim params As String
         Dim ret As Integer
 
         Return ret
@@ -326,8 +326,8 @@ Public Class X3WebServ
 
     'Web service qui enregistre un début de réglage
     Public Function WSDEBRGL(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByVal _phase As Integer, ByVal _of As String, ByVal _op As Integer, ByRef _retmsg As String) As Integer
-        Dim par As Object
-        Dim params As String
+        'Dim par As Object
+        'Dim params As String
         Dim ret As Integer
 
         Return ret
