@@ -4,11 +4,11 @@
 '------------------------------------------------------------------------------------------------------------------------
 Imports System.Configuration
 Imports System.IO
-Imports System.Text
+
 
 Module SFAO
     '---------------------------------------------------------------------------------------------------------------------------------------------------------'
-    '-------------------------------------------------------- Classes ou varaibles publiques -----------------------------------------------------------------'
+    '-------------------------------------------------------- Classes ou variables publiques -----------------------------------------------------------------'
     '------------------------------------------------------- accessibles dans tout le projet -----------------------------------------------------------------'
     '---------------------------------------------------------------------------------------------------------------------------------------------------------'
 
@@ -26,7 +26,7 @@ Module SFAO
     Public UpdateTimer As Timer                         'timer de recherche de mise à jour
 
     '---------------------------------------------------------------------------------------------------------------------------------------------------------'
-    '-------------------------------------------------------- Classes ou varaibles privées -------------------------------------------------------------------'
+    '-------------------------------------------------------- Classes ou variables privées -------------------------------------------------------------------'
     '----------------------------------------------------- accessibles seulement dans SFAO.vb ----------------------------------------------------------------'
     '---------------------------------------------------------------------------------------------------------------------------------------------------------'
 
@@ -146,7 +146,7 @@ Module SFAO
     '-----------------------------------------------------------------Peuvent être appelées du projet entier -----------------------------------------------------'
     '-------------------------------------------------------------------------------------------------------------------------------------------------------------'
 
-    'Appel à la méthode pour ouvrir le fichier de traces
+    'Appel à la méthode pour ouvrir le fichier de traces et pour la rendre publique à tout le projet
     Public Sub OuvreTrace()
         FichTrace.OuvreTrace()
     End Sub
@@ -166,25 +166,6 @@ Module SFAO
         FichTrace.FermeTrace()
     End Sub
 
-
-    'enregistrement d'un paramètre connexion string 
-    Public Sub AddConnectionString(name As String, connectionString As String, providerName As String)
-        Dim configFile As Configuration
-        Dim csSettings As ConnectionStringSettings
-        Dim csSection As ConnectionStringsSection
-        Try
-            configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None)
-            csSettings = New ConnectionStringSettings(name, connectionString, providerName)
-            csSection = configFile.ConnectionStrings
-            csSection.ConnectionStrings.Remove(csSettings)
-            csSection.ConnectionStrings.Add(csSettings)
-            configFile.Save(ConfigurationSaveMode.Modified)
-            ConfigurationManager.RefreshSection(configFile.ConnectionStrings.SectionInformation.Name)
-        Catch ex As Exception
-            Trace("Erreur d'enregistrement du paramètre connection string " & name & " !", FichierTrace.niveau.erreur)
-        End Try
-    End Sub
-
     'lecture des paramètres à partir du fichier sfao.exe.config
     Public Function Param(key As String) As String
         Dim result As String = String.Empty
@@ -201,24 +182,6 @@ Module SFAO
         Return result
     End Function
 
-    'enregistrement des paramètres dans le fichier sfao.exe.config
-    Public Sub AddParam(key As String, value As String)
-        Dim configFile As Configuration
-        Dim settings As KeyValueConfigurationCollection
-        Try
-            configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None)
-            settings = configFile.AppSettings.Settings
-            If IsNothing(settings(key)) Then
-                settings.Add(key, value)
-            Else
-                settings(key).Value = value
-            End If
-            configFile.Save(ConfigurationSaveMode.Modified)
-            ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name)
-        Catch e As ConfigurationErrorsException
-            Trace("Erreur d'enregistrement du paramètre " & key & " !", FichierTrace.niveau.erreur)
-        End Try
-    End Sub
     'lecture des paramètres dossier à partir du fichier sfao.exe.config
     Public Function ParamDos(key As String, dossier As String) As String
         Dim result As String = String.Empty
@@ -236,26 +199,7 @@ Module SFAO
         End Try
         Return result
     End Function
-    'enregistrement des paramètres dossier dans le fichier sfao.exe.config 
-    Public Sub AddParamDos(key As String, dossier As String, value As String)
-        Dim configFile As Configuration
-        Dim settings As KeyValueConfigurationCollection
-        Dim keydos As String
-        keydos = key & "-" & dossier
-        Try
-            configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None)
-            settings = configFile.AppSettings.Settings
-            If IsNothing(settings(keydos)) Then
-                settings.Add(keydos, value)
-            Else
-                settings(keydos).Value = value
-            End If
-            configFile.Save(ConfigurationSaveMode.Modified)
-            ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name)
-        Catch e As ConfigurationErrorsException
-            Trace("Erreur d'enregistrement du paramètre " & keydos & " !", FichierTrace.niveau.erreur)
-        End Try
-    End Sub
+
     Public Sub AddPar(key As String, value As String, Optional dossier As String = "")
         If dossier <> "" Then
             If SFAO.ParamDos(key, dossier) = "" Then
@@ -267,99 +211,6 @@ Module SFAO
             End If
         End If
     End Sub
-    'fonction qui retire tous les caractères spéciaux d'une chaine
-    Public Function RemoveAccents(ByVal s As String) As String
-        Dim normalizedString As String = s.Normalize(NormalizationForm.FormD)
-        Dim stringBuilder As New StringBuilder()
-        Dim i As Integer
-        Dim c As Char
-        For i = 0 To normalizedString.Length - 1
-            c = normalizedString(i)
-            If System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c) <> System.Globalization.UnicodeCategory.NonSpacingMark Then
-                stringBuilder.Append(c)
-            End If
-        Next
-        Return stringBuilder.ToString
-    End Function
-    'Fonction qui affiche la date et l'heure selon le format SFAO
-    Public Function AffDateHeure(ByVal _date As Date, ByVal _time As Integer) As String
-        If _date = CDate("1/1/0001") OrElse _date = CDate("31/12/1599") Then 'date nulle 15991231
-            Return String.Empty
-        ElseIf _date <> Now.Date Then
-            Return _date.ToString("dd/MM") + " " + ZHM(_time)
-        Else
-            Return ZHM(_time)
-        End If
-    End Function
-    'Fonction qui convertie une durée en secondes en affichage HH:MM 
-    Public Function ZHM(ByVal _time As Integer) As String
-        Dim H As Integer
-        Dim M As Integer
-        H = CInt(Math.Floor(_time / 3600))
-        M = CInt(Math.Floor((_time - (H * 3600)) / 60))
-        Return H.ToString("00") + ":" + M.ToString("00")
-    End Function
-    'Fonction qui calcule la durée la date dates + time (time en secondes) et le datetime donnée (now) dans l'unité demandée
-    Public Function Calc_Duree(ZDD As Date, ZTD As Integer, ZDF As DateTime, ZUNITE As Integer) As Decimal
-        '                                                       ZUNITE       #1=heures, 2 = minutes, 3 = secondes
-        Dim RETOUR As Decimal
-        Dim ZNBJ, ZNBJS, ZDIFS, ZTF As Integer
-
-        If Year(ZDD) > 1900 And Year(ZDF) > 1900 Then
-            ZNBJ = CInt(DateDiff(DateInterval.Day, ZDD, ZDF))
-            If ZNBJ < 99999 Then
-                ZNBJS = ZNBJ * 86400
-                ZTF = (ZDF.Hour * 3600) + (ZDF.Minute * 60) + ZDF.Second
-                ZDIFS = ZTF - ZTD
-                RETOUR = ZNBJS + ZDIFS
-                Select Case ZUNITE
-                    Case 1 '1=heures
-                        RETOUR = Math.Round(RETOUR / 3600, 2)                       'On arrondi les heures à 0.01 soit à 36 secondes près
-                        If RETOUR >= 10000 Then RETOUR = CDec(9999.99)              'maxi autorisé dans X3 (9999.9999)
-
-                    Case 2 '2=minutes
-                        RETOUR = Math.Round(RETOUR / 60, 1)                         'On arrondi les minutes à 0.1 soit à 6 secondes près
-                        If RETOUR >= 10000 Then RETOUR = CDec(9999.9)               'maxi autorisé dans X3 (9999.9999)
-                End Select
-            Else
-                RETOUR = CDec(9999.99)
-            End If
-        Else
-            RETOUR = 0
-        End If
-
-        Return RETOUR
-    End Function
-
-    'Affichage d'une durée en secondes sous le format J:HH ou HH:MM
-    Public Function AFF_TPS_JHM(ZTPS As Decimal) As String
-        Dim RETOUR As String
-        Dim NBMN, NBHR, NBJR As Integer
-
-        NBJR = CInt(Math.Floor(ZTPS / 1440))
-        NBHR = CInt(Math.Floor((ZTPS / 60) - (NBJR * 24)))
-        NBMN = CInt(Math.Floor(ZTPS - NBHR * 60 - NBJR * 1440))
-
-        If NBJR > 0 Then
-            RETOUR = NBJR.ToString + "j " + NBHR.ToString + "h"
-        Else
-            RETOUR = NBHR.ToString + "h " + NBMN.ToString("00")
-        End If
-
-        Return RETOUR
-    End Function
-
-    'Fonction pour convertir les unités 
-    Public Function AFF_UNIT(UNIT As String) As String
-        Select Case UNIT
-            Case "MLF"
-                AFF_UNIT = "ML"
-            Case "M2"
-                AFF_UNIT = "M²"
-            Case Else
-                AFF_UNIT = UNIT
-        End Select
-    End Function
 
     'attend x milisecondes avec hachage de y milisecondes 
     Public Sub Sleep(ByVal time As Integer, Optional hash As Integer = 100)
@@ -369,34 +220,7 @@ Module SFAO
             Application.DoEvents()
         Next
     End Sub
-    Private Sub UpdateTimer_tick(sender As Object, e As EventArgs)
-        Dim closeFile As String
-        closeFile = Application.StartupPath.ToString & "\sfao.close"
-        If My.Computer.FileSystem.FileExists(closeFile) Then
-            Trace("Fichier de fermeture trouvé : " & closeFile, FichierTrace.niveau.toujours)
-            Trace("Fermeture de la SFAO", FichierTrace.niveau.toujours)
 
-            My.Computer.FileSystem.DeleteFile(closeFile)
-
-            If IDCnx > 0 Then
-                Try
-                    ConnLoc.DeConnexionPoste(SFAO.Site.GRP1.FCY, SFAO.Site.GRP1.DOSSIER, SFAO.Poste.GRP1.WST, IDCnx)
-                Catch ex As Exception
-                    'aucune exception gérée
-                End Try
-
-            End If
-
-            FermeTrace() 'on ferme le fichier de trace
-            System.IO.File.Delete("sfao.run")
-            Application.Exit() 'on quitte 
-            End
-        Else
-            If CheckUpd Then
-                Call VerifUpdate()
-            End If
-        End If
-    End Sub
 
     'procédure qui copie des dossiers et fichiers du répertoire de la nv version vers l'actuelle version
     Public Sub CopieDossetFich(repSFAO_UpdExePath As String, sfaoPath As String)
@@ -603,6 +427,94 @@ Module SFAO
             Trace("Erreur: impossible d'ajouter les paramètres de la dernière saisie dans le fichier conf!", FichierTrace.niveau.erreur)
         End Try
     End Sub
+
+    'enregistrement d'un paramètre connexion string 
+    Private Sub AddConnectionString(name As String, connectionString As String, providerName As String)
+        Dim configFile As Configuration
+        Dim csSettings As ConnectionStringSettings
+        Dim csSection As ConnectionStringsSection
+        Try
+            configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None)
+            csSettings = New ConnectionStringSettings(name, connectionString, providerName)
+            csSection = configFile.ConnectionStrings
+            csSection.ConnectionStrings.Remove(csSettings)
+            csSection.ConnectionStrings.Add(csSettings)
+            configFile.Save(ConfigurationSaveMode.Modified)
+            ConfigurationManager.RefreshSection(configFile.ConnectionStrings.SectionInformation.Name)
+        Catch ex As Exception
+            Trace("Erreur d'enregistrement du paramètre connection string " & name & " !", FichierTrace.niveau.erreur)
+        End Try
+    End Sub
+
+    'enregistrement des paramètres dans le fichier sfao.exe.config
+    Private Sub AddParam(key As String, value As String)
+        Dim configFile As Configuration
+        Dim settings As KeyValueConfigurationCollection
+        Try
+            configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None)
+            settings = configFile.AppSettings.Settings
+            If IsNothing(settings(key)) Then
+                settings.Add(key, value)
+            Else
+                settings(key).Value = value
+            End If
+            configFile.Save(ConfigurationSaveMode.Modified)
+            ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name)
+        Catch e As ConfigurationErrorsException
+            Trace("Erreur d'enregistrement du paramètre " & key & " !", FichierTrace.niveau.erreur)
+        End Try
+    End Sub
+
+    'enregistrement des paramètres dossier dans le fichier sfao.exe.config 
+    Private Sub AddParamDos(key As String, dossier As String, value As String)
+        Dim configFile As Configuration
+        Dim settings As KeyValueConfigurationCollection
+        Dim keydos As String
+        keydos = key & "-" & dossier
+        Try
+            configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None)
+            settings = configFile.AppSettings.Settings
+            If IsNothing(settings(keydos)) Then
+                settings.Add(keydos, value)
+            Else
+                settings(keydos).Value = value
+            End If
+            configFile.Save(ConfigurationSaveMode.Modified)
+            ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name)
+        Catch e As ConfigurationErrorsException
+            Trace("Erreur d'enregistrement du paramètre " & keydos & " !", FichierTrace.niveau.erreur)
+        End Try
+    End Sub
+
+    Private Sub UpdateTimer_tick(sender As Object, e As EventArgs)
+        Dim closeFile As String
+        closeFile = Application.StartupPath.ToString & "\sfao.close"
+        If My.Computer.FileSystem.FileExists(closeFile) Then
+            Trace("Fichier de fermeture trouvé : " & closeFile, FichierTrace.niveau.toujours)
+            Trace("Fermeture de la SFAO", FichierTrace.niveau.toujours)
+
+            My.Computer.FileSystem.DeleteFile(closeFile)
+
+            If IDCnx > 0 Then
+                Try
+                    ConnLoc.DeConnexionPoste(SFAO.Site.GRP1.FCY, SFAO.Site.GRP1.DOSSIER, SFAO.Poste.GRP1.WST, IDCnx)
+                Catch ex As Exception
+                    'aucune exception gérée
+                End Try
+
+            End If
+
+            FermeTrace() 'on ferme le fichier de trace
+            System.IO.File.Delete("sfao.run")
+            Application.Exit() 'on quitte 
+            End
+        Else
+            If CheckUpd Then
+                Call VerifUpdate()
+            End If
+        End If
+    End Sub
+
 
     'Méthode qui verifie si une nouvelle version existe et aussi si un nouveau fichier SFAO-upd.exe existe et dans ce cas remplace l'actuel par le nouveau
     'en fonction de la version la mise à jour peut être facultative ou obligatoire
