@@ -13,6 +13,8 @@ Public Class SOROP
 
         Trace("Affichage fenêtre SOROP")
 
+        'On rafraichit la Situation 
+        Call FenSfao.Situation()
 
         'Si un seul opérateur présent sur le poste on prérempli le code matricule + nom et on calcule le temps de présence (contrairement à la V6 on peut faire une sortie de n'importe quel type d'opérateur)
         For i = 0 To FenSfao.WSsp.GRP2.Count - 1

@@ -301,15 +301,31 @@ Public Class X3WebServ
         If X3WSC.Run("WSENTOP", params, retxml, MsgErrWs, True) = 1 Then
             json = JObject.Parse(retxml)
             ret = CBool(CInt(json.SelectToken("GRP1").SelectToken("ZRET")))
+        Else
+            ret = False
+            _retmsg = MsgErrWs
         End If
         Return ret
     End Function
     'web service qui enregistre une copie de situation
     Public Function WSCopSit(ByVal _site As String, ByVal _poste As String, ByVal _empdst As Integer, ByVal _empori As Integer, ByRef _retmsg As String) As Boolean
-        'Dim par As Object
-        'Dim params As String
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
         Dim ret As Boolean = False
 
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZEMPDST = _empdst, .ZEMPORI = _empori, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSCOPSIT", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CBool(CInt(json.SelectToken("GRP1").SelectToken("ZRET")))
+        Else
+            ret = False
+            _retmsg = MsgErrWs
+        End If
         Return ret
     End Function
 
@@ -328,6 +344,9 @@ Public Class X3WebServ
         If X3WSC.Run("WSSOROP", params, retxml, MsgErrWs, True) = 1 Then
             json = JObject.Parse(retxml)
             ret = CBool(CInt(json.SelectToken("GRP1").SelectToken("ZRET")))
+        Else
+            ret = False
+            _retmsg = MsgErrWs
         End If
         Return ret
     End Function
@@ -344,11 +363,13 @@ Public Class X3WebServ
                     .NullValueHandling = NullValueHandling.Ignore,
                     .MissingMemberHandling = MissingMemberHandling.Ignore
                 }
+
         json.GRP1.ZFCY = _fcy
         json.GRP1.ZMFGNUM = _of
         json.GRP1.ZOPENUM = _op
         json.GRP1.ZTYPOP = _typop 'type du poste
         params = ClassToJson(Of WSOFOPInfo)(json, False, settings)
+
         If X3WSC.Run("WSOFOPINFO", params, retxml, MsgErrWs, True) = 1 Then
             json = JsonToClass(Of WSOFOPInfo)(retxml, settings)
         Else
@@ -360,10 +381,27 @@ Public Class X3WebServ
     End Function
     'Web service qui récupère le dernier OF/Opé/évt du poste
     Public Function WSGETLSTEV(ByVal _site As String, ByVal _poste As String) As WSLstEvt
-        'Dim params As String
+        Dim params As String
         Dim json As New WSLstEvt
+        Dim settings As JsonSerializerSettings
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
 
+        settings = New JsonSerializerSettings() With {
+                    .NullValueHandling = NullValueHandling.Ignore,
+                    .MissingMemberHandling = MissingMemberHandling.Ignore
+                }
 
+        json.GRP1.FCY = _site
+        json.GRP1.WST = _poste
+        params = ClassToJson(Of WSLstEvt)(json, False, settings)
+
+        If X3WSC.Run("WSGETLSTEV", params, retxml, MsgErrWs, True) = 1 Then
+            json = JsonToClass(Of WSLstEvt)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
+        End If
         Return json
     End Function
     'Web service qui enregistre un début d'opération

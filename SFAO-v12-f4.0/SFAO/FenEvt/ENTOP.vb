@@ -61,6 +61,7 @@ Public Class ENTOP
 
             Try
                 'appel web service qui récupère les infos du matricule
+                Trace("Appel du web service WSGetMatr")
                 tm = X3ws.WSGetMatr(Matricule)
             Catch ex As Exception
 
@@ -120,7 +121,7 @@ Public Class ENTOP
             End If
         End If
     End Sub
-    'Méthode qui contrôle si pour le patricule saisi on doit activer la copie ou le chevauchement
+    'Méthode qui contrôle si pour le matricule saisi on doit activer la copie ou le chevauchement
     Private Sub MTextBoxMatr_Validated(sender As Object, e As EventArgs) Handles MTextBoxMatr.Validated
         Dim nbEmp As Integer
         Dim nbEmpOpOf As Integer
@@ -167,6 +168,7 @@ Public Class ENTOP
                     'Vérifier si ancien OFOP
                     'appel au web service qui récupère l'ancien OF/Opé/Et
                     Try
+                        Trace("Appel au web service WSGETLSTEV")
                         zwslsev = X3ws.WSGETLSTEV(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST)
                     Catch ex As Exception
                         'si exeption : pas d'esrreur et pas de copie de situation
@@ -248,8 +250,10 @@ Public Class ENTOP
         If ComboBoxCopSitChev.Text = "OUI" Then 'Copie ou chevauchement
             FenSfao.Etat("Enregistrement de la copie de la situation", 1, 5000)
             Try
+                Trace("Appel du web service WSCopSit")
                 If X3ws.WSCopSit(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), CInt(LabelCopSitChev.Tag), retMsg) = True Then
                     Me.DialogResult = DialogResult.OK
+                    Trace("Copie situation réussie")
                 End If
             Catch ex As Exception
                 GoTo ErreurEntop
@@ -259,6 +263,7 @@ Public Class ENTOP
             Try
                 If X3ws.WSEntOp(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), CInt(Me.Tag), retMsg) = True Then
                     Me.DialogResult = DialogResult.OK
+                    Trace("Entrée opérateur réussie")
                 End If
             Catch ex As Exception
                 GoTo ErreurEntop

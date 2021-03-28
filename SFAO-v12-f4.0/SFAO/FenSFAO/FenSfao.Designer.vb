@@ -1527,7 +1527,7 @@ Partial Class FenSfao
         Me.TableLayoutPanelEtat.ColumnCount = 3
         Me.TableLayoutPanelEtat.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanelEtat.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanelEtat.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23.0!))
+        Me.TableLayoutPanelEtat.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 29.0!))
         Me.TableLayoutPanelEtat.Controls.Add(Me.LabelEtat2, 1, 0)
         Me.TableLayoutPanelEtat.Controls.Add(Me.LabelEtat1, 0, 0)
         Me.TableLayoutPanelEtat.Controls.Add(Me.PictureBoxWS, 2, 0)
@@ -1544,7 +1544,7 @@ Partial Class FenSfao
         '
         Me.LabelEtat2.AutoSize = True
         Me.LabelEtat2.ForeColor = System.Drawing.Color.White
-        Me.LabelEtat2.Location = New System.Drawing.Point(573, 1)
+        Me.LabelEtat2.Location = New System.Drawing.Point(570, 1)
         Me.LabelEtat2.Name = "LabelEtat2"
         Me.LabelEtat2.Size = New System.Drawing.Size(0, 13)
         Me.LabelEtat2.TabIndex = 1000

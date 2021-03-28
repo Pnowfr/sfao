@@ -1,5 +1,6 @@
 ﻿'------------------------------------------------------------------------------------------------------------------------
 'Modifications:
+'[280321PNO] : Rafraichissement situation par double-clique sur le label
 '
 '------------------------------------------------------------------------------------------------------------------------
 Public Class FenSfao
@@ -1349,6 +1350,40 @@ Public Class FenSfao
 
     End Sub
 
+    '280321PNO.sn
+    Private Sub Lab1Sitpost_DoubleClick(sender As Object, e As EventArgs) Handles Lab1Sitpost.DoubleClick
+        'affichage le load dans 100 ms
+        Call WaitGif(True, 100)
+
+        'Situation du poste
+        SituationPoste()
+
+        'on masque le gif load dans 1 seconde
+        Call WaitGif(False, 1000)
+    End Sub
+
+    Private Sub Lab1SitOp_DoubleClick(sender As Object, e As EventArgs) Handles Lab1SitOp.DoubleClick
+        'affichage le load dans 100 ms
+        Call WaitGif(True, 100)
+
+        'situation des OF/OP
+        SituationOfOp()
+
+        'on masque le gif load dans 1 seconde
+        Call WaitGif(False, 1000)
+    End Sub
+
+    Private Sub Lab1Sitmat_DoubleClick(sender As Object, e As EventArgs) Handles Lab1Sitmat.DoubleClick
+        'affichage le load dans 100 ms
+        Call WaitGif(True, 100)
+
+        'situation des composants
+        SituationCps()
+
+        'on masque le gif load dans 1 seconde
+        Call WaitGif(False, 1000)
+    End Sub
+    '280321PNO.en
 End Class
 
 
