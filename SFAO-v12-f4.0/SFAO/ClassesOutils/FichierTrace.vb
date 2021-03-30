@@ -147,6 +147,8 @@ Public Class FichierTrace
 
         If niveau = 1 Then
             MsgBox(message, MsgBoxStyle.Information) 'message info
+        ElseIf niveau = 2 Then
+            FenSfao.Etat(message, 1, 10000, Color.Red) 'on affiche le message d'erreur dans la barre d'état
         ElseIf niveau = 3 Then
             MsgBox(message, MsgBoxStyle.Exclamation) 'message erreur !
         ElseIf niveau = 4 Then 'erreur critique 
