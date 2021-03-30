@@ -283,7 +283,6 @@ ErreurEntop:
         If retMsg <> "" Then
             Trace(retMsg, FichierTrace.niveau.erreur)
         End If
-        FenSfao.Etat("Erreur d'enregistrement de l'arrivée !", 1, 5000)
         Me.DialogResult = DialogResult.Abort
         Me.Close()
         'On masque le load dans 0.5s

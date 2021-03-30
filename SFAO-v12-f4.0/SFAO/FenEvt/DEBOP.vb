@@ -322,6 +322,7 @@ Public Class DEBOP
 
         'tout va bien on enregistre le début d'opération + suivi auto du temps passé depuis le dernier évenement
         Try
+            Trace("Appel du web service WSDEBOPE")
             debop = X3ws.WSDEBOPE(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), TextBoxOF.Text, CInt(MaskedTextBoxOP.Text), retMsg)
         Catch ex As Exception
             GoTo ErreurDebop
@@ -343,7 +344,6 @@ ErreurDebop:
         If retMsg <> "" Then
             Trace(retMsg, FichierTrace.niveau.erreur)
         End If
-        FenSfao.Etat("Erreur d'enregistrement du début d'opération ! ", 1, 5000)
         Me.DialogResult = DialogResult.Abort
         Me.Close()
     End Sub

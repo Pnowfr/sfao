@@ -32,7 +32,6 @@ Public Class X3WebServ
 
         If X3WSC.Run("WSDTSFAO", params, retxml, MsgErrWs, False) = 1 Then
             json = JObject.Parse(retxml)
-            'ret = json("GRP1")("ZRET").ToString
             ret = json.SelectToken("GRP1").SelectToken("ZRET").ToString
         End If
         Return ret
@@ -293,7 +292,7 @@ Public Class X3WebServ
         Dim retxml As String = String.Empty
         Dim MsgErrWs As String = String.Empty
         Dim json As JObject
-        Dim ret As Boolean = False
+        Dim ret As Boolean
 
         par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZRET = 0, .ZMSG = ""}}
         params = JsonConvert.SerializeObject(par)
@@ -314,7 +313,7 @@ Public Class X3WebServ
         Dim retxml As String = String.Empty
         Dim MsgErrWs As String = String.Empty
         Dim json As JObject
-        Dim ret As Boolean = False
+        Dim ret As Boolean
 
         par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZEMPDST = _empdst, .ZEMPORI = _empori, .ZRET = 0, .ZMSG = ""}}
         params = JsonConvert.SerializeObject(par)
@@ -336,7 +335,7 @@ Public Class X3WebServ
         Dim retxml As String = String.Empty
         Dim MsgErrWs As String = String.Empty
         Dim json As JObject
-        Dim ret As Boolean = False
+        Dim ret As Boolean
 
         par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZRET = 0, .ZMSG = ""}}
         params = JsonConvert.SerializeObject(par)
@@ -406,9 +405,24 @@ Public Class X3WebServ
     End Function
     'Web service qui enregistre un début d'opération
     Public Function WSDEBOPE(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByVal _of As String, ByVal _op As Integer, ByRef _retmsg As String) As Integer
-        'Dim par As Object
-        'Dim params As String
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
         Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZMFGNUM = _of, .ZOPENUM = _op, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSDEBOPE", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
 
         Return ret
     End Function
