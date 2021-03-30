@@ -1140,8 +1140,7 @@ Public Class FenSfao
         Return taille
     End Function
 
-    Public Sub Etat(ByVal message As String, ByVal num As Integer, Optional ByVal time As Integer = 0)
-
+    Public Sub Etat(ByVal message As String, ByVal num As Integer, Optional ByVal time As Integer = 0, Optional couleur As Color = Nothing)
         If TimerEtat.Enabled Then
             TimerEtat.Stop()
             If CInt(TimerEtat.Tag) = 1 Then
@@ -1153,8 +1152,18 @@ Public Class FenSfao
         End If
 
         If num = 1 Then
+            If couleur = Nothing Then
+                LabelEtat1.ForeColor = Color.White
+            Else
+                LabelEtat1.ForeColor = couleur
+            End If
             LabelEtat1.Text = message
         ElseIf num = 2 Then
+            If couleur = Nothing Then
+                LabelEtat2.ForeColor = Color.White
+            Else
+                LabelEtat2.ForeColor = couleur
+            End If
             LabelEtat2.Text = message
         End If
 

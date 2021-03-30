@@ -228,7 +228,6 @@ ErreurDebrgl:
         If retMsg <> "" Then
             Trace(retMsg, FichierTrace.niveau.erreur)
         End If
-        FenSfao.Etat("Erreur d'enregistrement du début de réglage ! ", 1, 5000)
         Me.DialogResult = DialogResult.Abort
         Me.Close()
 

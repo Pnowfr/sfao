@@ -540,7 +540,7 @@ Module SFAO
 
         If repUpdSfao = "" Then
             UpdSFAO = False 'on ne refait plus de vérifications de mise à jours dans cette session
-            Trace("[VerifUpdate] La paramètre REPUPDSFAO du chemin des mise à jours est vide ! Mise à jour désactivée !", FichierTrace.niveau.erreur)
+            Trace("[VerifUpdate] La paramètre REPUPDSFAO du chemin des mise à jours est vide ! Mise à jour désactivée !", FichierTrace.niveau.information)
             Exit Sub
         End If
 
