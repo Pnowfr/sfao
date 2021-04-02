@@ -477,9 +477,14 @@ Public Class X3WebServAsync
 
         Select Case UserState
             Case "WSDTSFAO"
-                json = JObject.Parse(Result)
-                retour = json("GRP1")("ZRET").ToString
-                FenSfao.AnimRet(retour)
+                Try
+                    json = JObject.Parse(Result)
+                    retour = json("GRP1")("ZRET").ToString
+                    FenSfao.AnimRet(retour)
+                Catch ex As Exception
+                    retour = ""
+                    FenSfao.X3Anim(0)
+                End Try
         End Select
 
     End Sub
