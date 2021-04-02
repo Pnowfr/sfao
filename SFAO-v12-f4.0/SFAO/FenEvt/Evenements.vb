@@ -1,13 +1,15 @@
 ﻿'------------------------------------------------------------------------------------------------------------------------
 'Modifications:
-'
+'[020421PNO] : Tester existence du timer upd
 '------------------------------------------------------------------------------------------------------------------------
 Module Evenements
     'Fonction qui déclenche l'affichage d'un événement, par défaut c'est une événement de début. pour un événement de fin on peut indiquer l'événement appelant
     Public Function AfficheEvt(ByVal NumEvt As Integer, Optional ByVal DebFin As String = "D", Optional ByVal EvtEnCours As Integer = 0) As DialogResult
         AfficheEvt = DialogResult.None
 
-        SFAO.UpdateTimer.Stop() 'on met en pose la vérification de mise à jour pendant l'execution des événements
+        If UpdSFAO = True Then '020421PNO.n
+            SFAO.UpdateTimer.Stop() 'on met en pose la vérification de mise à jour pendant l'execution des événements
+        End If '020421PNO.n
 
         Select Case NumEvt
             Case 1000 'Arrivée opérateur
@@ -92,8 +94,9 @@ Module Evenements
                 AfficheEvt = DialogResult.None
         End Select
 
-        SFAO.UpdateTimer.Start() 'on réactive la vérification de mise à jour  
-
+        If UpdSFAO = True Then '020421PNO.n
+            SFAO.UpdateTimer.Start() 'on réactive la vérification de mise à jour  
+        End If '020421PNO.n
     End Function
 
     Private Function LanceEvt(ByVal _numEvt As Integer, ByRef _FenEvt As Form) As DialogResult

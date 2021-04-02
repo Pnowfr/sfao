@@ -23,7 +23,8 @@ Module SFAO
     Public Poste As New WSPoste                         'classe des infos du poste connecté
     Public Events As New WSEvt                          'classe des infos des événements du poste
     Public Phases As New List(Of Phase)                 'classe des phases existantes
-    Public UpdateTimer As Timer                         'timer de recherche de mise à jour
+    Public UpdateTimer As Timer                         'variable timer de recherche de mise à jour
+    Public UpdSFAO As Boolean                          'variable de gestion de mise à jour auto 
 
     '---------------------------------------------------------------------------------------------------------------------------------------------------------'
     '-------------------------------------------------------- Classes ou variables privées -------------------------------------------------------------------'
@@ -32,7 +33,6 @@ Module SFAO
 
     Private FichTrace As FichierTrace                   'classe de gestion des traces
     Private IDCnx As Integer                            'identifiant de connection à la base locale
-    Private UpdSFAO As Boolean                          'variable de gestion de mise à jour auto 
 
 
     '---------------------------------------------------------------------------------------------------------------------------------------------------------'
