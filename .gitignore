@@ -352,3 +352,5 @@ MigrationBackup/
 .ionide/
 
 Debug/sfao.run
+SFAO-v12-f4.0/SFAO/obj/x86/Debug/DesignTimeResolveAssemblyReferences.cache
+SFAO-v12-f4.0/SFAO/.vs/SFAO/v16/.suo
