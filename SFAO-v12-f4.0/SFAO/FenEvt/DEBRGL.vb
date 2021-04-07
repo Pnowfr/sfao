@@ -40,7 +40,7 @@ Public Class DEBRGL
             End If
         End If
 
-        'Récupération de la iste des phases 
+        'Récupération de la liste des phases du poste
         For Each phs As Phase In Phases.OrderBy(Function(x) x.ordre)
             If phs.evenement = CInt(Me.Tag) Then
                 ComboBoxPhase.Items.Add(phs.desc)
@@ -53,7 +53,7 @@ Public Class DEBRGL
         End If
 
         If MTextBoxMatr.Text <> "" And MsgErr = "" Then
-            MTextBoxMatr.Enabled = False
+            MTextBoxMatr.Enabled = False    'on a 1 seul opérateur présent sur le poste, donc on désactive la saisie du champ matricule
             'Sélection auto du 1er champ saisi
             ComboBoxPhase.Select()
         Else
@@ -163,9 +163,12 @@ Public Class DEBRGL
     End Function
     Private Sub ComboBoxPhase_Validating(sender As Object, e As CancelEventArgs) Handles ComboBoxPhase.Validating
         Dim MsgErr As String = ""
+
+        'si ausune phase sélectionnée
         If ComboBoxPhase.Text = "" Then
             MsgErr = ComboMsg()
         ElseIf Phases(ComboBoxPhase.SelectedIndex).phase = FenSfao.PhaseEnCours(CInt(MTextBoxMatr.Text), TextBoxOF.Text, CInt(MaskedTextBoxOP.Text)) Then
+            'si phase sélectionnée = phase déjà en cours
             MsgErr = "Vous êtes déjà en phase de " & Phases(ComboBoxPhase.SelectedIndex).desc
         End If
 
@@ -176,7 +179,6 @@ Public Class DEBRGL
             TextBoxMsg.Text = MsgErr
             System.Media.SystemSounds.Exclamation.Play() 'son erreur
             ComboBoxPhase.Select() 'sélection du contrôle
-            Console.WriteLine("ComboBoxPhase_Validating : " & MsgErr)
         End If
     End Sub
 
@@ -184,7 +186,6 @@ Public Class DEBRGL
         'on efface les erreurs précédentes
         ErrorProvider.SetError(ComboBoxPhase, "")
         TextBoxMsg.Text = ""
-        Console.WriteLine("ComboBoxPhase_Validated")
     End Sub
 
     Private Sub BtnFin_Click(sender As Object, e As EventArgs) Handles BtnFin.Click
@@ -195,6 +196,7 @@ Public Class DEBRGL
         'Console.WriteLine("BtnOk_Click")
         Dim retMsg As String = String.Empty
         Dim debrgl As Integer = -1
+        Dim PhaseSelect As Integer
 
         'Dans certains cas la validation passe même si tous les champs ne sont pas valides
         For Each ctl As Control In Me.TableLayoutPanel1.Controls
@@ -203,11 +205,19 @@ Public Class DEBRGL
             End If
         Next
 
+        'Chercher la phase correspondant à l'événement en cours (la combo ne comporte pas la liste complète)
+        Trace(ComboBoxPhase.SelectedItem.ToString, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+        For Each phs As Phase In Phases.OrderBy(Function(x) x.ordre)
+            If phs.evenement = CInt(Me.Tag) And phs.desc = ComboBoxPhase.SelectedItem.ToString Then
+                PhaseSelect = phs.phase
+            End If
+        Next
+        Trace(PhaseSelect.ToString, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
 
-        'tout va bien on enregistre le débutde réglage
+        'tout va bien on enregistre le début de réglage
         Try
             debrgl = X3ws.WSDEBRGL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag),
-                                   Phases(ComboBoxPhase.SelectedIndex).phase, TextBoxOF.Text, CInt(MaskedTextBoxOP.Text), retMsg)
+                                   PhaseSelect, TextBoxOF.Text, CInt(MaskedTextBoxOP.Text), retMsg)
         Catch ex As Exception
             GoTo ErreurDebrgl
         End Try
@@ -234,5 +244,7 @@ ErreurDebrgl:
 
     End Sub
 
+    Private Sub BtnOk_EnabledChanged(sender As Object, e As EventArgs) Handles BtnOk.EnabledChanged
 
+    End Sub
 End Class
