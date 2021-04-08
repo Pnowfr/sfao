@@ -117,13 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="pathConfigFile" xml:space="preserve">
-    <value>C:\Users\fidi\Desktop\Encours\SFAO-v1-f4.0\SFAO\bin\x86\Release\SFAO.exe.Config</value>
-  </data>
-  <data name="pathNouvelleVersion" xml:space="preserve">
-    <value>C:\Users\fidi\Desktop\Encours\SFAO-v1-f4.0\Serveur-Upd</value>
-  </data>
-  <data name="pathVieilleVersion" xml:space="preserve">
-    <value>C:\Users\fidi\Desktop\Encours\SFAO-v1-f4.0\SFAO\bin\x86\Debug</value>
+  <data name="RepF" xml:space="preserve">
+    <value />
   </data>
 </root>

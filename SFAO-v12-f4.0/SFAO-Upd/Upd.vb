@@ -4,10 +4,14 @@ Imports System.Xml
 
 Public Class Upd
     Private Sub Upd_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim reperUpdSfao As String = Application.StartupPath.ToString & "\SFAO.exe.config"
-        Dim valParamREPUPDSFAO As String = GetParamValue(reperUpdSfao, "REPUPDSFAO")
-        Dim valParamREPTRACECONNEXION As String = GetParamValue(reperUpdSfao, "REPTRACECONNEXION")
-        Dim valParamREPTRACESFAO As String = GetParamValue(reperUpdSfao, "REPTRACESFAO")
+
+        Dim reperSfao As String = My.Settings("RepFichConfig").ToString
+        Dim reperFichConfig As String = reperSfao & "SFAO.exe.config"
+        Dim valParamREPUPDSFAO As String = GetParamValue(reperFichConfig, "REPUPDSFAO")
+        Dim reperNouvelleVersion As String = valParamREPUPDSFAO & "Serveur-Upd"
+        Dim reperVieilleVersion As String = valParamREPUPDSFAO & "Serveur-Upd"
+        Dim valParamREPTRACECONNEXION As String = GetParamValue(reperFichConfig, "REPTRACECONNEXION")
+        Dim valParamREPTRACESFAO As String = GetParamValue(reperFichConfig, "REPTRACESFAO")
         Dim versionslist As New List(Of String)
         Dim Response As Integer
 
@@ -54,30 +58,26 @@ Public Class Upd
         'Vérifier si le nom du dernier dossier de la liste est le même que la version actuelle
         Dim listVersionLength As Integer = versionslist.Count
         Dim lastVersion As String = versionslist(listVersionLength - 1)
-
-        'Pour avoir le répertoire plus précis de la nouvelle version (inclus le fichier de la version)
-        Dim reperReelNvVersion = valParamREPUPDSFAO & "\" & lastVersion
+        Dim repSFAO_UpdExePath As String = valParamREPUPDSFAO & "\" & lastVersion & "\"
 
         'Vérifier si l'application sfao tourne, si OK, on crée le fichier sfao.close
         If File.Exists(checkSfaoRun) Then
             File.Create(Path.Combine(sfaoPath, sfaoClose))
-
-            'Vérifier si une mise à jour est disponible
-            If lastVersion.Equals(version) Then
-                MsgBox("Pas de mise à jour disponible")
-            Else
-                'Verifier si mise à jour obligatoire (bouton OK) ou facultative (boutons OK/Annuler)move
-                If Not (lastVersion.Substring(1, 3).Equals(version.Substring(1, 3))) Then
-                    Console.WriteLine(version.Substring(4, 3) & "-" & lastVersion.Substring(4, 3))
-                    'Mise à jour obligatoire
-                    MisAJourVersion(sfaoClose, sfaoPath, reperReelNvVersion, checkSfaoClose, lastVersion)
-                ElseIf Not (lastVersion.Substring(4, 3).Equals(version.Substring(4, 3))) Then 'Si c'est une mise à jour non obligatoire
-                    Response = MsgBox(Prompt:="Nouvelle version disponible: " + lastVersion + vbNewLine + "Voulez-vous mettre à jour vers cette nouvelle version?", Buttons:=vbYesNo)
-                    If Response = vbYes Then
-                        'Traiter le cas si on met à jour
-                        'Mise à jour en cours
-                        MisAJourVersion(sfaoClose, sfaoPath, reperReelNvVersion, checkSfaoClose, lastVersion)
-                    End If
+        End If
+        'Vérifier si une mise à jour est disponible
+        If lastVersion.Equals(version) Then
+            MsgBox(Prompt:="Pas de mise à jour disponible")
+        Else
+            'Verifier si mise à jour obligatoire (bouton OK) ou facultative (boutons OK/Annuler)
+            If Not (lastVersion.Substring(1).Equals(version.Substring(1))) Then
+                'Mise à jour obligatoire
+                MisAJourVersion(sfaoClose, reperSfao, reperNouvelleVersion, repSFAO_UpdExePath, checkSfaoClose, lastVersion)
+            Else 'Si ce n'est pas une mise à jour obligatoire
+                Response = MsgBox(Prompt:="Nouvelle version disponible: " + lastVersion + vbNewLine + "Voulez-vous mettre à jour vers cette nouvelle version?", Buttons:=vbYesNo)
+                If Response = vbYes Then
+                    'Traiter le cas si on met à jour
+                    'Mise à jour en cours
+                    MisAJourVersion(sfaoClose, reperSfao, reperNouvelleVersion, repSFAO_UpdExePath, checkSfaoClose, lastVersion)
                 End If
             End If
         End If
@@ -102,81 +102,88 @@ Public Class Upd
     End Function
 
     'Méthode appelée pour mise à jour version
-    Private Sub MisAJourVersion(sfaoClose As String, reperVieilleVersion As String, reperReelNvVersion As String, checkSfaoClose As String, newVersion As String)
-        Dim pathCsv As String = reperReelNvVersion & "\" & "listUpd" & newVersion & ".csv"
-        Dim listeFichiersUpdate As New List(Of String)
+    Private Sub MisAJourVersion(sfaoClose As String, reperVieilleVersion As String, reperNouvelleVersion As String, repSFAO_UpdExePath As String, checkSfaoClose As String, newVersion As String)
         If File.Exists(checkSfaoClose) Then
             'fermer la SFAO
             Application.Exit()
         End If
         MsgBox("Mise à jour en cours.....")
-        'Parcours et lecture fichier listVersionUpd
-        listeFichiersUpdate = lireCsv(pathCsv)
 
         'Traiter le remplacement des fichiers
-        CopieNouvelleVersion(listeFichiersUpdate, reperVieilleVersion, reperReelNvVersion, newVersion)
+        CopieNouvelleVersion(reperVieilleVersion, repSFAO_UpdExePath, reperNouvelleVersion, newVersion)
 
         'supprimer le sfao.close
         File.Delete(Path.Combine(reperVieilleVersion, sfaoClose))
     End Sub
 
     'Méthode qui supprime les dossiers de l'ancienne version et copie la nouvelle
-    Private Sub CopieNouvelleVersion(listFichCsv As List(Of String), ByVal reperVersion As String, ByVal reperReelNvVersion As String, ByVal newVersion As String)
-        Dim chemReelCompletFichAChanger As String = ""
-        Dim chemReelCompletDestination As String = ""
-        Dim repertoireFichierAChanger As String = ""
-        Dim fichierAchanger As String
+    Private Sub CopieNouvelleVersion(ByVal reperVersion As String, repSFAO_UpdExePath As String, ByVal reperNouvelleVersion As String, ByVal newVersion As String)
+        'Copie des dossiers de la nouvelle version vers l'appli client
+        'Parcours de fichiers qui sont dans le répertoire de la nouvelle version
+        Dim listFichiersNvVersion As New List(Of String)  'Liste qui va contenir les fichiers de la nouvelle version
+        Dim listDossiersNvVersion As New List(Of String)  'Liste qui va contenir les dossiers de la nouvelle version
+        Dim _dir_nvvers As New IO.DirectoryInfo(repSFAO_UpdExePath)
+        Dim fichDll As IO.FileInfo() = _dir_nvvers.GetFiles("*.dll")
+        Dim fichConfig As IO.FileInfo() = _dir_nvvers.GetFiles("*.config")
+        Dim fichXml As IO.FileInfo() = _dir_nvvers.GetFiles("*.xml")
+        Dim fi As IO.FileInfo
+        Dim fiConf As IO.FileInfo
+        Dim fiXml As IO.FileInfo
 
-        'Parcourir liste qui donne les fichiers à copier de la nouvelle à l'ancienne version
-        For i = 0 To listFichCsv.Count - 1
-            Dim valeurfichierAchanger As String = listFichCsv.Item(i).ToString()
-            Dim tabFichAchanger() As String = valeurfichierAchanger.Split(CChar("\"))
-            'Vérifier si fichierAchanger se présente en chemin de fichier ou fichier tout court
-            If tabFichAchanger.Count > 1 Then
-                'C'est un chemin de fichier
-                fichierAchanger = tabFichAchanger((tabFichAchanger.Length) - 1)
-                chemReelCompletFichAChanger = reperReelNvVersion & "\" & valeurfichierAchanger
-            Else
-                'C'est un fichier tout court
-                fichierAchanger = valeurfichierAchanger
-            End If
-
-            Dim tabReel = New String() {}
-            Dim listChemin As New List(Of String)
-            tabReel = chemReelCompletFichAChanger.Split(CChar("\"))
-            'Le fichier de ce nouveau répertoire
-            'Le but c'est d'enlever le dernier élément qui est le fichier lui-même
-            For j As Integer = 0 To tabReel.Count - 2
-                listChemin.Add(tabReel(j))
-            Next j
-
-            'On supprime le dernier élément de tabreel
-            'On reconstitue le répertoire du fichier à changer grâce à la liste 
-            repertoireFichierAChanger = ""
-            For Each str As String In listChemin
-                repertoireFichierAChanger = repertoireFichierAChanger & str & "\"
+        Try
+            'Ajout des dossiers dans la liste des versions
+            For Each _Dir In _dir_nvvers.GetDirectories
+                listDossiersNvVersion.Add(_Dir.Name)
+            Next
+            'Ajout des fichiers dll
+            For Each fi In fichDll
+                listFichiersNvVersion.Add(fi.Name)
+            Next
+            'Ajout des fichiers config
+            For Each fiConf In fichConfig
+                listFichiersNvVersion.Add(fiConf.Name)
+            Next
+            'Ajout des fichiers xml
+            For Each fiXml In fichXml
+                listFichiersNvVersion.Add(fiXml.Name)
             Next
 
-            chemReelCompletDestination = reperVersion & "\" & valeurfichierAchanger
-
-            'Vérifier si le fichier dans la liste est bien dans le répertoire de la nouvelle version
-            If File.Exists(Path.Combine(repertoireFichierAChanger, fichierAchanger)) Then
-                'Si oui, on copie ce fichier du répertoire nouvelle version vers celle de l'ancienne version,
+            'Copie des dossiers de la liste vers le répertoire de l'application actuelle
+            For Each dossNv As String In listDossiersNvVersion
                 Try
-                    My.Computer.FileSystem.CopyFile(
-                chemReelCompletFichAChanger,
-                chemReelCompletDestination,
-                FileIO.UIOption.AllDialogs,
-                FileIO.UICancelOption.DoNothing)
+                    Dim sDestination As String = reperVersion & "\" & dossNv
+                    Dim sSource As String = repSFAO_UpdExePath & dossNv
+
+                    'fonction récursive pour copier les dossiers et fichiers
+                    CopyDirectory(sSource, sDestination)
+
                 Catch ex As Exception
-                    Console.WriteLine(ex.Message)
-                    MsgBox("Il y a un problème dans la copie de ce fichier :" & ex.Message)
+                    MsgBox(" Erreur lors de la copie du dossier  : " & ex.Message)
+                    Exit Sub
                 End Try
-            Else
-                'Sinon, message d'erreur
-                MsgBox("Le fichier " & fichierAchanger & " n'existe pas dans le répertoire de mise à jour !")
-            End If
-        Next
+            Next
+            'Arrêt d'une application
+            Application.Exit()
+
+            'Copie des fichiers de la liste vers le répertoire de l'application actuelle
+            For Each fichNv As String In listFichiersNvVersion
+                Try
+                    'Copie du ficher dans le répertoire en écrasant les dossiers et fichiers du même nom
+                    Dim sDestination As String = reperVersion & fichNv
+                    Dim sSource As String = repSFAO_UpdExePath & fichNv
+                    'On procède à la copie
+                    File.Copy(sSource, sDestination, overwrite:=True)
+
+                Catch ex As Exception
+                    MsgBox(" Erreur lors de la copie du fichier  : " & fichNv & ex.Message)
+                    Exit Sub
+                End Try
+            Next
+
+        Catch ex As Exception
+            MsgBox(" Erreur de lecture du chemin de la nouvelle version : " & repSFAO_UpdExePath & ex.Message)
+            Exit Sub
+        End Try
     End Sub
 
     'Méthode qui permet de lire un fichier csv    
@@ -188,6 +195,31 @@ Public Class Upd
         Next ligne
         Return listeFichiers
     End Function
+
+
+    'Fonction récursive pour la copie des dossiers, sous dossiers etc...
+    Public Sub CopyDirectory(ByVal sourcePath As String, ByVal destinationPath As String)
+        Dim sourceDirectoryInfo As New DirectoryInfo(sourcePath)
+
+        ' Si le dossier de destination n'existe pas, le créer
+        If Not Directory.Exists(destinationPath) Then
+            Directory.CreateDirectory(destinationPath)
+        End If
+
+        Dim fileSystemInfo As FileSystemInfo
+        For Each fileSystemInfo In sourceDirectoryInfo.GetFileSystemInfos
+            Dim destinationFileName As String =
+                Path.Combine(destinationPath, fileSystemInfo.Name)
+
+            ' Maintenant, vérifier si c'est un dossier ou un fichier et faire les actions correspondantes
+            If TypeOf fileSystemInfo Is System.IO.FileInfo Then
+                File.Copy(fileSystemInfo.FullName, destinationFileName, True)
+            Else
+                ' Appeler la méthode récursivement si nécessaire
+                CopyDirectory(fileSystemInfo.FullName, destinationFileName)
+            End If
+        Next
+    End Sub
 
     'Méthode qui permet de supprimer tous les fichiers d'un répertoire
     Private Sub DeleteDirectory(path As String)

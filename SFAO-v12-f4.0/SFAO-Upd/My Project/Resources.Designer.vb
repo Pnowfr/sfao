@@ -61,29 +61,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Recherche une chaîne localisée semblable à C:\Users\fidi\Desktop\Encours\SFAO-v1-f4.0\SFAO\bin\x86\Release\SFAO.exe.Config.
+        '''  Recherche une chaîne localisée semblable à .
         '''</summary>
-        Friend ReadOnly Property pathConfigFile() As String
+        Friend ReadOnly Property RepF() As String
             Get
-                Return ResourceManager.GetString("pathConfigFile", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Recherche une chaîne localisée semblable à C:\Users\fidi\Desktop\Encours\SFAO-v1-f4.0\Serveur-Upd.
-        '''</summary>
-        Friend ReadOnly Property pathNouvelleVersion() As String
-            Get
-                Return ResourceManager.GetString("pathNouvelleVersion", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Recherche une chaîne localisée semblable à C:\Users\fidi\Desktop\Encours\SFAO-v1-f4.0\SFAO\bin\x86\Debug.
-        '''</summary>
-        Friend ReadOnly Property pathVieilleVersion() As String
-            Get
-                Return ResourceManager.GetString("pathVieilleVersion", resourceCulture)
+                Return ResourceManager.GetString("RepF", resourceCulture)
             End Get
         End Property
     End Module
