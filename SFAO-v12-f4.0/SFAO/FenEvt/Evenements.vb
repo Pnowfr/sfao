@@ -84,9 +84,14 @@ Module Evenements
                 'affichage du load
                 'Call FenSfao.GifLoad(True)
             Case 1080 'Test 
+                If DebFin = "D" Then    'début événement simple
+                    If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
+                        AfficheEvt = LanceEvt(NumEvt, CType(DEBINT, Form))
+                    End If
+                Else
+                    'TODO voir comment on déclanche la fin d'une interruption ????
 
-                'on masque du load
-                'Call FenSfao.GifLoad(False, 1000)
+                End If
             Case 1283
                 AfficheEvt = LanceEvt(NumEvt, CType(AUTOCTRL, Form))
             Case Else
