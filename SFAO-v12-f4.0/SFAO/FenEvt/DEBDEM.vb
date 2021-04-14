@@ -118,8 +118,12 @@ Public Class DEBDEM
                 If MsgErr = "" Then
                     'si ok on vérifie si l'opérateur a déjà une opération en cours
                     FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
-
-                    'TODO WEB : contrôle si démontage déjà en cours
+                    If MsgErr = "" Then
+                        'si ok on vérifie si l'opérateur n'est pas déjà en démontage
+                        If FenSfao.EventEnCours(matr) = 1070 Then
+                            MsgErr = "Vous êtes déjà en démontage"
+                        End If
+                    End If
                 End If
             End If
         End If

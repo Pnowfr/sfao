@@ -61,8 +61,6 @@ Public Class DEBRGL
             Me.Close()
         End If
 
-        'TODO WEB : si on a une seule phase, contrôle si phase déjà en cours
-
         If MTextBoxMatr.Text <> "" And MsgErr = "" Then
             MTextBoxMatr.Enabled = False    'on a 1 seul opérateur présent sur le poste, donc on désactive la saisie du champ matricule
             'Sélection auto du 1er champ saisi
@@ -221,8 +219,6 @@ Public Class DEBRGL
                 PhaseSelect = phs.phase
             End If
         Next
-
-        'TODO WEB : contrôle si phase déjà en cours
 
         'tout va bien on enregistre le début de réglage
         Try

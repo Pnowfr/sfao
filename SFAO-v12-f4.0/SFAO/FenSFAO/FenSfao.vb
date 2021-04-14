@@ -1321,6 +1321,21 @@ Public Class FenSfao
         End If
         Return nphas
     End Function
+    Public Function EventEnCours(ByVal _matr As Integer) As Integer
+        Dim xevent As Integer
+        Dim i As Integer
+        If WSsp.GRP2.Count > 0 Then
+            For i = 0 To WSsp.GRP2.Count - 1
+                If WSsp.GRP2(i).XEMPNUM > 0 AndAlso WSsp.GRP2(i).XEMPNUM = _matr Then
+                    If WSsp.GRP2(i).XEVENT > 0 Then
+                        xevent = WSsp.GRP2(i).XEVENT
+                        Exit For
+                    End If
+                End If
+            Next
+        End If
+        Return xevent
+    End Function
     'on contrôle si un événement en cours bloque la sortie opérateur
     Public Sub EventEnCoursSortie(ByVal _matr As Integer, ByRef _xevent As Integer, ByRef _msgErr As String)
         Dim i As Integer

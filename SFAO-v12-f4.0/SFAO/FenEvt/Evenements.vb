@@ -79,11 +79,16 @@ Module Evenements
 
                 'Case 1070
 
-            Case 1070 'Test 
+            Case 1070 'Démontage 
+                If DebFin = "D" Then    'début événement simple
+                    If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
+                        AfficheEvt = LanceEvt(NumEvt, CType(DEBDEM, Form))
+                    End If
+                Else
+                    'TODO voir comment on déclanche la fin d'une interruption ????
 
-                'affichage du load
-                'Call FenSfao.GifLoad(True)
-            Case 1080 'Test 
+                End If
+            Case 1080 'Interruption 
                 If DebFin = "D" Then    'début événement simple
                     If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
                         AfficheEvt = LanceEvt(NumEvt, CType(DEBINT, Form))
