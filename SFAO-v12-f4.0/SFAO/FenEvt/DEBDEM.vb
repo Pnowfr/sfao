@@ -4,16 +4,16 @@
 '------------------------------------------------------------------------------------------------------------------------
 Imports System.ComponentModel
 Imports System.Text.RegularExpressions
-Public Class DEBINT
+Public Class DEBDEM
     Private ofop As WSOFOPInfo
 
-    Private Sub DEBINT_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Sub DEBDEM_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim zTailFnt As Single
         Dim fnt As Font
         Dim i As Integer
         Dim MsgErr As String = String.Empty
 
-        Trace("Affichage fenêtre DEBINT")
+        Trace("Affichage fenêtre DEBDEM")
 
         'Si un seul opérateur présent sur le poste on prérempli le code matricule + nom 
         For i = 0 To FenSfao.WSsp.GRP2.Count - 1
@@ -55,7 +55,7 @@ Public Class DEBINT
     End Sub
 
     'Fonction qui gère le changement de taille des polices en fonction de la taille de la fenêtre
-    Private Sub DEBINT_FontChanged(sender As Object, e As EventArgs) Handles Me.FontChanged
+    Private Sub DEBDEM_FontChanged(sender As Object, e As EventArgs) Handles Me.FontChanged
         For Each ctl As Control In TableLayoutPanel1.Controls
             ctl.Font = Me.Font
         Next
@@ -113,12 +113,13 @@ Public Class DEBINT
             'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
             FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
             If MsgErr = "" Then
-                'TODO WEB : si type matricule <> 1 alors contrôle si opération hors OF et si oui message "terminer opé HOF"
                 'si ok on vérifie si opérateur est en opération hors OF
                 FenSfao.OpHof(matr, MsgErr)
                 If MsgErr = "" Then
                     'si ok on vérifie si l'opérateur a déjà une opération en cours
                     FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
+
+                    'TODO WEB : contrôle si démontage déjà en cours
                 End If
             End If
         End If
@@ -149,7 +150,7 @@ Public Class DEBINT
     Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles BtnOk.Click
         'Console.WriteLine("BtnOk_Click")
         Dim retMsg As String = String.Empty
-        Dim debint As Integer = -1
+        Dim debdem As Integer = -1
 
         'Dans certains cas la validation passe même si tous les champs ne sont pas valides
         For Each ctl As Control In Me.TableLayoutPanel1.Controls
@@ -160,15 +161,15 @@ Public Class DEBINT
 
         'tout va bien on enregistre le début d'interruption
         Try
-            debint = X3ws.WSDEBINT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag),
+            debdem = X3ws.WSDEBDEM(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag),
                                    TextBoxOF.Text, CInt(MaskedTextBoxOP.Text), retMsg)
         Catch ex As Exception
-            GoTo ErreurDebint
+            GoTo ErreurDebdem
         End Try
 
-        Select Case debint
+        Select Case debdem
             Case -1 'Erreur du web service
-                GoTo ErreurDebint
+                GoTo ErreurDebdem
             Case 0 'Erreur blocage 
                 Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
             Case 1 'ok
@@ -177,7 +178,7 @@ Public Class DEBINT
 
         Exit Sub
 
-ErreurDebint:
+ErreurDebdem:
         Trace("Erreur d'enregistrement du début de réglage ! ", FichierTrace.niveau.alerte)
         If retMsg <> "" Then
             Trace(retMsg, FichierTrace.niveau.erreur)

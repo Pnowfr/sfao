@@ -7,6 +7,15 @@ Imports System.Text.RegularExpressions
 Public Class DEBRGL
     Private ofop As WSOFOPInfo
 
+    Public Sub New()
+
+        ' Cet appel est requis par le concepteur.
+        InitializeComponent()
+
+        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+
+    End Sub
+
     Private Sub DEBRGL_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim zTailFnt As Single
         Dim fnt As Font
@@ -51,6 +60,8 @@ Public Class DEBRGL
             Trace("Aucune phase de règlage définie pour ce poste ! ", FichierTrace.niveau.alerte)
             Me.Close()
         End If
+
+        'TODO WEB : si on a une seule phase, contrôle si phase déjà en cours
 
         If MTextBoxMatr.Text <> "" And MsgErr = "" Then
             MTextBoxMatr.Enabled = False    'on a 1 seul opérateur présent sur le poste, donc on désactive la saisie du champ matricule
@@ -210,6 +221,8 @@ Public Class DEBRGL
                 PhaseSelect = phs.phase
             End If
         Next
+
+        'TODO WEB : contrôle si phase déjà en cours
 
         'tout va bien on enregistre le début de réglage
         Try
