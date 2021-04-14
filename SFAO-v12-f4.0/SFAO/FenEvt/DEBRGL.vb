@@ -193,7 +193,6 @@ Public Class DEBRGL
     End Sub
 
     Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles BtnOk.Click
-        'Console.WriteLine("BtnOk_Click")
         Dim retMsg As String = String.Empty
         Dim debrgl As Integer = -1
         Dim PhaseSelect As Integer
@@ -206,13 +205,11 @@ Public Class DEBRGL
         Next
 
         'Chercher la phase correspondant à l'événement en cours (la combo ne comporte pas la liste complète)
-        Trace(ComboBoxPhase.SelectedItem.ToString, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
         For Each phs As Phase In Phases.OrderBy(Function(x) x.ordre)
             If phs.evenement = CInt(Me.Tag) And phs.desc = ComboBoxPhase.SelectedItem.ToString Then
                 PhaseSelect = phs.phase
             End If
         Next
-        Trace(PhaseSelect.ToString, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
 
         'tout va bien on enregistre le début de réglage
         Try
