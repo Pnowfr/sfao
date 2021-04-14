@@ -90,7 +90,7 @@ Module Evenements
                 End If
             Case 1080 'Interruption 
                 If DebFin = "D" Then    'début événement simple
-                    If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
+                    If NbrMatr(True) > 0 Then
                         AfficheEvt = LanceEvt(NumEvt, CType(DEBINT, Form))
                     End If
                 Else

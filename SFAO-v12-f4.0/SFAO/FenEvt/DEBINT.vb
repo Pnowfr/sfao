@@ -104,7 +104,7 @@ Public Class DEBINT
         End If
     End Sub
 
-    'fonction qui contrôle le matricule (contrôle si matricule présent, si durée présence dépassé, si opération hors OF ou opération std en cours)
+    'fonction qui contrôle le matricule (contrôle si matricule présent, si durée présence dépassé, si opération hors OF)
     Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String, Optional ByVal afficheMsg As Boolean = True)
 
         'on contrôle si l'opérateur est présent sur le poste
@@ -113,12 +113,10 @@ Public Class DEBINT
             'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
             FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
             If MsgErr = "" Then
-                'TODO WEB : si type matricule <> 1 alors contrôle si opération hors OF et si oui message "terminer opé HOF"
-                'si ok on vérifie si opérateur est en opération hors OF
-                FenSfao.OpHof(matr, MsgErr)
-                If MsgErr = "" Then
-                    'si ok on vérifie si l'opérateur a déjà une opération en cours
-                    FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
+                'si type matricule <> 1 (opérateur)
+                If FenSfao.TypeMatr(matr) <> 1 Then
+                    'si type non opérateur : on vérifie si opération hors OF en cours
+                    FenSfao.OpHof(matr, MsgErr)
                 End If
             End If
         End If
@@ -129,18 +127,6 @@ Public Class DEBINT
         ErrorProvider.SetError(MTextBoxMatr, "")
         TextBoxMsg.Text = ""
     End Sub
-
-    Private Function ComboMsg() As String
-        Dim MsgErr As String
-        MsgErr = "Veuillez sélectionner la phase/étape de réglage : " + Environment.NewLine
-        For Each phs As Phase In Phases.OrderBy(Function(x) x.ordre)
-            If phs.evenement = CInt(Me.Tag) Then
-                MsgErr += phs.desc + ", "
-            End If
-        Next
-        MsgErr = MsgErr.Remove(MsgErr.LastIndexOf(", "), 2).Insert(MsgErr.LastIndexOf(", "), "")
-        Return MsgErr
-    End Function
 
     Private Sub BtnFin_Click(sender As Object, e As EventArgs) Handles BtnFin.Click
         Me.Close()
@@ -160,8 +146,14 @@ Public Class DEBINT
 
         'tout va bien on enregistre le début d'interruption
         Try
-            debint = X3ws.WSDEBINT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag),
+            If TextBoxOF.Text <> "" Then
+                debint = X3ws.WSDEBINT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag),
                                    TextBoxOF.Text, CInt(MaskedTextBoxOP.Text), retMsg)
+            Else
+                'Il n'est pas obligatoire davoir une opération en cours pour une interruption
+                debint = X3ws.WSDEBINT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag),
+                                   "", 0, retMsg)
+            End If
         Catch ex As Exception
             GoTo ErreurDebint
         End Try

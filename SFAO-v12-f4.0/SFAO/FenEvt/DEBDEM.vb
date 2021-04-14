@@ -120,7 +120,7 @@ Public Class DEBDEM
                     FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
                     If MsgErr = "" Then
                         'si ok on vérifie si l'opérateur n'est pas déjà en démontage
-                        If FenSfao.EventEnCours(matr) = 1070 Then
+                        If FenSfao.EventEnCours(matr) = CInt(Me.Tag) Then
                             MsgErr = "Vous êtes déjà en démontage"
                         End If
                     End If

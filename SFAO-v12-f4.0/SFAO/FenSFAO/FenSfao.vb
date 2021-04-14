@@ -25,6 +25,14 @@ Public Class FenSfao
     Private DblClc As Boolean
     Private _maxHeuresPresence As Decimal
 
+    Public Sub New()
+
+        ' Cet appel est requis par le concepteur.
+        InitializeComponent()
+
+        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+
+    End Sub
 
     Private Sub FQT_Click(sender As Object, e As EventArgs) Handles FQT.Click, LblFin.Click
         If MsgBox("Voulez-vous quitter la SFAO ?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
@@ -1244,6 +1252,20 @@ Public Class FenSfao
             _msgErr = "Matricule n° " & _matr.ToString & " non présent sur ce poste !"
         End If
     End Sub
+    'fonction qui renvoie le type de matricule 
+    Public Function TypeMatr(ByVal _matr As Integer) As Integer
+        Dim typem As Integer
+        Dim i As Integer
+        If WSsp.GRP2.Count > 0 Then
+            For i = 0 To WSsp.GRP2.Count - 1
+                If WSsp.GRP2(i).XEMPNUM > 0 AndAlso WSsp.GRP2(i).XEMPNUM = _matr Then
+                    typem = WSsp.GRP2(i).XTYPE
+                    Exit For
+                End If
+            Next
+        End If
+        Return typem
+    End Function
     Public Sub DureeMaxPresenceDepassee(ByRef _msgErr As String, Optional ByVal _afficheMsg As Boolean = True)
         Dim i As Integer
         Dim HeuresPresence As Decimal
