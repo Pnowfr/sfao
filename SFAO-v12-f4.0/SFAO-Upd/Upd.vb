@@ -50,7 +50,7 @@ Public Class Upd
         Dim checkSfaoClose As String = Path.Combine(sfaoPath, sfaoClose)
         Dim _main_Dir As New IO.DirectoryInfo(valParamREPUPDSFAO)
 
-        'Ajout dans la liste des versions dispos dans le dossier
+        'Ajout dans la liste des versions dispos dans le dossier  ddd
         For Each _Dir In _main_Dir.GetDirectories
             versionslist.Add(_Dir.Name)
         Next

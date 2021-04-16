@@ -1,6 +1,6 @@
 ﻿Imports System.Configuration
 Imports System.IO
-Imports System.Text
+Imports System.Text 'test fidi
 
 Module SFAO
     Public SfaoTest As Boolean                          'Variable pour les tests
