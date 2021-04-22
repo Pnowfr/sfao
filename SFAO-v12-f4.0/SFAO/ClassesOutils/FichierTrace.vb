@@ -152,11 +152,8 @@ Public Class FichierTrace
         ElseIf niveau = 3 Then
             MsgBox(message, MsgBoxStyle.Exclamation) 'message erreur !
         ElseIf niveau = 4 Then 'erreur critique 
-            FermeTrace()
             MsgBox(message, MsgBoxStyle.Critical) 'message utilisateur !
-
-            System.IO.File.Delete("sfao.run")
-            Application.Exit()                    'on quitte l'application ! 
+            FermeSFAO()                    'on quitte l'application ! 
             End
         End If
 
