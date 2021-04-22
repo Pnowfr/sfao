@@ -242,6 +242,18 @@
     <Compile Include="FenEvt\AUTOCTRL.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FenEvt\DEBDEM.Designer.vb">
+      <DependentUpon>DEBDEM.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FenEvt\DEBDEM.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FenEvt\DEBINT.Designer.vb">
+      <DependentUpon>DEBINT.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FenEvt\DEBINT.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FenEvt\DEBOP.Designer.vb">
       <DependentUpon>DEBOP.vb</DependentUpon>
     </Compile>
@@ -292,6 +304,18 @@
     <Compile Include="FenLogo\Logo.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormCopie.Designer.vb">
+      <DependentUpon>FormCopie.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormCopie.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormFinCopie.Designer.vb">
+      <DependentUpon>FormFinCopie.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FormFinCopie.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Modules\Fnc.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -328,6 +352,12 @@
       <DependentUpon>AUTOCTRL.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="FenEvt\DEBDEM.resx">
+      <DependentUpon>DEBDEM.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FenEvt\DEBINT.resx">
+      <DependentUpon>DEBINT.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FenEvt\DEBOP.resx">
       <DependentUpon>DEBOP.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -358,6 +388,12 @@
     <EmbeddedResource Include="FenLogo\Logo.resx">
       <DependentUpon>Logo.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCopie.resx">
+      <DependentUpon>FormCopie.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormFinCopie.resx">
+      <DependentUpon>FormFinCopie.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

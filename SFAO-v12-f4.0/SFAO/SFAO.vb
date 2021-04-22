@@ -76,7 +76,7 @@ Module SFAO
         Logo.Hide()            'on cache le logo avant l'affichage de la fenêtre de connexion
         Logo.Dispose()         'on libère le logo de la mémoire
 
-        'Actie timer de vérification des mise à jour
+        'Active timer de vérification des mise à jour
         If UpdSFAO Then
             Trace("Activation du timer de recherche de mise à jour")
             UpdateTimer = New Timer()
