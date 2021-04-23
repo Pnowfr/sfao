@@ -176,6 +176,32 @@ Public Class X3WebServ
 
         Return json
     End Function
+
+    'web service qui récupère les motifs de non solde liées à un poste
+    Public Function WSGETMNS(ByVal _cod As String) As WSMns
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As New WSMns
+        Dim settings As JsonSerializerSettings
+
+        settings = New JsonSerializerSettings() With {
+            .NullValueHandling = NullValueHandling.Ignore,
+            .MissingMemberHandling = MissingMemberHandling.Ignore
+        }
+
+        json.GRP1.WST = _cod
+
+        params = ClassToJson(Of WSMns)(json, False, settings)
+        If X3WSC.Run("WSGETMNS", params, retxml, MsgErrWs, True) = 1 Then
+            json = JsonToClass(Of WSMns)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
+        End If
+
+        Return json
+    End Function
     'Web service qui récupère la situation du poste
     Public Function WSGETSITPS(ByVal _cod As String, ByVal _sit As String) As WSSitPs
         Dim params As String
@@ -489,6 +515,30 @@ Public Class X3WebServ
         params = JsonConvert.SerializeObject(par)
 
         If X3WSC.Run("WSDEBINT", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
+    'Web service qui enregistre un début d'interruption
+    Public Function WSFINOPE(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByVal _opesld As String, ByVal _motif As String, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZOPESLD = _opesld, .ZMOTIF = _motif, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSFINOPE", params, retxml, MsgErrWs, True) = 1 Then
             json = JObject.Parse(retxml)
             ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
             _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString

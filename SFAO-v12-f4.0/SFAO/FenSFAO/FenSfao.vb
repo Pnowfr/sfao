@@ -22,6 +22,8 @@ Public Class FenSfao
     Public WSof As WSSitOF                  'classe de la situation des opérations
     Public WScp As WSSitCP                  'classe de la situation des composants
     Public DtSFAO As String
+    Public WSLstMns As New WSMns               'classe de la liste des motis de non solde
+
     Private DblClc As Boolean
     Private _maxHeuresPresence As Decimal
 
@@ -135,6 +137,9 @@ Public Class FenSfao
         Trace("Initialisation des événements et actions du poste")
         Call InitaliseEvenements()
 
+        'Initialisation des listes liées au poste
+        Trace("Initialisation des listes du poste")
+        Call InitaliseListes()
 
         'Récupération et affichage de la situation du poste
         Call Situation()
@@ -258,6 +263,15 @@ Public Class FenSfao
         Next
     End Sub
 
+    Private Sub InitaliseListes()
+        Try
+            'Récupération de la liste des motifs de non solde
+            WSLstMns = X3ws.WSGETMNS(SFAO.Poste.GRP1.WST)
+        Catch ex As Exception
+            Trace("Erreur de connexion au web service !", FichierTrace.niveau.alerte)
+            Trace("[WSGETMNS] : " & ex.Message, FichierTrace.niveau.erreur)
+        End Try
+    End Sub
     Public Sub Situation()
 
         'Situation du poste

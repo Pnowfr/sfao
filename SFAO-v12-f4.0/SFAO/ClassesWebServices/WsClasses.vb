@@ -148,6 +148,56 @@ Public Class WSEvtGRP2
 End Class
 
 '########################################################################################################################
+'Classe liste des motifs de non solde d'opérations
+Public Class WSMns
+    Public Property GRP1 As WSMnsGRP1
+    Public Property GRP2 As List(Of WSMnsGRP2)
+    Sub New()
+        GRP1 = New WSMnsGRP1
+        GRP2 = New List(Of WSMnsGRP2)
+    End Sub
+End Class
+Public Class WSMnsGRP1
+    Public Property WST As String
+    Public Property ZRET As Integer
+    Public Property ZMSG As String
+    Sub New()
+        WST = String.Empty
+        ZMSG = String.Empty
+        ZRET = 0
+    End Sub
+End Class
+Public Class WSMnsGRP2
+    Public Enum TypeMsg
+        Null                    '0
+        Evenement               '1
+        Phase                   '2
+        Motif_de_non_solde      '3
+        Interruption            '4
+        Interruption_MA         '5
+        Interruption_MO         '6
+        Interruption_MAMO       '7
+        Divers                  '8
+        Opération_Hors_Of       '9
+        Messages_Ope_Hors_Of    '10
+        Saisie_manuelle         '11
+        Action                  '12
+    End Enum
+    Public Property MSGNUM As Integer
+    Public Property DESLNG As String
+    Public Property DESSHO As String
+    Public Property ZTYPEMSG As TypeMsg
+    Public Property ZTYPEMSG_LBL As String 'menu local 5201
+    Sub New()
+        MSGNUM = 0
+        DESLNG = String.Empty
+        DESSHO = String.Empty
+        ZTYPEMSG = TypeMsg.Null
+        ZTYPEMSG_LBL = String.Empty
+    End Sub
+End Class
+
+'########################################################################################################################
 
 Public Class WSSitPs
     Public Property GRP1 As WSSitPsGRP1

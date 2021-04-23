@@ -33,7 +33,7 @@ Public Class FINOP
         'on a un seul matricule sur le poste
         If MTextBoxMatr.Text <> "" Then
             'on doit valider le matricule
-            Matr_Valid(CInt(MTextBoxMatr.Text), MsgErr, False) 'sans affichage des erreurs
+            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr, False) 'sans affichage des erreurs
             If MsgErr <> "" Then
                 TextBoxMsg.Text = MsgErr
                 ErrorProvider.SetError(MTextBoxMatr, MsgErr)
@@ -41,10 +41,21 @@ Public Class FINOP
             End If
         End If
 
+        'Récupération de la liste des motifs de non solde d'opération
+        For i = 0 To FenSfao.WSLstMns.GRP2.Count - 1
+            ComboBoxMotifNS.Items.Add(FenSfao.WSLstMns.GRP2(i).DESSHO)
+        Next i
+
+        'Affichage du bilan de production/consommation de l'opération
+        Call BilanOP()
+
+        LabelMotifNS.Visible = False     'on masque le label motif non solde + champ de saisie
+        ComboBoxMotifNS.Visible = False
+
         If MTextBoxMatr.Text <> "" And MsgErr = "" Then
             MTextBoxMatr.Enabled = False
             'Sélection auto du 1er champ saisi
-            TextBoxOF.Select()
+            ComboBoxSoldOp.Select()
         Else
             'Sélection auto du 1er champ saisi
             MTextBoxMatr.Select()
@@ -69,6 +80,10 @@ Public Class FINOP
         Next
     End Sub
 
+    'fonction qui calcul et affiche le bilan de l'opération
+    Private Sub BilanOP()
+        RichTextBoxInfo.Rtf = "{\rtf1\ansi\b BILAN :\b0\tab Qté produite :\line\tab\tab Qté rebut :\line\tab\tab Conso sup 1 :\line\tab \b Ecart :\b0}"
+    End Sub
 
     Private Sub MTextBoxMatr_GotFocus(sender As Object, e As EventArgs) Handles MTextBoxMatr.GotFocus
         If ErrorProvider.GetError(MTextBoxMatr).ToString = "" Then
@@ -91,7 +106,7 @@ Public Class FINOP
         Else
 
             'on doit valider le matricule
-            Matr_Valid(CInt(MTextBoxMatr.Text), MsgErr, True) 'avec affichage des erreurs
+            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr, True) 'avec affichage des erreurs
 
             'en cas d'erreur on déclare l'erreur sur le ErrorProvider
             If MsgErr <> "" Then
@@ -106,9 +121,8 @@ Public Class FINOP
         End If
     End Sub
 
-
     'fonction qui contrôle le matricule (contrôle si matricule présent, si durée présence dépassé, si opération hors OF ou opération std en cours)
-    Private Sub Matr_Valid(ByVal matr As Integer, ByRef MsgErr As String, Optional ByVal afficheMsg As Boolean = True)
+    Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String, Optional ByVal afficheMsg As Boolean = True)
 
         'on contrôle si l'opérateur est présent sur le poste
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
@@ -120,189 +134,16 @@ Public Class FINOP
                 FenSfao.OpHof(matr, MsgErr)
                 If MsgErr = "" Then
                     'si ok on vérifie si l'opérateur a déjà une opération en cours
-                    FenSfao.OpEnCours(matr, MsgErr)
+                    FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
                 End If
             End If
         End If
     End Sub
+
     Private Sub MTextBoxMatr_Validated(sender As Object, e As EventArgs) Handles MTextBoxMatr.Validated
         'on efface les erreurs précédentes
         ErrorProvider.SetError(MTextBoxMatr, "")
         TextBoxMsg.Text = ""
-    End Sub
-
-    'Méthode qui affiche le commentaire sur la zone OF
-    Private Sub TextBoxOF_GotFocus(sender As Object, e As EventArgs) Handles TextBoxOF.GotFocus
-        If TextBoxOF.Tag Is Nothing Then
-            TextBoxMsg.Text = "Veuillez saisir ou scanner le code de l'OF/OP"
-            'Console.WriteLine("TextBoxOF_GotFocus")
-        End If
-        'TextBoxOF.Select(0, TextBoxOF.Text.Length)
-    End Sub
-    Private Sub TextBoxOF_Leave(sender As Object, e As EventArgs) Handles TextBoxOF.Leave
-        'Console.WriteLine("TextBoxOF_Leave : OFOP_Validating")
-        'OFOP_Validating(TextBoxOF.Text, MaskedTextBoxOP.Text, "OF")
-
-    End Sub
-    'Méthode qui contrôle la saisie de l'OF
-    Private Sub TextBoxOF_Validating(sender As Object, e As CancelEventArgs) Handles TextBoxOF.Validating
-        'Console.WriteLine("TextBoxOF_Validating")
-        'If TextBoxOF.Tag Is Nothing Then                                                   '270321PNO.o
-        If TextBoxOF.Tag Is Nothing OrElse TextBoxOF.Tag.ToString = String.Empty Then       '270321PNO.n
-            OFOP_Validating(TextBoxOF.Text, MaskedTextBoxOP.Text, "OF")
-        End If
-        If TextBoxOF.Tag IsNot Nothing AndAlso TextBoxOF.Tag.ToString <> "" Then
-            e.Cancel = True 'zone invalide
-            ErrorProvider.SetError(TextBoxOF, TextBoxOF.Tag.ToString)
-            TextBoxMsg.Text = TextBoxOF.Tag.ToString
-            System.Media.SystemSounds.Exclamation.Play() 'son erreur
-            TextBoxOF.Select() 'selection de la zone OF
-            TextBoxOF.Select(0, TextBoxOF.Text.Length) 'sélection du texte saisi
-            TextBoxOF.Tag = Nothing
-        End If
-
-    End Sub
-
-    'méthode qui traite l'OF saisi
-    Private Sub TextBoxOF_Validated(sender As Object, e As EventArgs) Handles TextBoxOF.Validated
-        'Console.WriteLine("TextBoxOF_Validated")
-
-        'on efface les erreurs précédentes
-        ErrorProvider.SetError(TextBoxOF, "")
-        TextBoxMsg.Text = ""
-
-    End Sub
-
-    'Méthode qui affiche le commentaire sur la zone OP
-    Private Sub MaskedTextBoxOP_GotFocus(sender As Object, e As EventArgs) Handles MaskedTextBoxOP.GotFocus
-        If TextBoxOF.Tag Is Nothing Then
-            TextBoxMsg.Text = "Veuillez saisir ou scanner le code de l'OF/OP"
-        End If
-        MaskedTextBoxOP.Select(0, MaskedTextBoxOP.Text.Length)
-    End Sub
-
-    Private Sub MaskedTextBoxOP_Leave(sender As Object, e As EventArgs) Handles MaskedTextBoxOP.Leave
-        'Console.WriteLine("MaskedTextBoxOP_Leave : OFOP_Validating")
-        If TextBoxOF.Tag Is Nothing Then
-            OFOP_Validating(TextBoxOF.Text, MaskedTextBoxOP.Text, "OP")
-            Me.ValidateChildren()
-        End If
-    End Sub
-    Private Sub MaskedTextBoxOP_Validating(sender As Object, e As CancelEventArgs) Handles MaskedTextBoxOP.Validating
-
-    End Sub
-    Private Sub OFOP_Validating(ByRef _of As String, ByRef _op As String, ByVal _zone As String)
-        Dim pattern As String = "^[A-Z0-9/]*$"
-        Dim m As Match
-        Dim nop As Integer
-        Dim p As Integer
-        Dim t As String
-
-        'On elimine les espaces éventuels
-        _of = _of.Replace(" ", "")
-        _op = _op.Replace(" ", "")
-
-        TextBoxOF.Tag = Nothing 'on initialise le Tag (si non vide c'est qu'on a une erreur)
-
-        Select Case _zone
-            Case "OF"
-
-                If _of = "" Then 'si l'OF est vide : erreur
-                    TextBoxOF.Tag = "Veuillez saisir ou scanner le code de l'OF/OP"
-                    'Console.WriteLine("OFOP_Validating OF vide")
-                Else
-                    m = Regex.Match(_of, pattern, RegexOptions.None) 'on vérifie si l'OF contient autre chose que des lettres majuscules, des chifres et slash
-                    'on doit valider le code OF : pas plus long que 20c et un seul / ou un double slash // ! 
-                    'If Len(_of) > 20 OrElse _of.Count(Function(c As Char) c = "/") >= 2 OrElse m.Success = False Then
-                    If Len(_of) > 21 OrElse _of.Count(Function(c As Char) c = "/") >= 3 OrElse m.Success = False Then
-                        TextBoxOF.Tag = "Format de l'OF incorrect !"
-
-                    ElseIf _of.Count(Function(c As Char) c = "/") = 2 Then 'si l'of contient deux //  '270321PNO.sn
-                        t = _of
-                        p = InStr(t, "//") + 1
-                        'Si la zone OF contient l'OF+OP sous forme OFXXXXXX//50 on sépare l'OF et on copie l'OP dans la zone OP
-                        If p > 0 Then
-                            _of = Strings.Left(t, p - 2)
-                            _op = Strings.Right(t, Len(t) - p)
-                            t = _of
-                        End If
-
-                        If Len(t) > 0 And Len(t) <= 5 And IsNumeric(t) Then 'si dans l'OF on a que des chifres
-                            'si on a saisi le n° simple de l'OF (ex : 1234) on le transforme en OFB2001234 en utilisant le site et l'année en cours
-                            _of = "OF" & Strings.Left(SFAO.Site.GRP1.FCY, 1) & Now.ToString("yy") & StrDup(5 - Len(t), "0") & t
-                        End If
-                        '270321PNO.en
-                    ElseIf _of.Count(Function(c As Char) c = "/") <= 1 Then 'si l'of contient aucun ou un /
-                        t = _of
-                        p = InStr(t, "/")
-                        'Si la zone OF contient l'OF+OP sous forme OFXXXXXX/50 on sépare l'OF et on copie l'OP dans la zone OP
-                        If p > 0 Then
-                            _of = Strings.Left(t, p - 1)
-                            _op = Strings.Right(t, Len(t) - p)
-                            t = _of
-                        End If
-
-                        If Len(t) > 0 And Len(t) <= 5 And IsNumeric(t) Then 'si dans l'OF on a que des chifres
-                            'si on a saisi le n° simple de l'OF (ex : 1234) on le transforme en OFB2001234 en utilisant le site et l'année en cours
-                            _of = "OF" & Strings.Left(SFAO.Site.GRP1.FCY, 1) & Now.ToString("yy") & StrDup(5 - Len(t), "0") & t
-                        End If
-                    End If
-
-                End If
-
-            Case "OP"
-                Int32.TryParse(_op, nop) 'on convertit l'op en numérique
-                If _op = "" OrElse nop = 0 Then 'si l'OP est vide on met l'erreur sur la zone OF
-                    TextBoxOF.Tag = "Veuillez saisir ou scanner le code de l'OF/OP"
-                    'Console.WriteLine("OFOP_Validating Opération vide")
-                Else
-                    Try
-                        'on fait valider le code OF/OP par le web service
-                        Trace("Lancement du web service WSOFOPInfo")
-                        ofop = X3ws.WSOFOPInfo(SFAO.Site.GRP1.FCY, _of, nop, SFAO.Poste.GRP1.Y_TYPOP)
-
-                    Catch ex As Exception
-                        Trace("Erreur de connexion au web service !", FichierTrace.niveau.alerte)
-                        If ex.Message <> "" Then
-                            Trace(ex.Message, FichierTrace.niveau.erreur)
-                        End If
-
-                        FenSfao.X3Anim(0)       'affichage du gif erreur
-                        Application.DoEvents()  'rafraichir les écrans
-
-                        Me.DialogResult = DialogResult.Abort
-                        Me.Close() 'on quitte l'évenement
-                    End Try
-
-                    If ofop IsNot Nothing AndAlso ofop.GRP1.ZRET = 1 Then
-                        'si on a un retour du web service : tout est ok
-                        TextBoxCodCli.Text = ofop.GRP1.ZBPCNUM
-                        TextBoxNomCli.Text = ofop.GRP1.ZBPCNAM
-                        TextBoxArt1.Text = ofop.GRP1.ZITMREF
-                        TextBoxArtDes.Text = ofop.GRP1.ZITMDES
-                    ElseIf ofop IsNot Nothing AndAlso ofop.GRP1.ZRET = 0 Then
-                        'si retour du web service avec erreur
-                        TextBoxCodCli.Text = ""
-                        TextBoxNomCli.Text = ""
-                        TextBoxArt1.Text = ""
-                        TextBoxArtDes.Text = ""
-                        TextBoxOF.Tag = ofop.GRP1.ZMSG
-                    Else
-                        'cas de retour vide du web service 
-                        TextBoxCodCli.Text = ""
-                        TextBoxNomCli.Text = ""
-                        TextBoxArt1.Text = ""
-                        TextBoxArtDes.Text = ""
-                        TextBoxOF.Tag = "OF/OP inconnu !"
-                    End If
-
-                End If
-
-        End Select
-
-        'If TextBoxOF.Tag IsNot Nothing Then 'si on a une erreur on efface la zone opération
-        '_op = ""
-        'End If
     End Sub
 
     Private Sub BtnFin_Click(sender As Object, e As EventArgs) Handles BtnFin.Click
@@ -326,17 +167,19 @@ Public Class FINOP
             End If
         Next
 
+        'TODO WEB : si cde/appel et opération soldée, contrôle du nombre de palettes produites
+
         'tout va bien on enregistre le début d'opération + suivi auto du temps passé depuis le dernier évenement
         Try
-            Trace("Appel du web service WSDEBOPE")
-            debop = X3ws.WSDEBOPE(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), TextBoxOF.Text, CInt(MaskedTextBoxOP.Text), retMsg)
+            Trace("Appel du web service WSFINOPE")
+            debop = X3ws.WSFINOPE(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), ComboBoxSoldOp.Text, ComboBoxMotifNS.Text, retMsg)
         Catch ex As Exception
-            GoTo ErreurDebop
+            GoTo ErreurFinop
         End Try
 
         Select Case debop
             Case -1 'Erreur du web service
-                GoTo erreurDebop
+                GoTo ErreurFinop
             Case 0 'Erreur blocage 
                 Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
             Case 1 'ok
@@ -345,7 +188,7 @@ Public Class FINOP
 
         Exit Sub
 
-ErreurDebop:
+ErreurFinop:
         Trace("Erreur d'enregistrement du début d'opération ! ", FichierTrace.niveau.alerte)
         If retMsg <> "" Then
             Trace(retMsg, FichierTrace.niveau.erreur)
@@ -367,6 +210,38 @@ ErreurDebop:
     End Sub
 
     Private Sub ComboBoxSoldOp_Validated(sender As Object, e As EventArgs) Handles ComboBoxSoldOp.Validated
+
+        'on efface les erreurs précédentes
         ErrorProvider.SetError(ComboBoxSoldOp, "")
+        TextBoxMsg.Text = ""
+        ComboBoxMotifNS.Select()
+    End Sub
+
+    Private Sub ComboBoxSoldOp_SelectionChangeCommitted(sender As Object, e As EventArgs) Handles ComboBoxSoldOp.SelectionChangeCommitted
+        'on affiche le motif de non solde si "NON" sélectionné
+        If ComboBoxSoldOp.Text = "NON" Then
+            LabelMotifNS.Visible = True
+            ComboBoxMotifNS.Visible = True
+        Else
+            LabelMotifNS.Visible = False
+            ComboBoxMotifNS.Visible = False
+        End If
+    End Sub
+
+    Private Sub ComboBoxMotifNS_GotFocus(sender As Object, e As EventArgs) Handles ComboBoxMotifNS.GotFocus
+        TextBoxMsg.Text = "Pour quelle raison l'opération est-elle arrêtée mais non soldée ?"
+    End Sub
+
+    Private Sub ComboBoxMotifNS_Validating(sender As Object, e As CancelEventArgs) Handles ComboBoxMotifNS.Validating
+        If ComboBoxSoldOp.Text = "NON" AndAlso ComboBoxMotifNS.Text = "" Then
+            e.Cancel = True
+            ErrorProvider.SetError(ComboBoxMotifNS, "Liste motifs")
+        End If
+    End Sub
+
+    Private Sub ComboBoxMotifNS_Validated(sender As Object, e As EventArgs) Handles ComboBoxMotifNS.Validated
+        'on efface les erreurs précédentes
+        ErrorProvider.SetError(ComboBoxMotifNS, "")
+        TextBoxMsg.Text = ""
     End Sub
 End Class
