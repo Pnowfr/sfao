@@ -82,7 +82,91 @@ Public Class FINOP
 
     'fonction qui calcul et affiche le bilan de l'opération
     Private Sub BilanOP()
-        RichTextBoxInfo.Rtf = "{\rtf1\ansi\b BILAN :\b0\tab Qté produite :\line\tab\tab Qté rebut :\line\tab\tab Conso sup 1 :\line\tab \b Ecart :\b0}"
+        Dim qteAQ As Decimal = 0
+        Dim qteQN As Decimal = 0
+        Dim qteR As Decimal = 0
+        Dim nbPcu As Integer = 0
+        Dim uom As String = String.Empty
+        Dim qteSup1 As Decimal = 0
+        Dim qteSup2 As Decimal = 0
+        Dim qteRet As Decimal = 0
+        Dim unite As String = String.Empty
+        Dim qteLnk1 As Decimal = 0
+        Dim qteLnk2 As Decimal = 0
+        Dim retMsg As String = String.Empty
+        Dim getqpro As Integer = -1
+        Dim getqcso As Integer = -1
+        Dim qtepro As Decimal = 0
+        Dim ecart As Decimal = 0
+
+        Try
+            Trace("Appel du web service WSGETQPRO")
+            getqpro = X3ws.WSGETQPRO(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), qteAQ, qteQN, qteR, nbPcu, uom, retMsg)
+        Catch ex As Exception
+            GoTo ErreurBilanOP
+        End Try
+
+        RichTextBoxInfo.Rtf = "{\rtf1\ansi\b BILAN :\b0\tab Qté produite : $QP\line\tab\tab Qté rebut : $QR\line\tab\tab Conso sup 1 : $S1\line\tab\tab Conso sup 2 : $S2\tab\tab \b ECART : \b0 $QE}"
+
+        Select Case getqpro
+            Case -1 'Erreur du web service
+                GoTo ErreurBilanOP
+            Case 0 'Erreur blocage 
+                Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+            Case 1 'ok
+                RichTextBoxInfo.Find("$QP")
+                If nbPcu > 1 Then
+                    qtepro = (qteAQ + qteQN) / nbPcu
+                    RichTextBoxInfo.SelectedText = CStr(nbPcu) + "*" + CStr(qtepro) + " " + uom
+                Else
+                    qtepro = qteAQ + qteQN
+                    RichTextBoxInfo.SelectedText = CStr(qtepro) + " " + uom
+                End If
+                RichTextBoxInfo.Find("$QR")
+                RichTextBoxInfo.SelectedText = CStr(qteR) + " " + uom
+        End Select
+
+        Try
+            Trace("Appel du web service WSGETQCSO")
+            getqcso = X3ws.WSGETQCSO(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, SFAO.Poste.GRP1.STOLOC, CInt(MTextBoxMatr.Text), qteSup1, qteSup2, qteRet, unite, qteLnk1, qteLnk2, retMsg)
+        Catch ex As Exception
+            GoTo ErreurBilanOP
+        End Try
+
+        Select Case getqcso
+            Case -1 'Erreur du web service
+                GoTo ErreurBilanOP
+            Case 0 'Erreur blocage 
+                Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+            Case 1 'ok
+                RichTextBoxInfo.Find("$S1")
+                RichTextBoxInfo.SelectedText = CStr(qteSup1) + " " + unite
+                If qteSup2 > 0 Then
+                    RichTextBoxInfo.Find("$S2")
+                    RichTextBoxInfo.SelectedText = CStr(qteSup2) + " " + unite
+                Else
+                    RichTextBoxInfo.Find("Conso sup 2 : $S2")
+                    RichTextBoxInfo.SelectedText = ""
+                End If
+
+        End Select
+
+        ecart = (qtepro + qteR) * qteLnk1 - qteSup1
+        If qteSup2 > 0 Then
+            ecart += (qtepro + qteR) * qteLnk2 - qteSup2
+        End If
+        RichTextBoxInfo.Find("$QE")
+        RichTextBoxInfo.SelectedText = CStr(ecart) + " " + unite
+
+        Exit Sub
+
+ErreurBilanOP:
+        Trace("Erreur de calcul du bilan d'opération ! ", FichierTrace.niveau.alerte)
+        If retMsg <> "" Then
+            Trace(retMsg, FichierTrace.niveau.erreur)
+        End If
+        Me.DialogResult = DialogResult.Abort
+        Me.Close()
     End Sub
 
     Private Sub MTextBoxMatr_GotFocus(sender As Object, e As EventArgs) Handles MTextBoxMatr.GotFocus
@@ -152,7 +236,7 @@ Public Class FINOP
 
     Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles BtnOk.Click
         Dim retMsg As String = String.Empty
-        Dim debop As Integer = -1
+        Dim finop As Integer = -1
 
         'on déclenche la validation de la zone opération soldée
         If ComboBoxSoldOp.Text = "" Then
@@ -169,15 +253,15 @@ Public Class FINOP
 
         'TODO WEB : si cde/appel et opération soldée, contrôle du nombre de palettes produites
 
-        'tout va bien on enregistre le début d'opération + suivi auto du temps passé depuis le dernier évenement
+        'tout va bien on enregistre la fin d'opération + suivi auto du temps passé depuis le dernier évenement
         Try
             Trace("Appel du web service WSFINOPE")
-            debop = X3ws.WSFINOPE(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), ComboBoxSoldOp.Text, ComboBoxMotifNS.Text, retMsg)
+            finop = X3ws.WSFINOPE(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), ComboBoxSoldOp.Text, ComboBoxMotifNS.Text, retMsg)
         Catch ex As Exception
             GoTo ErreurFinop
         End Try
 
-        Select Case debop
+        Select Case finop
             Case -1 'Erreur du web service
                 GoTo ErreurFinop
             Case 0 'Erreur blocage 

@@ -526,7 +526,7 @@ Public Class X3WebServ
         Return ret
     End Function
 
-    'Web service qui enregistre un début d'interruption
+    'Web service qui enregistre une fin d'opération
     Public Function WSFINOPE(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByVal _opesld As String, ByVal _motif As String, ByRef _retmsg As String) As Integer
         Dim par As Object
         Dim params As String
@@ -541,6 +541,65 @@ Public Class X3WebServ
         If X3WSC.Run("WSFINOPE", params, retxml, MsgErrWs, True) = 1 Then
             json = JObject.Parse(retxml)
             ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
+    'Web service qui récupère les quantités produites d'une opération
+    Public Function WSGETQPRO(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByRef _qteaq As Decimal, ByRef _qteqn As Decimal, ByRef _qter As Decimal, ByRef _nbpcu As Integer, ByRef _uom As String, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZQTEAQ = _qteaq, .ZQTEQN = _qteqn, .ZQTER = _qter, .ZNBPCU = _nbpcu, .ZOPEUOM = _uom, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSGETQPRO", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _qteaq = CDec(json.SelectToken("GRP1").SelectToken("ZQTEAQ"))
+            _qteqn = CDec(json.SelectToken("GRP1").SelectToken("ZQTEQN"))
+            _qter = CDec(json.SelectToken("GRP1").SelectToken("ZQTER"))
+            _nbpcu = CInt(json.SelectToken("GRP1").SelectToken("ZNBPCU"))
+            _uom = json.SelectToken("GRP1").SelectToken("ZOPEUOM").ToString
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
+    'Web service qui récupère les quantités consommées d'une opération
+    Public Function WSGETQCSO(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _stoloc As String, ByVal _empnum As Integer, ByRef _qtesup1 As Decimal, ByRef _qtesup2 As Decimal, ByRef _qteret As Decimal, ByRef _unite As String, ByRef _qteLnk1 As Decimal, ByRef _qteLnk2 As Decimal, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZSTOLOC = _stoloc, .ZEMPNUM = _empnum, .ZQTESUP1 = _qtesup1, .ZQTESUP2 = _qtesup2, .ZQTERET = _qteret, .ZSTUMAT = _unite, .ZQTYLNK1 = _qteLnk1, .ZQTYLNK2 = _qteLnk2, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSGETQCSO", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _qtesup1 = CDec(json.SelectToken("GRP1").SelectToken("ZQTESUP1"))
+            _qtesup2 = CDec(json.SelectToken("GRP1").SelectToken("ZQTESUP2"))
+            _qteret = CDec(json.SelectToken("GRP1").SelectToken("ZQTERET"))
+            _unite = json.SelectToken("GRP1").SelectToken("ZSTUMAT").ToString
+            _qteLnk1 = CDec(json.SelectToken("GRP1").SelectToken("ZQTYLNK1"))
+            _qteLnk2 = CDec(json.SelectToken("GRP1").SelectToken("ZQTYLNK2"))
             _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
         Else
             ret = -1
