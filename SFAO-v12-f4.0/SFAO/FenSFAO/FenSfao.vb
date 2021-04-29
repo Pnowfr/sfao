@@ -1342,6 +1342,19 @@ Public Class FenSfao
             _msgErr = "Aucune opération cours !"
         End If
     End Sub
+    Public Function OpExc(ByVal _matr As Integer) As Integer
+        Dim nopexc As Integer
+        Dim i As Integer
+        If WSsp.GRP2.Count > 0 Then
+            For i = 0 To WSsp.GRP2.Count - 1
+                If WSsp.GRP2(i).XEMPNUM > 0 AndAlso WSsp.GRP2(i).XEMPNUM = _matr Then
+                    nopexc = WSsp.GRP2(i).ZOPEXC
+                    Exit For
+                End If
+            Next
+        End If
+        Return nopexc
+    End Function
     Public Function PhaseEnCours(ByVal _matr As Integer, ByVal _of As String, ByVal _op As Integer) As Integer
         Dim nphas As Integer
         Dim i As Integer

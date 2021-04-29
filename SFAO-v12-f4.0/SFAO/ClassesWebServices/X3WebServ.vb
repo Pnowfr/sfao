@@ -455,7 +455,7 @@ Public Class X3WebServ
     End Function
 
     'Web service qui enregistre un début de réglage
-    Public Function WSDEBRGL(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByVal _phase As Integer, ByVal _of As String, ByVal _op As Integer, ByRef _retmsg As String) As Integer
+    Public Function WSDEBRGL(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByVal _phase As Integer, ByRef _retmsg As String) As Integer
         Dim par As Object
         Dim params As String
         Dim retxml As String = String.Empty
@@ -463,7 +463,7 @@ Public Class X3WebServ
         Dim json As JObject
         Dim ret As Integer
 
-        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZPHASE = _phase, .ZMFGNUM = _of, .ZOPENUM = _op, .ZRET = 0, .ZMSG = ""}}
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZPHASE = _phase, .ZRET = 0, .ZMSG = ""}}
         params = JsonConvert.SerializeObject(par)
 
         If X3WSC.Run("WSDEBRGL", params, retxml, MsgErrWs, True) = 1 Then
@@ -479,7 +479,7 @@ Public Class X3WebServ
     End Function
 
     'Web service qui enregistre un début de démontage
-    Public Function WSDEBDEM(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByVal _of As String, ByVal _op As Integer, ByRef _retmsg As String) As Integer
+    Public Function WSDEBDEM(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByRef _retmsg As String) As Integer
         Dim par As Object
         Dim params As String
         Dim retxml As String = String.Empty
@@ -487,7 +487,7 @@ Public Class X3WebServ
         Dim json As JObject
         Dim ret As Integer
 
-        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZMFGNUM = _of, .ZOPENUM = _op, .ZRET = 0, .ZMSG = ""}}
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZRET = 0, .ZMSG = ""}}
         params = JsonConvert.SerializeObject(par)
 
         If X3WSC.Run("WSDEBDEM", params, retxml, MsgErrWs, True) = 1 Then
@@ -503,7 +503,7 @@ Public Class X3WebServ
     End Function
 
     'Web service qui enregistre un début d'interruption
-    Public Function WSDEBINT(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByVal _of As String, ByVal _op As Integer, ByRef _retmsg As String) As Integer
+    Public Function WSDEBINT(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByRef _retmsg As String) As Integer
         Dim par As Object
         Dim params As String
         Dim retxml As String = String.Empty
@@ -511,7 +511,7 @@ Public Class X3WebServ
         Dim json As JObject
         Dim ret As Integer
 
-        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZMFGNUM = _of, .ZOPENUM = _op, .ZRET = 0, .ZMSG = ""}}
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZRET = 0, .ZMSG = ""}}
         params = JsonConvert.SerializeObject(par)
 
         If X3WSC.Run("WSDEBINT", params, retxml, MsgErrWs, True) = 1 Then
@@ -607,6 +607,35 @@ Public Class X3WebServ
         End If
 
         Return ret
+    End Function
+
+    'Web service qui récupère les palettes non validées
+    Public Function WSPALNVLD(ByVal _site As String, ByVal _stoloc As String, ByVal _of As String) As WSLstPal
+        Dim params As String
+        Dim json As New WSLstPal
+        Dim settings As JsonSerializerSettings
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+
+        settings = New JsonSerializerSettings() With {
+                    .NullValueHandling = NullValueHandling.Ignore,
+                    .MissingMemberHandling = MissingMemberHandling.Ignore
+                }
+
+        json.GRP1.ZFCY = _site
+        json.GRP1.ZSTOLOC = _stoloc
+        json.GRP1.ZMFGNUM = _of
+
+        params = ClassToJson(Of WSLstPal)(json, False, settings)
+
+        If X3WSC.Run("WSPALNVLD", params, retxml, MsgErrWs, True) = 1 Then
+            json = JsonToClass(Of WSLstPal)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
+        End If
+
+        Return json
     End Function
 
     '########################################################################################################################

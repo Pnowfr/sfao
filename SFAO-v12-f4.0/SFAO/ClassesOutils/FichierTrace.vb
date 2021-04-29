@@ -113,6 +113,7 @@ Public Class FichierTrace
 
             Try
                 file = My.Computer.FileSystem.OpenTextFileWriter(repertoire & "\" & fichier, True)
+                file.AutoFlush = True
             Catch ex As Exception
                 Console.WriteLine("Erreur ouverture fichier trace !")
                 MsgBox("Erreur d'ouverture du fichier trace : " & repertoire & "\" & fichier & " !", MsgBoxStyle.Exclamation) 'message erreur !

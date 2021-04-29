@@ -465,3 +465,33 @@ Public Class OFOPInfo
 End Class
 
 '########################################################################################################################
+
+Public Class WSLstPal
+    Public Property GRP1 As WSLstPalGRP1
+    Public Property GRP2 As List(Of WSLstPalGRP2)
+    Sub New()
+        GRP1 = New WSLstPalGRP1
+        GRP2 = New List(Of WSLstPalGRP2)
+    End Sub
+End Class
+Public Class WSLstPalGRP1
+    Public Property ZFCY As String
+    Public Property ZSTOLOC As String
+    Public Property ZMFGNUM As String
+    Public Property ZRET As Integer
+    Public Property ZMSG As String
+    Sub New()
+        ZFCY = String.Empty
+        ZSTOLOC = String.Empty
+        ZMFGNUM = String.Empty
+        ZMSG = String.Empty
+        ZRET = 0
+    End Sub
+End Class
+Public Class WSLstPalGRP2
+    Public Property ZPALNVLD As String
+    Sub New()
+        ZPALNVLD = String.Empty
+    End Sub
+End Class
+'########################################################################################################################

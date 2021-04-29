@@ -118,6 +118,14 @@ Public Class DEBINT
                     'si type non opérateur : on vérifie si opération hors OF en cours
                     FenSfao.OpHof(matr, MsgErr)
                 End If
+                If MsgErr = "" Then
+                    'si ok on vérifie si l'opérateur a déjà une opération en cours
+                    'juste pour l'affichage OF/op
+                    FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
+                    'pour l'interruption, il n'est pas nécessaire d'avoir une opération en cours
+                    'on efface donc l'éventuel message d'erreur
+                    MsgErr = ""
+                End If
             End If
         End If
     End Sub
@@ -146,14 +154,7 @@ Public Class DEBINT
 
         'tout va bien on enregistre le début d'interruption
         Try
-            If TextBoxOF.Text <> "" Then
-                debint = X3ws.WSDEBINT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag),
-                                   TextBoxOF.Text, CInt(MaskedTextBoxOP.Text), retMsg)
-            Else
-                'Il n'est pas obligatoire davoir une opération en cours pour une interruption
-                debint = X3ws.WSDEBINT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag),
-                                   "", 0, retMsg)
-            End If
+            debint = X3ws.WSDEBINT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), retMsg)
         Catch ex As Exception
             GoTo ErreurDebint
         End Try
@@ -170,7 +171,7 @@ Public Class DEBINT
         Exit Sub
 
 ErreurDebint:
-        Trace("Erreur d'enregistrement du début de réglage ! ", FichierTrace.niveau.alerte)
+        Trace("Erreur d'enregistrement du début d'interruption ! ", FichierTrace.niveau.alerte)
         If retMsg <> "" Then
             Trace(retMsg, FichierTrace.niveau.erreur)
         End If
