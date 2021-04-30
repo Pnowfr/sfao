@@ -426,13 +426,13 @@ Module SFAO
     Private Sub SaveDerniereSaisi()
         Try
             If SFAO.Site.GRP1.FCYSHO <> "" Then
-                AddPar("LASTSITE", SFAO.Site.GRP1.FCYSHO)
+                AddParam("LASTSITE", SFAO.Site.GRP1.FCYSHO)
             End If
             If SFAO.Site.GRP1.DOSSIER <> "" Then
-                AddPar("LASTDOSSIER", SFAO.Site.GRP1.DOSSIER)
+                AddParam("LASTDOSSIER", SFAO.Site.GRP1.DOSSIER)
             End If
             If SFAO.Poste.GRP1.WST <> "" Then
-                AddPar("LASTPOSTE", SFAO.Poste.GRP1.WST)
+                AddParam("LASTPOSTE", SFAO.Poste.GRP1.WST)
             End If
             Trace("Sauvegarde de la dernière saisie dans le fichier conf")
         Catch ex As Exception

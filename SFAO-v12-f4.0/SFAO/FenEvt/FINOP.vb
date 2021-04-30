@@ -40,8 +40,10 @@ Public Class FINOP
                 ErrorProvider.SetError(MTextBoxMatr, MsgErr)
                 System.Media.SystemSounds.Exclamation.Play()
             End If
+        End If
 
-            'Si pas d'opération exceptionnelle ni palettisation
+        If MTextBoxMatr.Text <> "" And MsgErr = "" Then
+            'Si pas d'opération exceptionnelle ni palettisation : gestion solde d'opération
             If SFAO.Poste.GRP1.Y_TYPOP <> "PAL" And FenSfao.OpExc(CInt(MTextBoxMatr.Text)) = 0 Then
                 palnvl = PalNvld(TextBoxOF.Text, MsgErr)
                 If palnvl = MsgBoxResult.No Then
@@ -51,21 +53,45 @@ Public Class FINOP
 
                 'Affichage du bilan de production/consommation de l'opération
                 Call BilanOP(CInt(MTextBoxMatr.Text), MsgErr)
+
+                'Récupération de la liste des motifs de non solde d'opération
+                For i = 0 To FenSfao.WSLstMns.GRP2.Count - 1
+                    ComboBoxMotifNS.Items.Add(FenSfao.WSLstMns.GRP2(i).DESSHO)
+                Next i
+
+                'Par défaut, on masque le label motif non solde + champ de saisie
+                LabelMotifNS.Visible = False
+                ComboBoxMotifNS.Visible = False
+            Else
+                'Pas de solde si opération exceptionnelle d'OF ou opération Palettisation
+                LabelSoldOp.Visible = False
+                ComboBoxSoldOp.Visible = False
+                ComboBoxSoldOp.Enabled = False
+                LabelMotifNS.Visible = False
+                ComboBoxMotifNS.Visible = False
+                ComboBoxMotifNS.Enabled = False
             End If
         End If
 
-        'Récupération de la liste des motifs de non solde d'opération
-        For i = 0 To FenSfao.WSLstMns.GRP2.Count - 1
-            ComboBoxMotifNS.Items.Add(FenSfao.WSLstMns.GRP2(i).DESSHO)
-        Next i
+        'Si site Tilwel et opération d'impression : saisie des encres et vernis utilisés
+        If SFAO.Poste.GRP1.WCRFCY <> "TIL" Or Strings.Left(SFAO.Poste.GRP1.Y_TYPOP, 3) <> "IMP" Then
+            'Sinon on masque les champs
+            LabelTotEnc.Visible = False
+            MTextBoxTotEnc.Visible = False
+            MTextBoxTotEnc.Enabled = False
+            LabelTotVer.Visible = False
+            MTextBoxTotVer.Visible = False
+            MTextBoxTotVer.Enabled = False
+        End If
 
-        LabelMotifNS.Visible = False     'on masque le label motif non solde + champ de saisie
-        ComboBoxMotifNS.Visible = False
-
+        'Sélection auto du 1er champ saisi
         If MTextBoxMatr.Text <> "" And MsgErr = "" Then
             MTextBoxMatr.Enabled = False
-            'Sélection auto du 1er champ saisi
-            ComboBoxSoldOp.Select()
+            If ComboBoxSoldOp.Visible Then
+                ComboBoxSoldOp.Select()
+            Else
+                MTextBoxTotEnc.Select()
+            End If
         Else
             'Sélection auto du 1er champ saisi
             MTextBoxMatr.Select()
@@ -99,24 +125,25 @@ Public Class FINOP
         Dim result As MsgBoxResult
         result = MsgBoxResult.Ok
 
-        Trace("Contrôle des palettes non validées")
+        Trace("Contrôle des palettes non validées de l'OF : " + numof)
+        If numof = "" Then
+            Try
+                Trace("Appel du web service WSPALNVLD")
+                LstPalNvld = X3ws.WSPALNVLD(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.STOLOC, numof)
+            Catch ex As Exception
+                GoTo ErreurPalNvld
+            End Try
 
-        Try
-            Trace("Appel du web service WSPALNVLD")
-            LstPalNvld = X3ws.WSPALNVLD(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.STOLOC, numof)
-        Catch ex As Exception
-            GoTo ErreurPalNvld
-        End Try
-
-        If LstPalNvld.GRP2.Count > 0 Then
-            msgpal = "Il reste des palettes non validées :" + vbNewLine + "Pal. n° "
-            For i = 0 To LstPalNvld.GRP2.Count - 1
-                msgpal += sep + CStr(CInt(Strings.Right(LstPalNvld.GRP2(i).ZPALNVLD, 4)))
-                sep = ", "
-            Next
-            Trace(msgpal)
-            msgpal += vbNewLine + "Continuer quand même la fin d'opération ?"
-            result = MsgBox(msgpal, CType(MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, MsgBoxStyle))
+            If LstPalNvld.GRP2.Count > 0 Then
+                msgpal = "Il reste des palettes non validées :" + vbNewLine + "Pal. n° "
+                For i = 0 To LstPalNvld.GRP2.Count - 1
+                    msgpal += sep + CStr(CInt(Strings.Right(LstPalNvld.GRP2(i).ZPALNVLD, 4)))
+                    sep = ", "
+                Next
+                Trace(msgpal)
+                msgpal += vbNewLine + "Continuer quand même la fin d'opération ?"
+                result = MsgBox(msgpal, CType(MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, MsgBoxStyle))
+            End If
         End If
 
         Return result
@@ -152,14 +179,20 @@ ErreurPalNvld:
 
         Trace("Calcul du BILAN d'opération")
 
+        RichTextBoxInfo.Text = "BILAN" + vbTab + "Qté produite : $QP" + vbNewLine + vbTab + vbTab + "Qté rebut : $QR"
+        RichTextBoxInfo.Text += vbNewLine + vbTab + vbTab + "Conso sup 1 : $QS"
+        RichTextBoxInfo.Text += vbNewLine + vbTab + vbTab + "ECART : $QE" + vbNewLine + vbNewLine + "$RM"
+
+        RichTextBoxInfo.Find("BILAN")
+        RichTextBoxInfo.SelectionFont = New Font("", RichTextBoxInfo.SelectionFont.Size, FontStyle.Bold)
+        RichTextBoxInfo.SelectionColor = Color.Black
+
         Try
             Trace("Appel du web service WSGETQPRO")
             getqpro = X3ws.WSGETQPRO(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, matr, qteAQ, qteQN, qteR, nbPcu, uom, MsgErr)
         Catch ex As Exception
             GoTo ErreurBilanOP
         End Try
-
-        RichTextBoxInfo.Rtf = "{\rtf1\ansi\b BILAN :\b0\tab $QP\line\tab\tab $QR\line\tab\tab $S1\line\tab\tab $S2\line\b\tab\tab ECART : \b0 $QE\line\line $RM}"
 
         Select Case getqpro
             Case -1 'Erreur du web service
@@ -171,13 +204,18 @@ ErreurPalNvld:
                 RichTextBoxInfo.Find("$QP")
                 If nbPcu > 1 Then
                     qtepro = (qteAQ + qteQN) / nbPcu
-                    RichTextBoxInfo.SelectedText = "Qté produite : " + CStr(nbPcu) + "*" + CStr(qtepro) + " " + uom
+                    RichTextBoxInfo.SelectedText = CStr(nbPcu) + " * " + CStr(qtepro) + " " + uom
                 Else
                     qtepro = qteAQ + qteQN
-                    RichTextBoxInfo.SelectedText = "Qté produite : " + CStr(qtepro) + " " + uom
+                    RichTextBoxInfo.SelectedText = CStr(qtepro) + " " + uom
                 End If
                 RichTextBoxInfo.Find("$QR")
-                RichTextBoxInfo.SelectedText = "Qté rebut : " + CStr(qteR) + " " + uom
+                If qteR > 0 Then
+                    RichTextBoxInfo.SelectedText = CStr(qteR) + " " + uom
+                Else
+                    RichTextBoxInfo.SelectedText = ""
+                End If
+
         End Select
 
         Try
@@ -194,28 +232,26 @@ ErreurPalNvld:
                 Trace(MsgErr, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
             Case 1 'ok
                 Trace("Affichage des quantités consommées")
-                RichTextBoxInfo.Find("$S1")
-                RichTextBoxInfo.SelectedText = "Conso sup 1 : " + CStr(qteSup1) + " " + unite
-                RichTextBoxInfo.Find("$S2")
+                RichTextBoxInfo.Find("$QS")
+                RichTextBoxInfo.SelectedText = CStr(qteSup1) + " " + unite
                 If qteSup2 > 0 Then
-                    RichTextBoxInfo.SelectedText = "Conso sup 2 : " + CStr(qteSup2) + " " + unite
-                Else
-                    RichTextBoxInfo.SelectedText = ""
+                    RichTextBoxInfo.SelectedText += vbNewLine + vbTab + vbTab + "Conso sup 2 : " + CStr(qteSup2) + " " + unite
                 End If
 
         End Select
 
+        Trace("Affichage de l'écart : " + CStr(ecart) + " " + unite)
         ecart = (qtepro + qteR) * qteLnk1 - qteSup1
         If qteSup2 > 0 Then
             ecart += (qtepro + qteR) * qteLnk2 - qteSup2
         End If
 
-        Trace("Affichage de l'écart : " + CStr(ecart) + " " + unite)
-        'Si l'écart est nul, on l'affiche en vert, sinon en rouge
+        'Si l'écart est nul, on l'affiche en vert, sinon en rouge et en gras
         RichTextBoxInfo.Find("ECART : $QE")
         If ecart = 0 Then
             RichTextBoxInfo.SelectionColor = Color.Green
         Else
+            RichTextBoxInfo.SelectionFont = New Font("", RichTextBoxInfo.SelectionFont.Size, FontStyle.Bold)
             RichTextBoxInfo.SelectionColor = Color.Red
         End If
         RichTextBoxInfo.Find("$QE")
@@ -224,8 +260,8 @@ ErreurPalNvld:
         RichTextBoxInfo.Find("$RM")
         If qteRet > 0 Then
             RichTextBoxInfo.SelectionColor = Color.Blue
-            RichTextBoxInfo.SelectedText = "Faire le RETOUR matières : " + CStr(qteRet) + " " + unite
-            Trace("Faire le RETOUR matières : " + CStr(qteRet) + " " + unite)
+            RichTextBoxInfo.SelectedText = "ATTENTION : Faire le RETOUR matières !" + vbNewLine + vbTab + vbTab + "Reste sur machine : " + CStr(qteRet) + " " + unite
+            Trace("ATTENTION ! Faire le RETOUR matières : " + CStr(qteRet) + " " + unite)
         Else
             RichTextBoxInfo.SelectedText = ""
         End If
@@ -297,18 +333,42 @@ ErreurBilanOP:
 
     Private Sub MTextBoxMatr_Validated(sender As Object, e As EventArgs) Handles MTextBoxMatr.Validated
         Dim MsgErr As String = String.Empty
+        Dim palnvl As MsgBoxResult
+        Dim i As Integer
 
         'on efface les erreurs précédentes
         ErrorProvider.SetError(MTextBoxMatr, "")
         TextBoxMsg.Text = ""
 
-        'Si pas d'opération exceptionnelle ni palettisation
+        'Si pas d'opération exceptionnelle ni palettisation : gestion solde d'opération
         If SFAO.Poste.GRP1.Y_TYPOP <> "PAL" And FenSfao.OpExc(CInt(MTextBoxMatr.Text)) = 0 Then
-            'TODO WEB : contrôle palettes non validées
+            palnvl = PalNvld(TextBoxOF.Text, MsgErr)
+            If palnvl = MsgBoxResult.No Then
+                Me.DialogResult = DialogResult.Abort
+                Me.Close()
+            End If
 
             'Affichage du bilan de production/consommation de l'opération
             Call BilanOP(CInt(MTextBoxMatr.Text), MsgErr)
+
+            'Récupération de la liste des motifs de non solde d'opération
+            For i = 0 To FenSfao.WSLstMns.GRP2.Count - 1
+                ComboBoxMotifNS.Items.Add(FenSfao.WSLstMns.GRP2(i).DESSHO)
+            Next i
+
+            'Par défaut, on masque le label motif non solde + champ de saisie
+            LabelMotifNS.Visible = False
+            ComboBoxMotifNS.Visible = False
+        Else
+            'Pas de solde si opération exceptionnelle d'OF ou opération Palettisation
+            LabelSoldOp.Visible = False
+            ComboBoxSoldOp.Visible = False
+            ComboBoxSoldOp.Enabled = False
+            LabelMotifNS.Visible = False
+            ComboBoxMotifNS.Visible = False
+            ComboBoxMotifNS.Enabled = False
         End If
+
     End Sub
 
     Private Sub BtnFin_Click(sender As Object, e As EventArgs) Handles BtnFin.Click
@@ -318,19 +378,22 @@ ErreurBilanOP:
     Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles BtnOk.Click
         Dim retMsg As String = String.Empty
         Dim finop As Integer = -1
+        Dim conso As Integer = -1
 
-        'on déclenche la validation de la zone opération soldée
-        If ComboBoxSoldOp.Text = "" Then
-            ErrorProvider.SetError(ComboBoxSoldOp, "Oui/Non")
-            ComboBoxSoldOp.Select()
-            Exit Sub
-        End If
-
-        'on déclenche la validation de la zone motif NS si opération non soldée
-        If ComboBoxSoldOp.Text = "NON" And ComboBoxMotifNS.Text = "" Then
-            ErrorProvider.SetError(ComboBoxMotifNS, "Motif de non solde obligatoire")
-            ComboBoxMotifNS.Select()
-            Exit Sub
+        'Si gestion du solde d'opération
+        If LabelSoldOp.Visible Then
+            'on déclenche la validation de la zone opération soldée
+            If ComboBoxSoldOp.Text = "" Then
+                ErrorProvider.SetError(ComboBoxSoldOp, "Oui/Non")
+                ComboBoxSoldOp.Select()
+                Exit Sub
+            End If
+            'on déclenche la validation de la zone motif NS si opération non soldée
+            If ComboBoxSoldOp.Text = "NON" And ComboBoxMotifNS.Text = "" Then
+                ErrorProvider.SetError(ComboBoxMotifNS, "Motif de non solde obligatoire")
+                ComboBoxMotifNS.Select()
+                Exit Sub
+            End If
         End If
 
         'Dans certains cas la validation passe même si tous les champs ne sont pas valides
@@ -343,6 +406,27 @@ ErreurBilanOP:
         'TODO WEB : si cde/appel et opération soldée, contrôle du nombre de palettes produites
 
         'tout va bien on enregistre la fin d'opération + suivi auto du temps passé depuis le dernier évenement
+
+        'on enregistre la consommation des encres et vernis utilisés
+        If MTextBoxTotEnc.Visible AndAlso MTextBoxTotVer.Visible AndAlso (CDec(MTextBoxTotEnc.Text) > 0 Or CDec(MTextBoxTotVer.Text) > 0) Then
+            Try
+                Trace("Appel du web service WSCSOENC")
+                conso = X3ws.WSCSOENC(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), CDec(MTextBoxTotEnc.Text), CDec(MTextBoxTotVer.Text), retMsg)
+            Catch ex As Exception
+                GoTo ErreurFinop
+            End Try
+
+            Select Case conso
+                Case -1 'Erreur du web service
+                    GoTo ErreurFinop
+                Case 0 'Erreur blocage 
+                    Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+                Case 1 'ok
+                    Me.DialogResult = DialogResult.OK
+            End Select
+        End If
+
+        'on enregistre la fin d'opération + suivi auto du temps passé depuis le dernier évenement
         Try
             Trace("Appel du web service WSFINOPE")
             finop = X3ws.WSFINOPE(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), ComboBoxSoldOp.Text, ComboBoxMotifNS.Text, retMsg)
@@ -362,7 +446,7 @@ ErreurBilanOP:
         Exit Sub
 
 ErreurFinop:
-        Trace("Erreur d'enregistrement du début d'opération ! ", FichierTrace.niveau.alerte)
+        Trace("Erreur d'enregistrement de fin d'opération ! ", FichierTrace.niveau.alerte)
         If retMsg <> "" Then
             Trace(retMsg, FichierTrace.niveau.erreur)
         End If
