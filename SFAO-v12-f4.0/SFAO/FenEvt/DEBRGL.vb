@@ -222,8 +222,7 @@ Public Class DEBRGL
 
         'tout va bien on enregistre le début de réglage
         Try
-            debrgl = X3ws.WSDEBRGL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag),
-                                   PhaseSelect, TextBoxOF.Text, CInt(MaskedTextBoxOP.Text), retMsg)
+            debrgl = X3ws.WSDEBRGL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), PhaseSelect, retMsg)
         Catch ex As Exception
             GoTo ErreurDebrgl
         End Try
