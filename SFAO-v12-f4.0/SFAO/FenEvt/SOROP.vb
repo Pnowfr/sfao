@@ -4,7 +4,37 @@
 '------------------------------------------------------------------------------------------------------------------------
 Imports System.ComponentModel
 Public Class SOROP
+    Private WstSor As String
+    Private MtrSor As Integer
+    Private NomSor As String
+    Private DatEnt As Date
+    Private TimEnt As Integer
 
+    Public WriteOnly Property SetWstSor As String
+        Set(value As String)
+            WstSor = value
+        End Set
+    End Property
+    Public WriteOnly Property SetMtrSor As Integer
+        Set(value As Integer)
+            MtrSor = value
+        End Set
+    End Property
+    Public WriteOnly Property SetNomSor As String
+        Set(value As String)
+            NomSor = value
+        End Set
+    End Property
+    Public WriteOnly Property SetDatEnt As Date
+        Set(value As Date)
+            DatEnt = value
+        End Set
+    End Property
+    Public WriteOnly Property SetTimEnt As Integer
+        Set(value As Integer)
+            TimEnt = value
+        End Set
+    End Property
     Private Sub SOROP_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim zTailFnt As Single
         Dim fnt As Font
@@ -13,34 +43,51 @@ Public Class SOROP
 
         Trace("Affichage fenêtre SOROP")
 
-        'On rafraichit la Situation 
-        Call FenSfao.Situation()
 
-        'Si un seul opérateur présent sur le poste on prérempli le code matricule + nom et on calcule le temps de présence (contrairement à la V6 on peut faire une sortie de n'importe quel type d'opérateur)
-        For i = 0 To FenSfao.WSsp.GRP2.Count - 1
-            If FenSfao.WSsp.GRP2(i).XEMPNUM > 0 Then
-                If MTextBoxMatr.Text = "" Then
-                    MTextBoxMatr.Text = FenSfao.WSsp.GRP2(i).XEMPNUM.ToString
-                    TextBoxNom.Text = FenSfao.WSsp.GRP2(i).ZEMPDES
-                Else
-                    MTextBoxMatr.Text = ""
-                    TextBoxNom.Text = ""
-                    Exit For
+        'Poste de sortie
+        TextBoxPoste.Text = WstSor
+
+        'si sortie demandée à partir d'un autre évenement
+        If MtrSor > 0 Then
+            MTextBoxMatr.Text = MtrSor.ToString
+            TextBoxNom.Text = NomSor
+        Else
+            'On rafraichit la Situation 
+            Call FenSfao.Situation()
+
+            'Si un seul opérateur présent sur le poste on prérempli le code matricule + nom et on calcule le temps de présence (contrairement à la V6 on peut faire une sortie de n'importe quel type d'opérateur)
+            For i = 0 To FenSfao.WSsp.GRP2.Count - 1
+                If FenSfao.WSsp.GRP2(i).XEMPNUM > 0 Then
+                    If MTextBoxMatr.Text = "" Then
+                        MTextBoxMatr.Text = FenSfao.WSsp.GRP2(i).XEMPNUM.ToString
+                        TextBoxNom.Text = FenSfao.WSsp.GRP2(i).ZEMPDES
+                    Else
+                        MTextBoxMatr.Text = ""
+                        TextBoxNom.Text = ""
+                        Exit For
+                    End If
                 End If
-            End If
-        Next
+            Next
+        End If
+
 
         If MTextBoxMatr.Text <> "" Then
             'on contrôle le matricule et on calcule le temps de présence
-            CtrlMatr(CInt(MTextBoxMatr.Text), MsgErr)
-            If MsgErr <> "" Then
-                TextBoxMsg.Text = MsgErr
-                ErrorProvider.SetError(MTextBoxMatr, MsgErr)
-                System.Media.SystemSounds.Exclamation.Play()
+            If TextBoxPoste.Text = SFAO.Poste.GRP1.WST Then
+                CtrlMatr(CInt(MTextBoxMatr.Text), MsgErr) 'contrôle sur la situation du poste
+            Else
+                'Calcul du temps de présence d'un opérateur sur un autre poste
+                TextBoxTps.Text = AFF_TPS_JHM(CInt(Calc_Duree(DatEnt, TimEnt, Now, 2)))
             End If
-        End If
 
-        If MTextBoxMatr.Text <> "" And MsgErr = "" Then
+            If MsgErr <> "" Then
+                    TextBoxMsg.Text = MsgErr
+                    ErrorProvider.SetError(MTextBoxMatr, MsgErr)
+                    System.Media.SystemSounds.Exclamation.Play()
+                End If
+            End If
+
+            If MTextBoxMatr.Text <> "" And MsgErr = "" Then
             MTextBoxMatr.Enabled = False
         Else
             'MTextBoxMatr.Text = ""
@@ -78,8 +125,7 @@ Public Class SOROP
     Private Sub MTextBoxMatr_Validating(sender As Object, e As CancelEventArgs) Handles MTextBoxMatr.Validating
         Dim MsgErr As String = ""
 
-        TextBoxTps.Tag = ""
-        TextBoxNom.Text = ""
+        TextBoxTps.Tag = Nothing
 
         If MTextBoxMatr.Text = "" Then
             'si le matricule est vide : erreur
@@ -87,18 +133,22 @@ Public Class SOROP
             MsgErr = "Veuillez saisir ou scanner le code de votre matricule"
             ErrorProvider.SetError(MTextBoxMatr, MsgErr)
             TextBoxMsg.Text = MsgErr
+            TextBoxNom.Text = ""
         Else
-            'On contrôle le matricule saisi 
-            CtrlMatr(CInt(MTextBoxMatr.Text), MsgErr)
+            If TextBoxPoste.Text = SFAO.Poste.GRP1.WST Then
+                'On contrôle le matricule si saisi 
+                CtrlMatr(CInt(MTextBoxMatr.Text), MsgErr)
+            End If
 
             'en cas d'erreur on déclare l'erreur sur le ErrorProvider
             If MsgErr <> "" Then
                 Trace("[MTextBoxMatr_Validating] : " & MsgErr)
                 e.Cancel = True 'zone invalide
-                MTextBoxMatr.Select(0, MTextBoxMatr.Text.Length) 'sélection du texte saisi
+                MTextBoxMatr.Select(0, MTextBoxMatr.Text.Length) 'sélection du texte saisi 
                 ErrorProvider.SetError(MTextBoxMatr, MsgErr)
                 TextBoxMsg.Text = MsgErr
                 System.Media.SystemSounds.Exclamation.Play()
+                TextBoxNom.Text = ""
             End If
 
         End If
@@ -156,7 +206,7 @@ Public Class SOROP
             FenSfao.Etat("Enregistrement du départ opérateur", 1, 3000)
 
             Try
-                If X3ws.WSSorOp(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), CInt(Me.Tag), retMsg) = True Then
+                If X3ws.WSSorOp(SFAO.Site.GRP1.FCY, TextBoxPoste.Text, CInt(MTextBoxMatr.Text), CInt(Me.Tag), retMsg) = True Then
                     Me.DialogResult = DialogResult.OK
                 End If
             Catch ex As Exception
