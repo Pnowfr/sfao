@@ -273,6 +273,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FenEvt\Evenements.vb" />
+    <Compile Include="FenEvt\FINOP.Designer.vb">
+      <DependentUpon>FINOP.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FenEvt\FINOP.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FenEvt\MATUTL.designer.vb">
       <DependentUpon>MATUTL.vb</DependentUpon>
     </Compile>
@@ -368,6 +374,9 @@
     <EmbeddedResource Include="FenEvt\ENTOP.resx">
       <DependentUpon>ENTOP.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FenEvt\FINOP.resx">
+      <DependentUpon>FINOP.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FenEvt\MATUTL.resx">
       <DependentUpon>MATUTL.vb</DependentUpon>

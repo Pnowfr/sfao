@@ -1,5 +1,5 @@
 ﻿'------------------------------------------------------------------------------------------------------------------------
-'Modifications: 
+'Modifications:
 '
 '------------------------------------------------------------------------------------------------------------------------
 Imports System.Configuration
@@ -76,7 +76,7 @@ Module SFAO
         Logo.Hide()            'on cache le logo avant l'affichage de la fenêtre de connexion
         Logo.Dispose()         'on libère le logo de la mémoire
 
-        'Active timer de vérification des mise à jour
+        'Actie timer de vérification des mise à jour
         If UpdSFAO Then
             Trace("Activation du timer de recherche de mise à jour")
             UpdateTimer = New Timer()
@@ -363,15 +363,15 @@ Module SFAO
             'paramètres par dossier : 
 
             'TODO PNO : dossier GBIV6 à enlever plus tard : 
-            'AddPar("WEBSERVEURPOOLALIAS", "GBIV6", "GBIV6")
-            'AddPar("WEBSERVEURVERSION", "V6", "GBIV6")
-            'AddPar("WEBSERVEURLANG", "FRA", "GBIV6")
-            'AddPar("WEBSERVEURURL", "http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC", "GBIV6")
-            'AddPar("WEBSERVEURUSER", "web", "GBIV12")
-            'AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV6")
-            'AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV6")
-            'AddPar("WEBSERVEURTIMTEST", "18000", "GBIV6")
-            'AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV6")
+            AddPar("WEBSERVEURPOOLALIAS", "GBIV6", "GBIV6")
+            AddPar("WEBSERVEURVERSION", "V6", "GBIV6")
+            AddPar("WEBSERVEURLANG", "FRA", "GBIV6")
+            AddPar("WEBSERVEURURL", "http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC", "GBIV6")
+            AddPar("WEBSERVEURUSER", "web", "GBIV12")
+            AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV6")
+            AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV6")
+            AddPar("WEBSERVEURTIMTEST", "180000", "GBIV6")
+            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV6")
 
             'Dossier prod V12 : 
             AddPar("WEBSERVEURPOOLALIAS", "GBIV12", "GBIV12")
@@ -381,7 +381,7 @@ Module SFAO
             AddPar("WEBSERVEURUSER", "web", "GBIV12")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV12")
             AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV12")
-            AddPar("WEBSERVEURTIMTEST", "18000", "GBIV12")
+            AddPar("WEBSERVEURTIMTEST", "180000", "GBIV12")
             AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV12")
 
             'TODO Connexion externe pour les tests à enlever plus tard
@@ -392,7 +392,7 @@ Module SFAO
             AddPar("WEBSERVEURUSER", "web", "REING (ext)")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV12 (ext)")
             AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV12 (ext)")
-            AddPar("WEBSERVEURTIMTEST", "18000", "GBIV12 (ext)")
+            AddPar("WEBSERVEURTIMTEST", "180000", "GBIV12 (ext)")
             AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV12 (ext)")
 
             'Dossier de test de la V12
@@ -403,7 +403,7 @@ Module SFAO
             AddPar("WEBSERVEURUSER", "web", "REING")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "REING")
             AddPar("WEBSERVEURTIMEOUT", "15000", "REING")
-            AddPar("WEBSERVEURTIMTEST", "18000", "REING")
+            AddPar("WEBSERVEURTIMTEST", "180000", "REING")
             AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "REING")
 
             'TODO Connexion externe pour les tests à enlever
@@ -414,7 +414,7 @@ Module SFAO
             AddPar("WEBSERVEURUSER", "web", "REING (ext)")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "REING (ext)")
             AddPar("WEBSERVEURTIMEOUT", "15000", "REING (ext)")
-            AddPar("WEBSERVEURTIMTEST", "18000", "REING (ext)")
+            AddPar("WEBSERVEURTIMTEST", "180000", "REING (ext)")
             AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "REING (ext)")
 
         Catch ex As Exception
@@ -426,13 +426,13 @@ Module SFAO
     Private Sub SaveDerniereSaisi()
         Try
             If SFAO.Site.GRP1.FCYSHO <> "" Then
-                AddParam("LASTSITE", SFAO.Site.GRP1.FCYSHO)
+                AddPar("LASTSITE", SFAO.Site.GRP1.FCYSHO)
             End If
             If SFAO.Site.GRP1.DOSSIER <> "" Then
-                AddParam("LASTDOSSIER", SFAO.Site.GRP1.DOSSIER)
+                AddPar("LASTDOSSIER", SFAO.Site.GRP1.DOSSIER)
             End If
             If SFAO.Poste.GRP1.WST <> "" Then
-                AddParam("LASTPOSTE", SFAO.Poste.GRP1.WST)
+                AddPar("LASTPOSTE", SFAO.Poste.GRP1.WST)
             End If
             Trace("Sauvegarde de la dernière saisie dans le fichier conf")
         Catch ex As Exception
@@ -516,7 +516,9 @@ Module SFAO
 
             End If
 
-            FermeSFAO() 'on quitte 
+            FermeTrace() 'on ferme le fichier de trace
+            System.IO.File.Delete("sfao.run")
+            Application.Exit() 'on quitte 
             End
         Else
             If UpdSFAO Then
@@ -525,11 +527,7 @@ Module SFAO
         End If
     End Sub
 
-    Public Sub FermeSFAO()
-        FermeTrace() 'on ferme le fichier de trace
-        System.IO.File.Delete("sfao.run")
-        Application.Exit() 'on quitte 
-    End Sub
+
     'Méthode qui verifie si une nouvelle version existe et aussi si un nouveau fichier SFAO-upd.exe existe et dans ce cas remplace l'actuel par le nouveau
     'en fonction de la version la mise à jour peut être facultative ou obligatoire
     Private Sub VerifUpdate()
@@ -569,12 +567,7 @@ Module SFAO
             Debug.WriteLine("Debug " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & " [VerifUpdate] Pas de version plus récente")
         Else
             Trace("[VerifUpdate] Version SFAO plus récente trouvée : " & lastVersion & " , lancement de la mise à jour.", FichierTrace.niveau.toujours)
-            'TODO Fidy si version facultative question à l'utilisateur : Nouvelle version de la SFAO disponible, voulez lancer la mise à jour ?
-            'si ^réponse = non => pas de copie de SFAO-upd.exe et pas de lancement de la mise à jour + désactiver le timer par UpdSFAO = False
-
-            'TODO Fidy si vesrion obligatoire : message utilisateur : Nouvelle version de la SFAO disponible, lancement de la mise à jour.
-
-            ' on le copie dans le dossier de l'appli client le SFAO-Upd.exe
+            'Si on a une version + récente on vérifie si SFAO-Upd.exe est plus récent(??), si oui on le copie dans le dossier de l'appli client
             Dim repSFAO_UpdExePath As String = repUpdSfao & "\" & lastVersion & "\"
             Dim repSFAO_UpdExe As String = repUpdSfao & "\" & lastVersion & "\" & sfaoUpdateExe
             'Le répertoire de la version
@@ -599,9 +592,20 @@ Module SFAO
                 .FileName = repertoireAppliClient
             }
             'On arrête SFAO
-            FermeSFAO()
+            Application.Exit()
             ' Exécuter le SFAO-upd.exe
-            Process.Start(p)
+            'Process.Start(p) //Commenté temporairement pour l'instant,ça provoque un bug
+
+
+            'Copie des dossiers de la nouvelle version vers l'appli client
+            'Appel à la procédure qui copie des dossiers et fichiers du répertoire de la nv version vers l'actuelle version
+            Try
+                CopieDossetFich(repSFAO_UpdExePath, sfaoPath)
+
+            Catch ex As Exception
+                MsgBox(" Erreur de lecture du chemin de la nouvelle version : " & repSFAO_UpdExePath & ex.Message)
+                Exit Sub
+            End Try
         End If
     End Sub
 
