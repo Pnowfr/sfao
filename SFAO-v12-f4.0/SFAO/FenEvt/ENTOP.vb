@@ -48,6 +48,7 @@ Public Class ENTOP
         Dim Matricule As Integer
         Dim AutrePoste As String
         Dim result As MsgBoxResult
+        Dim soresult As DialogResult
 
         If MTextBoxMatr.Text = "" Then
             'si le matricule est vide : erreur
@@ -93,6 +94,15 @@ Public Class ENTOP
                     result = MsgBox("Matricule déjà présent sur le poste " & AutrePoste & "." & Environment.NewLine & "Voulez-vous saisir son départ ?", CType(MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, MsgBoxStyle))
                     If result = MsgBoxResult.Yes Then
                         'TODO PNO lancer la sortie du matricule d'un autre poste
+                        SOROP.SetWstSor = AutrePoste                'spécifie le poste sur le quel se fera la sortie
+                        SOROP.SetMtrSor = Matricule                 'spécifie le matricule à sortir
+                        SOROP.SetNomSor = TextBoxNom.Text           'spécifie le nom du matricule à sortir
+                        SOROP.SetDatEnt = tm.GRP1.ZDATE             'spécifie la date d'entrée
+                        SOROP.SetTimEnt = tm.GRP1.ZTIME             'spécifie le time d'entrée
+                        soresult = LanceEvt(1100, CType(SOROP, Form))
+                        If soresult <> DialogResult.OK Then
+                            MsgErr = "Matricule déjà présent sur le poste " & AutrePoste & " !"
+                        End If
                     Else
                         MsgErr = "Matricule déjà présent sur le poste " & AutrePoste & " !"
                     End If

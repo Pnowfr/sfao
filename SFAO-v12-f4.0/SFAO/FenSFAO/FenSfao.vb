@@ -21,8 +21,8 @@ Public Class FenSfao
     Public WSsp As WSSitPs                  'classe de la situation du poste
     Public WSof As WSSitOF                  'classe de la situation des opérations
     Public WScp As WSSitCP                  'classe de la situation des composants
+    Public WSLstMns As New WSMns            'classe de la liste des motis de non solde
     Public DtSFAO As String
-    Public WSLstMns As New WSMns               'classe de la liste des motis de non solde
 
     Private DblClc As Boolean
     Private _maxHeuresPresence As Decimal
