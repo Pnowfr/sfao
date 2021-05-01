@@ -94,8 +94,6 @@ C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.SOROP.resources
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.FenSfao.resources
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.Login.resources
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.Logo.resources
-C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.FormCopie.resources
-C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.FormFinCopie.resources
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.Resources.resources
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.vbproj.GenerateResource.cache
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.vbproj.CoreCompileInputs.cache
