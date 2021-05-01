@@ -420,6 +420,8 @@ Public Class Matr
     Public Property ZTYPE_LBL As String
     Public Property ZPASSE As String
     Public Property ZPOSTE As String
+    Public Property ZDATE As Date
+    Public Property ZTIME As Integer
     Public Property ZRET As Integer
     Public Property ZMSG As String
     Public Sub New()
@@ -431,6 +433,8 @@ Public Class Matr
         ZTYPE_LBL = String.Empty
         ZPASSE = String.Empty
         ZPOSTE = String.Empty
+        ZDATE = Nothing
+        ZTIME = 0
         ZRET = 0
         ZMSG = String.Empty
     End Sub

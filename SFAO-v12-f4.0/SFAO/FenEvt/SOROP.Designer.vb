@@ -36,6 +36,8 @@ Partial Class SOROP
         Me.TextBoxTps = New System.Windows.Forms.TextBox()
         Me.TableLayoutPanel0 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.TextBoxPoste = New System.Windows.Forms.TextBox()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel0.SuspendLayout()
@@ -47,7 +49,7 @@ Partial Class SOROP
         Me.BtnOk.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.BtnOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.BtnOk.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnOk.Location = New System.Drawing.Point(48, 414)
+        Me.BtnOk.Location = New System.Drawing.Point(48, 464)
         Me.BtnOk.Name = "BtnOk"
         Me.BtnOk.Size = New System.Drawing.Size(90, 35)
         Me.BtnOk.TabIndex = 10
@@ -61,7 +63,7 @@ Partial Class SOROP
         Me.BtnFin.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.BtnFin.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.BtnFin.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnFin.Location = New System.Drawing.Point(456, 414)
+        Me.BtnFin.Location = New System.Drawing.Point(456, 464)
         Me.BtnFin.Name = "BtnFin"
         Me.BtnFin.Size = New System.Drawing.Size(90, 35)
         Me.BtnFin.TabIndex = 11
@@ -74,11 +76,11 @@ Partial Class SOROP
         Me.Label1.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(3, 32)
+        Me.Label1.Location = New System.Drawing.Point(3, 25)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(176, 29)
+        Me.Label1.Size = New System.Drawing.Size(75, 29)
         Me.Label1.TabIndex = 3
-        Me.Label1.Text = "Code Matricule"
+        Me.Label1.Text = "Poste"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label2
@@ -86,7 +88,7 @@ Partial Class SOROP
         Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(3, 125)
+        Me.Label2.Location = New System.Drawing.Point(3, 183)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(180, 29)
         Me.Label2.TabIndex = 4
@@ -98,7 +100,7 @@ Partial Class SOROP
         Me.TextBoxNom.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxNom.Enabled = False
         Me.TextBoxNom.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBoxNom.Location = New System.Drawing.Point(238, 122)
+        Me.TextBoxNom.Location = New System.Drawing.Point(238, 180)
         Me.TextBoxNom.Name = "TextBoxNom"
         Me.TextBoxNom.Size = New System.Drawing.Size(311, 35)
         Me.TextBoxNom.TabIndex = 5
@@ -113,7 +115,7 @@ Partial Class SOROP
         Me.MTextBoxMatr.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.MTextBoxMatr.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ErrorProvider.SetIconPadding(Me.MTextBoxMatr, 3)
-        Me.MTextBoxMatr.Location = New System.Drawing.Point(238, 29)
+        Me.MTextBoxMatr.Location = New System.Drawing.Point(238, 101)
         Me.MTextBoxMatr.Mask = "9999"
         Me.MTextBoxMatr.Name = "MTextBoxMatr"
         Me.MTextBoxMatr.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
@@ -133,7 +135,7 @@ Partial Class SOROP
         Me.TextBoxMsg.Multiline = True
         Me.TextBoxMsg.Name = "TextBoxMsg"
         Me.TextBoxMsg.ShortcutsEnabled = False
-        Me.TextBoxMsg.Size = New System.Drawing.Size(546, 84)
+        Me.TextBoxMsg.Size = New System.Drawing.Size(546, 97)
         Me.TextBoxMsg.TabIndex = 15
         Me.TextBoxMsg.TabStop = False
         '
@@ -145,20 +147,23 @@ Partial Class SOROP
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.75362!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 57.24638!))
-        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxNom, 1, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.MTextBoxMatr, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxTps, 1, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxNom, 1, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.MTextBoxMatr, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.Label1, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxTps, 1, 2)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label4, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxPoste, 1, 0)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(4, 4)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 3
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel1.RowCount = 4
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(552, 281)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(552, 318)
         Me.TableLayoutPanel1.TabIndex = 18
         '
         'Label3
@@ -166,7 +171,7 @@ Partial Class SOROP
         Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(3, 204)
+        Me.Label3.Location = New System.Drawing.Point(3, 248)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(129, 58)
         Me.Label3.TabIndex = 6
@@ -178,7 +183,7 @@ Partial Class SOROP
         Me.TextBoxTps.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxTps.Enabled = False
         Me.TextBoxTps.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBoxTps.Location = New System.Drawing.Point(238, 216)
+        Me.TextBoxTps.Location = New System.Drawing.Point(238, 260)
         Me.TextBoxTps.Name = "TextBoxTps"
         Me.TextBoxTps.Size = New System.Drawing.Size(311, 35)
         Me.TextBoxTps.TabIndex = 7
@@ -199,7 +204,7 @@ Partial Class SOROP
         Me.TableLayoutPanel0.RowCount = 2
         Me.TableLayoutPanel0.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 75.0!))
         Me.TableLayoutPanel0.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel0.Size = New System.Drawing.Size(560, 386)
+        Me.TableLayoutPanel0.Size = New System.Drawing.Size(560, 436)
         Me.TableLayoutPanel0.TabIndex = 19
         '
         'TableLayoutPanel2
@@ -208,12 +213,35 @@ Partial Class SOROP
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.TextBoxMsg, 0, 0)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(4, 292)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(4, 329)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(552, 90)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(552, 103)
         Me.TableLayoutPanel2.TabIndex = 20
+        '
+        'Label4
+        '
+        Me.Label4.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(3, 104)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(176, 29)
+        Me.Label4.TabIndex = 3
+        Me.Label4.Text = "Code Matricule"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'TextBoxPoste
+        '
+        Me.TextBoxPoste.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.TextBoxPoste.Enabled = False
+        Me.TextBoxPoste.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBoxPoste.Location = New System.Drawing.Point(238, 22)
+        Me.TextBoxPoste.Name = "TextBoxPoste"
+        Me.TextBoxPoste.Size = New System.Drawing.Size(116, 35)
+        Me.TextBoxPoste.TabIndex = 5
+        Me.TextBoxPoste.TabStop = False
         '
         'SOROP
         '
@@ -221,7 +249,7 @@ Partial Class SOROP
         Me.AutoScaleDimensions = New System.Drawing.SizeF(14.0!, 29.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.BtnFin
-        Me.ClientSize = New System.Drawing.Size(584, 461)
+        Me.ClientSize = New System.Drawing.Size(584, 511)
         Me.Controls.Add(Me.TableLayoutPanel0)
         Me.Controls.Add(Me.BtnFin)
         Me.Controls.Add(Me.BtnOk)
@@ -229,7 +257,7 @@ Partial Class SOROP
         Me.MaximizeBox = False
         Me.MaximumSize = New System.Drawing.Size(800, 800)
         Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(299, 300)
+        Me.MinimumSize = New System.Drawing.Size(300, 300)
         Me.Name = "SOROP"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
@@ -259,4 +287,6 @@ Partial Class SOROP
     Friend WithEvents TableLayoutPanel0 As TableLayoutPanel
     Friend WithEvents Label3 As Label
     Friend WithEvents TextBoxTps As TextBox
+    Friend WithEvents Label4 As Label
+    Friend WithEvents TextBoxPoste As TextBox
 End Class

@@ -15,6 +15,7 @@ Module Evenements
             Case 1000 'Arrivée opérateur
                 AfficheEvt = LanceEvt(NumEvt, CType(ENTOP, Form))
             Case 1100 'départ opérateur
+                SOROP.SetWstSor = SFAO.Poste.GRP1.WST                'spécifie le poste sur le quel se fera la sortie
                 AfficheEvt = LanceEvt(NumEvt, CType(SOROP, Form))
             Case 1010 'Début opération 
                 If DebFin = "D" Then    'début événement simple 
@@ -114,7 +115,7 @@ Module Evenements
         End If '020421PNO.n
     End Function
 
-    Private Function LanceEvt(ByVal _numEvt As Integer, ByRef _FenEvt As Form) As DialogResult
+    Public Function LanceEvt(ByVal _numEvt As Integer, ByRef _FenEvt As Form) As DialogResult
         Dim result As DialogResult
         Trace("Affichage " & _FenEvt.Text & "(" & _FenEvt.Name & ")" & " événement n° " & _numEvt.ToString)
         FenSfao.Etat("Evénement " & _FenEvt.Text, 1, 3000)

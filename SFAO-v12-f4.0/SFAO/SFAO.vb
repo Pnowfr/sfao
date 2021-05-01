@@ -1,6 +1,6 @@
 ﻿'------------------------------------------------------------------------------------------------------------------------
 'Modifications: 
-'
+' p
 '------------------------------------------------------------------------------------------------------------------------
 Imports System.Configuration
 Imports System.IO
@@ -80,7 +80,7 @@ Module SFAO
         If UpdSFAO Then
             Trace("Activation du timer de recherche de mise à jour")
             UpdateTimer = New Timer()
-            UpdateTimer.Interval = 3000                                 'TODO passer le temps de vérification d'existance d'une nouvelle version en paramètre
+            UpdateTimer.Interval = Math.Max(CInt(Param("UPDSFAOTIME")), 10000)     'l'intervale de vérification d'existance d'une nouvelle version en paramètre ou 10sec min
             AddHandler UpdateTimer.Tick, AddressOf UpdateTimer_tick
             UpdateTimer.Start()
         End If
@@ -359,10 +359,11 @@ Module SFAO
             AddPar("NIVEAUTRACE", "0")
             AddPar("UPDSFAO", "VRAI")
             AddPar("REPUPDSFAO", "")
+            AddPar("UPDSFAOTIME", "30000")
 
             'paramètres par dossier : 
 
-            'TODO PNO : dossier GBIV6 à enlever plus tard : 
+            'dossier GBIV6 à enlever : 
             'AddPar("WEBSERVEURPOOLALIAS", "GBIV6", "GBIV6")
             'AddPar("WEBSERVEURVERSION", "V6", "GBIV6")
             'AddPar("WEBSERVEURLANG", "FRA", "GBIV6")
