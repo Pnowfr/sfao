@@ -363,15 +363,15 @@ Module SFAO
             'paramètres par dossier : 
 
             'TODO PNO : dossier GBIV6 à enlever plus tard : 
-            AddPar("WEBSERVEURPOOLALIAS", "GBIV6", "GBIV6")
-            AddPar("WEBSERVEURVERSION", "V6", "GBIV6")
-            AddPar("WEBSERVEURLANG", "FRA", "GBIV6")
-            AddPar("WEBSERVEURURL", "http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC", "GBIV6")
-            AddPar("WEBSERVEURUSER", "web", "GBIV12")
-            AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV6")
-            AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV6")
-            AddPar("WEBSERVEURTIMTEST", "180000", "GBIV6")
-            AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV6")
+            'AddPar("WEBSERVEURPOOLALIAS", "GBIV6", "GBIV6")
+            'AddPar("WEBSERVEURVERSION", "V6", "GBIV6")
+            'AddPar("WEBSERVEURLANG", "FRA", "GBIV6")
+            'AddPar("WEBSERVEURURL", "http://192.168.1.248:28880/adxwsvc/services/CAdxWebServiceXmlCC", "GBIV6")
+            'AddPar("WEBSERVEURUSER", "web", "GBIV12")
+            'AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV6")
+            'AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV6")
+            'AddPar("WEBSERVEURTIMTEST", "18000", "GBIV6")
+            'AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV6")
 
             'Dossier prod V12 : 
             AddPar("WEBSERVEURPOOLALIAS", "GBIV12", "GBIV12")
@@ -381,7 +381,7 @@ Module SFAO
             AddPar("WEBSERVEURUSER", "web", "GBIV12")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV12")
             AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV12")
-            AddPar("WEBSERVEURTIMTEST", "180000", "GBIV12")
+            AddPar("WEBSERVEURTIMTEST", "18000", "GBIV12")
             AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV12")
 
             'TODO Connexion externe pour les tests à enlever plus tard
@@ -392,7 +392,7 @@ Module SFAO
             AddPar("WEBSERVEURUSER", "web", "REING (ext)")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "GBIV12 (ext)")
             AddPar("WEBSERVEURTIMEOUT", "15000", "GBIV12 (ext)")
-            AddPar("WEBSERVEURTIMTEST", "180000", "GBIV12 (ext)")
+            AddPar("WEBSERVEURTIMTEST", "18000", "GBIV12 (ext)")
             AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "GBIV12 (ext)")
 
             'Dossier de test de la V12
@@ -403,7 +403,7 @@ Module SFAO
             AddPar("WEBSERVEURUSER", "web", "REING")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "REING")
             AddPar("WEBSERVEURTIMEOUT", "15000", "REING")
-            AddPar("WEBSERVEURTIMTEST", "180000", "REING")
+            AddPar("WEBSERVEURTIMTEST", "18000", "REING")
             AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "REING")
 
             'TODO Connexion externe pour les tests à enlever
@@ -414,7 +414,7 @@ Module SFAO
             AddPar("WEBSERVEURUSER", "web", "REING (ext)")
             AddPar("WEBSERVEURPWD", "GiwpM0kjZZ1hNI0vCTt2wg==", "REING (ext)")
             AddPar("WEBSERVEURTIMEOUT", "15000", "REING (ext)")
-            AddPar("WEBSERVEURTIMTEST", "180000", "REING (ext)")
+            AddPar("WEBSERVEURTIMTEST", "18000", "REING (ext)")
             AddPar("WEBSERVEURPARAM", "adxwss.optreturn=JSON&adxwss.beautify=true", "REING (ext)")
 
         Catch ex As Exception
