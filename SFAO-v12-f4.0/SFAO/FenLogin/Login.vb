@@ -114,7 +114,7 @@ Public Class Login
         End If
 
         'TODO Temporaire à enlever !!!
-        ComboBoxDos.SelectedIndex = 3
+        'ComboBoxDos.SelectedIndex = 3
 
         TextBoxPoste.Text = SFAO.Param("POSTE")
         If SFAO.Param("MULTIPOSTE") <> "VRAI" And TextBoxPoste.Text <> "" Then
