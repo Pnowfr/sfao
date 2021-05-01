@@ -377,7 +377,7 @@ Partial Class DEBOP
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Début opération"
+        Me.Text = "Début d'opération"
         Me.TopMost = True
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)

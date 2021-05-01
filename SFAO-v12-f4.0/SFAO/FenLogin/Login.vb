@@ -64,6 +64,8 @@ Public Class Login
         Dim i As Integer
         Dim nbdos As Integer
         Dim appSettings As Specialized.NameValueCollection = ConfigurationManager.AppSettings
+        Dim site As String
+        Dim lstsite As String
 
         Me.Icon = My.Resources.icon_sfao
 
@@ -78,11 +80,13 @@ Public Class Login
             TextBoxSoc.Enabled = False
         End If
 
+        site = SFAO.Param("SITE")
+        lstsite = SFAO.Param("LASTSITE")
 
-        TextBoxSit.Text = SFAO.Param("SITE")
+        TextBoxSit.Text = site
         If Strings.Right(TextBoxSit.Text, 1) = " " Then
-            If SFAO.Param("LASTSITE") <> "" Then
-                TextBoxSit.Text = SFAO.Param("LASTSITE")
+            If lstsite <> "" And site <> lstsite And site <> "" Then
+                TextBoxSit.Text = lstsite
             Else
                 TextBoxSit.Text = Strings.Left(TextBoxSoc.Text, TextBoxSit.Text.Length - 1)
             End If
@@ -319,5 +323,6 @@ Public Class Login
         End If
 
     End Sub
+
 
 End Class

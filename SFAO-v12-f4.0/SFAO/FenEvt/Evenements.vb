@@ -77,8 +77,6 @@ Module Evenements
                 '                        ^PQ1,0,1,Y^XZ")
                 'Debug.WriteLine("Debug " & Date.Now.ToString("yyyy/MM/dd HH:mm:ss.fff") & "fin impression code ZPL")
 
-                'Case 1070
-
             Case 1070 'Démontage 
                 If DebFin = "D" Then    'début événement simple
                     If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
@@ -88,6 +86,7 @@ Module Evenements
                     'TODO voir comment on déclanche la fin d'une interruption ????
 
                 End If
+
             Case 1080 'Interruption 
                 If DebFin = "D" Then    'début événement simple
                     If NbrMatr(True) > 0 Then
@@ -97,6 +96,12 @@ Module Evenements
                     'TODO voir comment on déclanche la fin d'une interruption ????
 
                 End If
+
+            Case 1090 'Fin opération
+                If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
+                    AfficheEvt = LanceEvt(NumEvt, CType(FINOP, Form))
+                End If
+
             Case 1283
                 AfficheEvt = LanceEvt(NumEvt, CType(AUTOCTRL, Form))
             Case Else

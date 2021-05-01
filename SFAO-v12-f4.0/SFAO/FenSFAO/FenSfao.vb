@@ -22,6 +22,8 @@ Public Class FenSfao
     Public WSof As WSSitOF                  'classe de la situation des opérations
     Public WScp As WSSitCP                  'classe de la situation des composants
     Public DtSFAO As String
+    Public WSLstMns As New WSMns               'classe de la liste des motis de non solde
+
     Private DblClc As Boolean
     Private _maxHeuresPresence As Decimal
 
@@ -135,6 +137,9 @@ Public Class FenSfao
         Trace("Initialisation des événements et actions du poste")
         Call InitaliseEvenements()
 
+        'Initialisation des listes liées au poste
+        Trace("Initialisation des listes du poste")
+        Call InitaliseListes()
 
         'Récupération et affichage de la situation du poste
         Call Situation()
@@ -258,6 +263,15 @@ Public Class FenSfao
         Next
     End Sub
 
+    Private Sub InitaliseListes()
+        Try
+            'Récupération de la liste des motifs de non solde
+            WSLstMns = X3ws.WSGETMNS(SFAO.Poste.GRP1.WST)
+        Catch ex As Exception
+            Trace("Erreur de connexion au web service !", FichierTrace.niveau.alerte)
+            Trace("[WSGETMNS] : " & ex.Message, FichierTrace.niveau.erreur)
+        End Try
+    End Sub
     Public Sub Situation()
 
         'Situation du poste
@@ -1328,6 +1342,19 @@ Public Class FenSfao
             _msgErr = "Aucune opération cours !"
         End If
     End Sub
+    Public Function OpExc(ByVal _matr As Integer) As Integer
+        Dim nopexc As Integer
+        Dim i As Integer
+        If WSsp.GRP2.Count > 0 Then
+            For i = 0 To WSsp.GRP2.Count - 1
+                If WSsp.GRP2(i).XEMPNUM > 0 AndAlso WSsp.GRP2(i).XEMPNUM = _matr Then
+                    nopexc = WSsp.GRP2(i).ZOPEXC
+                    Exit For
+                End If
+            Next
+        End If
+        Return nopexc
+    End Function
     Public Function PhaseEnCours(ByVal _matr As Integer, ByVal _of As String, ByVal _op As Integer) As Integer
         Dim nphas As Integer
         Dim i As Integer
