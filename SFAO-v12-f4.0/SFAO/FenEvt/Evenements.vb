@@ -46,6 +46,17 @@ Module Evenements
                     'TODO voir comment on déclanche la fin d'un réglage ????
 
                 End If
+
+            Case 1040 'Production
+                If DebFin = "D" Then    'début événement simple
+                    If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
+                        AfficheEvt = LanceEvt(NumEvt, CType(DEBPRO, Form))
+                    End If
+                Else
+                    'TODO voir comment on déclanche la fin de production ????
+
+                End If
+
             Case 1050 'Test déclaration
                 'MsgBox("Test ZPL")
                 'MsgBox("Test ZPL 2 ")

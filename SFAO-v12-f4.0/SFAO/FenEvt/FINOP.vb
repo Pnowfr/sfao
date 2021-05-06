@@ -377,8 +377,14 @@ ErreurBilanOP:
 
     Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles BtnOk.Click
         Dim retMsg As String = String.Empty
-        Dim finop As Integer = -1
+        Dim nbapl As Integer
+        Dim nbpal As Integer
+        Dim ctrlapl As Integer = -1
+        Dim msgapl As String
         Dim conso As Integer = -1
+        Dim finop As Integer = -1
+        Dim result As MsgBoxResult
+        result = MsgBoxResult.Ok
 
         'Si gestion du solde d'opération
         If LabelSoldOp.Visible Then
@@ -403,11 +409,46 @@ ErreurBilanOP:
             End If
         Next
 
-        'TODO WEB : si cde/appel et opération soldée, contrôle du nombre de palettes produites
+        'Si opération soldée, on vérifie si on est à une étape de production
+        If ComboBoxSoldOp.Text = "OUI" AndAlso FenSfao.EtapePro(TextBoxOF.Text, CInt(MaskedTextBoxOP.Text)) = True Then
+            Trace("Opération soldée et étape de production : contrôle si commande sur appel du nombre de palettes")
+            'Si cde/appel, contrôle du nombre de palettes produites / nombre d'appels
+            Try
+                Trace("Appel du web service WSNBPALAPL")
+                ctrlapl = X3ws.WSNBPALAPL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), nbapl, nbpal, retMsg)
+            Catch ex As Exception
+                GoTo ErreurFinop
+            End Try
 
-        'tout va bien on enregistre la fin d'opération + suivi auto du temps passé depuis le dernier évenement
+            Select Case ctrlapl
+                Case -1 'Erreur du web service
+                    GoTo ErreurFinop
+                Case 0 'Erreur blocage 
+                    Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+                Case 1 'ok
+                    If nbapl = 0 Then
+                        Trace("Ce n'est pas une commande sur appel")
+                    Else
+                        msgapl = "Commande sur appel ok : palettes produites = " + CStr(nbpal) + " et nombre d'appels = " + CStr(nbapl)
+                        Trace(msgapl)
+                    End If
+
+                Case 2
+                    msgapl = "Attention, il s'agit d'une commande sur appel et il y a moins de palettes produites (" + CStr(nbpal) + ") que d'appels (" + CStr(nbapl) + ")"
+                    Trace(msgapl)
+                    msgapl += vbNewLine + "Voulez-vous quand même solder l'opération ?"
+                    result = MsgBox(msgapl, CType(MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, MsgBoxStyle))
+                    If result = MsgBoxResult.No Then
+                        Me.DialogResult = DialogResult.Abort
+                        Me.Close()
+                    End If
+            End Select
+        End If
+
+        'tout va bien on enregistre la conso des encres/vernis et la fin d'opération
 
         'on enregistre la consommation des encres et vernis utilisés
+        '(avant la fin d'opération, puisqu'on utilise les infos de la situation d'opération)
         If MTextBoxTotEnc.Visible AndAlso MTextBoxTotVer.Visible AndAlso (CDec(MTextBoxTotEnc.Text) > 0 Or CDec(MTextBoxTotVer.Text) > 0) Then
             Try
                 Trace("Appel du web service WSCSOENC")

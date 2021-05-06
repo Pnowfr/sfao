@@ -662,6 +662,84 @@ Public Class X3WebServ
         Return ret
     End Function
 
+    'Web service qui contrôle, si cde/appel, nombre de palettes produites / nombre d'appels
+    Public Function WSNBPALAPL(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByRef _nbapl As Integer, ByRef _nbpal As Integer, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZNBAPL = _nbapl, .ZNBPAL = _nbpal, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSNBPALAPL", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _nbapl = CInt(json.SelectToken("GRP1").SelectToken("ZNBAPL"))
+            _nbpal = CInt(json.SelectToken("GRP1").SelectToken("ZNBPAL"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
+    'Web service qui récupère la liste des types d'étiquettes ZPL
+    Public Function WSGETTETQ(ByVal _option As String) As WSTypEtq
+        Dim params As String
+        Dim json As New WSTypEtq
+        Dim settings As JsonSerializerSettings
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+
+        settings = New JsonSerializerSettings() With {
+                    .NullValueHandling = NullValueHandling.Ignore,
+                    .MissingMemberHandling = MissingMemberHandling.Ignore
+                }
+
+        json.GRP1.OPT = _option
+
+        params = ClassToJson(Of WSTypEtq)(json, False, settings)
+
+        If X3WSC.Run("WSGETTETQ", params, retxml, MsgErrWs, True) = 1 Then
+            json = JsonToClass(Of WSTypEtq)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
+        End If
+
+        Return json
+    End Function
+
+    'Web service qui contrôle s'il faut saisir le poids des bobines
+    Public Function WSSAIPDS(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByRef _repdef As String, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZREP = _repdef, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSSAIPDS", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _repdef = json.SelectToken("GRP1").SelectToken("ZREP").ToString
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
     '########################################################################################################################
     'Liste des classes utilisées pour les web services
     '########################################################################################################################

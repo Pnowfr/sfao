@@ -198,6 +198,37 @@ Public Class WSMnsGRP2
 End Class
 
 '########################################################################################################################
+'Classe liste des types d'étiquettes ZPL
+Public Class WSTypEtq
+    Public Property GRP1 As WSTypEtqGRP1
+    Public Property GRP2 As List(Of WSTypEtqGRP2)
+    Sub New()
+        GRP1 = New WSTypEtqGRP1
+        GRP2 = New List(Of WSTypEtqGRP2)
+    End Sub
+End Class
+Public Class WSTypEtqGRP1
+    Public Property OPT As String
+    Public Property ZRET As Integer
+    Public Property ZMSG As String
+    Sub New()
+        OPT = String.Empty
+        ZMSG = String.Empty
+        ZRET = 0
+    End Sub
+End Class
+Public Class WSTypEtqGRP2
+    Public Property CODE As String
+    Public Property LNGDES As String
+    Public Property SHODES As String
+    Sub New()
+        CODE = String.Empty
+        LNGDES = String.Empty
+        SHODES = String.Empty
+    End Sub
+End Class
+
+'########################################################################################################################
 
 Public Class WSSitPs
     Public Property GRP1 As WSSitPsGRP1
@@ -246,6 +277,7 @@ Public Class WSSitPsGRP2
     Public Property XTIMENT As Integer
     Public Property ZOPEXC As Integer
     Public Property ZTYPOPHOF As Integer
+    Public Property ZEVTOBL As Integer
 
     Sub New()
         XEMPNUM = 0
@@ -266,6 +298,7 @@ Public Class WSSitPsGRP2
         XTIMENT = 0
         ZOPEXC = 0
         ZTYPOPHOF = 0
+        ZEVTOBL = 0
     End Sub
 End Class
 
@@ -306,6 +339,7 @@ Public Class WSSitOFGRP2
     Public Property ZQTYA As Decimal
     Public Property ZQTYR As Decimal
     Public Property ZLSTPAL As Integer
+
     Sub New()
         XMFGNUM = String.Empty
         XOPENUM = 0
