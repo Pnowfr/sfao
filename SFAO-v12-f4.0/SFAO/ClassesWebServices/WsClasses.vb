@@ -275,7 +275,10 @@ Public Class WSSitPsGRP2
     Public Property XBPCNAM As String
     Public Property XDATENT As Date
     Public Property XTIMENT As Integer
+    Public Property ZOPEUOM As String
     Public Property ZOPEXC As Integer
+    Public Property ZPREOPE As Integer
+    Public Property ZPREUOM As String
     Public Property ZTYPOPHOF As Integer
     Public Property ZEVTOBL As Integer
 
@@ -296,7 +299,10 @@ Public Class WSSitPsGRP2
         XBPCNAM = String.Empty
         XDATENT = Nothing
         XTIMENT = 0
+        ZOPEUOM = String.Empty
         ZOPEXC = 0
+        ZPREOPE = 0
+        ZPREUOM = String.Empty
         ZTYPOPHOF = 0
         ZEVTOBL = 0
     End Sub
@@ -339,6 +345,7 @@ Public Class WSSitOFGRP2
     Public Property ZQTYA As Decimal
     Public Property ZQTYR As Decimal
     Public Property ZLSTPAL As Integer
+    Public Property ZTCLCOD As String
 
     Sub New()
         XMFGNUM = String.Empty
@@ -354,6 +361,7 @@ Public Class WSSitOFGRP2
         ZQTYA = 0
         ZQTYR = 0
         ZLSTPAL = 0
+        ZTCLCOD = String.Empty
     End Sub
 End Class
 

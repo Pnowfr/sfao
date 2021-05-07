@@ -37,6 +37,7 @@ Partial Class DEBPRO
         Me.ComboBoxTypEtq = New System.Windows.Forms.ComboBox()
         Me.MTextBoxQtéUC = New System.Windows.Forms.MaskedTextBox()
         Me.MTextBoxNbUC = New System.Windows.Forms.MaskedTextBox()
+        Me.MTextBoxNbUN = New System.Windows.Forms.MaskedTextBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.LabelNbUN = New System.Windows.Forms.Label()
         Me.LabelNbUC = New System.Windows.Forms.Label()
@@ -51,7 +52,6 @@ Partial Class DEBPRO
         Me.TableLayoutPanel0 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.TextBoxMsg = New System.Windows.Forms.TextBox()
-        Me.MTextBoxNbUN = New System.Windows.Forms.MaskedTextBox()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel0.SuspendLayout()
@@ -237,6 +237,23 @@ Partial Class DEBPRO
         Me.MTextBoxNbUC.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.MTextBoxNbUC.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
         Me.MTextBoxNbUC.ValidatingType = GetType(Integer)
+        '
+        'MTextBoxNbUN
+        '
+        Me.MTextBoxNbUN.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.MTextBoxNbUN.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MTextBoxNbUN.HidePromptOnLeave = True
+        Me.ErrorProvider.SetIconPadding(Me.MTextBoxNbUN, 3)
+        Me.MTextBoxNbUN.Location = New System.Drawing.Point(223, 529)
+        Me.MTextBoxNbUN.Mask = "99"
+        Me.MTextBoxNbUN.MaximumSize = New System.Drawing.Size(116, 35)
+        Me.MTextBoxNbUN.Name = "MTextBoxNbUN"
+        Me.MTextBoxNbUN.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
+        Me.MTextBoxNbUN.Size = New System.Drawing.Size(116, 35)
+        Me.MTextBoxNbUN.TabIndex = 33
+        Me.MTextBoxNbUN.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.MTextBoxNbUN.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
+        Me.MTextBoxNbUN.ValidatingType = GetType(Integer)
         '
         'TableLayoutPanel1
         '
@@ -444,23 +461,6 @@ Partial Class DEBPRO
         Me.TextBoxMsg.Size = New System.Drawing.Size(546, 91)
         Me.TextBoxMsg.TabIndex = 9
         Me.TextBoxMsg.TabStop = False
-        '
-        'MTextBoxNbUN
-        '
-        Me.MTextBoxNbUN.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.MTextBoxNbUN.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MTextBoxNbUN.HidePromptOnLeave = True
-        Me.ErrorProvider.SetIconPadding(Me.MTextBoxNbUN, 3)
-        Me.MTextBoxNbUN.Location = New System.Drawing.Point(223, 529)
-        Me.MTextBoxNbUN.Mask = "99"
-        Me.MTextBoxNbUN.MaximumSize = New System.Drawing.Size(116, 35)
-        Me.MTextBoxNbUN.Name = "MTextBoxNbUN"
-        Me.MTextBoxNbUN.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.MTextBoxNbUN.Size = New System.Drawing.Size(116, 35)
-        Me.MTextBoxNbUN.TabIndex = 33
-        Me.MTextBoxNbUN.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.MTextBoxNbUN.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
-        Me.MTextBoxNbUN.ValidatingType = GetType(Integer)
         '
         'DEBPRO
         '

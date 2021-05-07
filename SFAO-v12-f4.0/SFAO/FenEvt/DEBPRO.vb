@@ -139,32 +139,35 @@ Public Class DEBPRO
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
         If MsgErr = "" Then
             'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
-            FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
+            'FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
+            'If MsgErr = "" Then
+            'si ok on vérifie si opérateur est en opération hors OF
+            FenSfao.OpHof(matr, MsgErr)
             If MsgErr = "" Then
-                'si ok on vérifie si opérateur est en opération hors OF
-                FenSfao.OpHof(matr, MsgErr)
+                'si ok on vérifie si l'opérateur a déjà une opération en cours
+                FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
                 If MsgErr = "" Then
-                    'si ok on vérifie si l'opérateur a déjà une opération en cours
-                    FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
+                    FenSfao.EventOblig(matr, MsgErr)
                     If MsgErr = "" Then
-                        FenSfao.EventOblig(matr, MsgErr)
-                        If MsgErr = "" Then
-                            Infos_OFOP(TextBoxOF.Text, CInt(MaskedTextBoxOP.Text), MsgErr)
-                        End If
+                        'On remplit les champs affichés
+                        Infos_OFOP(matr, TextBoxOF.Text, CInt(MaskedTextBoxOP.Text), MsgErr)
                     End If
                 End If
             End If
+            'End If
         End If
     End Sub
 
     'fonction qui remplit les infos à partir de l'OF/opération
-    Private Sub Infos_OFOP(ByRef numof As String, ByRef numop As Integer, ByRef MsgErr As String)
+    Private Sub Infos_OFOP(ByVal matr As Integer, ByVal numof As String, ByVal numop As Integer, ByRef MsgErr As String)
         Dim lsttypop As String = "BOB,EMB,FAC"
         Dim saipds As Integer
         Dim retMsg As String = String.Empty
         Dim repdef As String = String.Empty
 
-        TextBoxUOM.Text = FenSfao.UnitFab(numof, numop)
+        'On récupère l'unité de fabrication et on la convertit dans un format lisible pour l'opérateur
+        TextBoxUOM.Text = FenSfao.AffUnit(FenSfao.UnitFab(matr))
+
         'Si étape de production et bobinage/emballage/façonnage : saisie du poids
         If FenSfao.EtapePro(numof, numop) = True AndAlso lsttypop.IndexOf(Strings.Left(SFAO.Poste.GRP1.Y_TYPOP, 3)) <> -1 Then
             If SFAO.Poste.GRP1.Y_TYPOP = "EMB" AndAlso TextBoxUOM.Text = "UN" Then
@@ -202,6 +205,20 @@ Public Class DEBPRO
             LabelSaiPds.Visible = False
             ComboBoxSaiPds.Enabled = False
             ComboBoxSaiPds.Visible = False
+        End If
+
+        'Si étape de production et plus d'un article produit (hors encours)
+        If FenSfao.EtapePro(numof, numop) = True AndAlso FenSfao.NbArt(numof, numop) > 1 Then
+            If FenSfao.OpExc(matr) > 0 Then
+                'Si opération exceptionnelle : saisie de l'article produit
+                LabelAmalg.Text = "Article produit"
+            Else
+
+            End If
+        Else
+            LabelAmalg.Visible = False
+            TextAmalg.Enabled = False
+            TextAmalg.Visible = False
         End If
     End Sub
 

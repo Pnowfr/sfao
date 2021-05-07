@@ -134,15 +134,15 @@ Public Class DEBRGL
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
         If MsgErr = "" Then
             'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
-            FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
-            If MsgErr = "" Then
-                'si ok on vérifie si opérateur est en opération hors OF
-                FenSfao.OpHof(matr, MsgErr)
+            'FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
+            'If MsgErr = "" Then
+            'si ok on vérifie si opérateur est en opération hors OF
+            FenSfao.OpHof(matr, MsgErr)
                 If MsgErr = "" Then
                     'si ok on vérifie si l'opérateur a déjà une opération en cours
                     FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
                 End If
-            End If
+            'End If
         End If
     End Sub
 
@@ -249,7 +249,4 @@ ErreurDebrgl:
 
     End Sub
 
-    Private Sub BtnOk_EnabledChanged(sender As Object, e As EventArgs) Handles BtnOk.EnabledChanged
-
-    End Sub
 End Class

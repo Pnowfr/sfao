@@ -111,22 +111,22 @@ Public Class DEBINT
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
         If MsgErr = "" Then
             'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
-            FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
-            If MsgErr = "" Then
-                'si type matricule <> 1 (opérateur)
-                If FenSfao.TypeMatr(matr) <> 1 Then
-                    'si type non opérateur : on vérifie si opération hors OF en cours
-                    FenSfao.OpHof(matr, MsgErr)
-                End If
-                If MsgErr = "" Then
-                    'si ok on vérifie si l'opérateur a déjà une opération en cours
-                    'juste pour l'affichage OF/op
-                    FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
-                    'pour l'interruption, il n'est pas nécessaire d'avoir une opération en cours
-                    'on efface donc l'éventuel message d'erreur
-                    MsgErr = ""
-                End If
+            'FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
+            'If MsgErr = "" Then
+            'si type matricule <> 1 (opérateur)
+            If FenSfao.TypeMatr(matr) <> 1 Then
+                'si type non opérateur : on vérifie si opération hors OF en cours
+                FenSfao.OpHof(matr, MsgErr)
             End If
+            If MsgErr = "" Then
+                'si ok on vérifie si l'opérateur a déjà une opération en cours
+                'juste pour l'affichage OF/op
+                FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
+                'pour l'interruption, il n'est pas nécessaire d'avoir une opération en cours
+                'on efface donc l'éventuel message d'erreur
+                MsgErr = ""
+            End If
+            'End If
         End If
     End Sub
 

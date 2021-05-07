@@ -1428,20 +1428,52 @@ Public Class FenSfao
         End If
         Return etppro
     End Function
-    'Fonction qui renvoie l'unité de fabrication
-    Public Function UnitFab(ByVal _of As String, ByVal _op As Integer) As String
-        Dim uom As String = String.Empty
+    'Fonction qui renvoie le nombre d'articles produits sur l'OF
+    Public Function NbArt(ByVal _of As String, ByVal _op As Integer) As Integer
+        Dim nbitm As Integer
         Dim i As Integer
         If WSof.GRP2.Count > 0 Then
             For i = 0 To WSof.GRP2.Count - 1
                 If WSof.GRP2(i).XMFGNUM = _of AndAlso WSof.GRP2(i).XOPENUM = _op Then
-                    uom = WSof.GRP2(i).UOM
-                    'TODO WEB : si opération exceptionnelle, afficher ZPREUOM (situation poste)
+                    If WSof.GRP2(i).ZTCLCOD <> "EP" Then
+                        nbitm += 1
+                    End If
+                End If
+            Next
+        End If
+        Return nbitm
+    End Function
+    'Fonction qui renvoie l'unité de fabrication
+    Public Function UnitFab(ByVal _matr As Integer) As String
+        Dim uom As String = String.Empty
+        Dim i As Integer
+        If WSsp.GRP2.Count > 0 Then
+            For i = 0 To WSsp.GRP2.Count - 1
+                If WSsp.GRP2(i).XEMPNUM > 0 AndAlso WSsp.GRP2(i).XEMPNUM = _matr Then
+                    If WSsp.GRP2(i).ZOPEXC > 0 Then
+                        uom = WSsp.GRP2(i).ZPREUOM
+                    Else
+                        uom = WSsp.GRP2(i).ZOPEUOM
+                    End If
                     Exit For
                 End If
             Next
         End If
         Return uom
+    End Function
+    'Fonction qui convertit l'unité pour affichage dans un format lisible pour l'opérateur
+    Public Function AffUnit(ByVal _unit As String) As String
+        Dim unit As String = String.Empty
+        Select Case _unit
+            Case "MLF"
+                unit = "ML"
+            Case "M2"
+                unit = "M²"
+            Case Else
+                unit = _unit
+        End Select
+
+        Return unit
     End Function
     'on contrôle si un événement en cours bloque la sortie opérateur
     Public Sub EventEnCoursSortie(ByVal _matr As Integer, ByRef _xevent As Integer, ByRef _msgErr As String)
