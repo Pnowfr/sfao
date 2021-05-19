@@ -449,6 +449,9 @@ ErreurBilanOP:
 
         'tout va bien on enregistre la conso des encres/vernis et la fin d'opération
 
+        'affichage le load dans 100 ms
+        Call FenSfao.WaitGif(True, 100)
+
         'on enregistre la consommation des encres et vernis utilisés
         '(avant la fin d'opération, puisqu'on utilise les infos de la situation d'opération)
         If MTextBoxTotEnc.Visible AndAlso MTextBoxTotVer.Visible AndAlso (CDec(MTextBoxTotEnc.Text) > 0 Or CDec(MTextBoxTotVer.Text) > 0) Then
@@ -464,6 +467,10 @@ ErreurBilanOP:
                     GoTo ErreurFinop
                 Case 0 'Erreur blocage 
                     Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+                    Me.DialogResult = DialogResult.Abort
+                    Me.Close()
+                    'On masque le load dans 0.5s
+                    Call FenSfao.WaitGif(False, 500)
                 Case 1 'ok
                     Me.DialogResult = DialogResult.OK
             End Select
@@ -482,6 +489,10 @@ ErreurBilanOP:
                 GoTo ErreurFinop
             Case 0 'Erreur blocage 
                 Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+                Me.DialogResult = DialogResult.Abort
+                Me.Close()
+                'On masque le load dans 0.5s
+                Call FenSfao.WaitGif(False, 500)
             Case 1 'ok
                 Me.DialogResult = DialogResult.OK
         End Select
@@ -495,6 +506,8 @@ ErreurFinop:
         End If
         Me.DialogResult = DialogResult.Abort
         Me.Close()
+        'On masque le load dans 0.5s
+        Call FenSfao.WaitGif(False, 500)
     End Sub
 
     Private Sub ComboBoxSoldOp_GotFocus(sender As Object, e As EventArgs) Handles ComboBoxSoldOp.GotFocus

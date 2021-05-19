@@ -221,6 +221,10 @@ Public Class DEBRGL
         Next
 
         'tout va bien on enregistre le début de réglage
+
+        'affichage le load dans 100 ms
+        Call FenSfao.WaitGif(True, 100)
+
         Try
             debrgl = X3ws.WSDEBRGL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), PhaseSelect, retMsg)
         Catch ex As Exception
@@ -232,6 +236,10 @@ Public Class DEBRGL
                 GoTo ErreurDebrgl
             Case 0 'Erreur blocage 
                 Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+                Me.DialogResult = DialogResult.Abort
+                Me.Close()
+                'On masque le load dans 0.5s
+                Call FenSfao.WaitGif(False, 500)
             Case 1 'ok
                 Me.DialogResult = DialogResult.OK
         End Select
@@ -245,7 +253,8 @@ ErreurDebrgl:
         End If
         Me.DialogResult = DialogResult.Abort
         Me.Close()
-
+        'On masque le load dans 0.5s
+        Call FenSfao.WaitGif(False, 500)
 
     End Sub
 

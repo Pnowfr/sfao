@@ -689,7 +689,7 @@ Public Class X3WebServ
     End Function
 
     'Web service qui récupère la liste des types d'étiquettes ZPL
-    Public Function WSGETTETQ(ByVal _option As String) As WSTypEtq
+    Public Function WSGETLETQ(ByVal _option As String) As WSTypEtq
         Dim params As String
         Dim json As New WSTypEtq
         Dim settings As JsonSerializerSettings
@@ -705,7 +705,7 @@ Public Class X3WebServ
 
         params = ClassToJson(Of WSTypEtq)(json, False, settings)
 
-        If X3WSC.Run("WSGETTETQ", params, retxml, MsgErrWs, True) = 1 Then
+        If X3WSC.Run("WSGETLETQ", params, retxml, MsgErrWs, True) = 1 Then
             json = JsonToClass(Of WSTypEtq)(retxml, settings)
         Else
             json.GRP1.ZRET = 0
@@ -713,6 +713,31 @@ Public Class X3WebServ
         End If
 
         Return json
+    End Function
+
+    'Web service qui renvoie le type d'étiquettes ZPL par défaut
+    Public Function WSGETTETQ(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByRef _typetq As String, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZTYPETQ = _typetq, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSGETTETQ", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _typetq = json.SelectToken("GRP1").SelectToken("ZTYPETQ").ToString
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
     End Function
 
     'Web service qui contrôle s'il faut saisir le poids des bobines
@@ -738,6 +763,108 @@ Public Class X3WebServ
         End If
 
         Return ret
+    End Function
+
+    'Web service qui récupère le nombre de bobines filles produites
+    Public Function WSGETNBBOB(ByVal _site As String, ByVal _of As String, ByVal _op As Integer, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZMFGNUM = _of, .ZMFGOPE = _op, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSGETNBBOB", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
+    'Web service qui récupère la quantité de conditionnement
+    Public Function WSGETQPCU(ByVal _site As String, ByVal _of As String, ByVal _op As Integer, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZMFGNUM = _of, .ZMFGOPE = _op, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSGETQPCU", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
+    'Web service qui récupère le nombre d'unités par format (emballage)
+    Public Function WSGETNBUN(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSGETNBUN", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
+    'Web service qui récupère les tailles de palettes
+    Public Function WSTAILPAL(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer) As WSTailPal
+        Dim params As String
+        Dim json As New WSTailPal
+        Dim settings As JsonSerializerSettings
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+
+        settings = New JsonSerializerSettings() With {
+                    .NullValueHandling = NullValueHandling.Ignore,
+                    .MissingMemberHandling = MissingMemberHandling.Ignore
+                }
+
+        json.GRP1.ZFCY = _site
+        json.GRP1.ZPOSTE = _poste
+        json.GRP1.ZTYPOP = _typop
+        json.GRP1.ZEMPNUM = _empnum
+
+        params = ClassToJson(Of WSTailPal)(json, False, settings)
+
+        If X3WSC.Run("WSTAILPAL", params, retxml, MsgErrWs, True) = 1 Then
+            json = JsonToClass(Of WSTailPal)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
+        End If
+
+        Return json
     End Function
 
     '########################################################################################################################

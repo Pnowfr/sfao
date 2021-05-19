@@ -43,31 +43,6 @@ Public Class DEBPRO
             End If
         End If
 
-        If MsgErr = "" Then
-            'Récupération de la liste des types d'étiquettes
-            Try
-                Trace("Appel du web service WSGETTETQ")
-                WSLstTypEtq = X3ws.WSGETTETQ("P")
-                If WSLstTypEtq.GRP1.ZRET = 1 Then
-                    For i = 0 To WSLstTypEtq.GRP2.Count - 1
-                        ComboBoxTypEtq.Items.Add(WSLstTypEtq.GRP2(i).LNGDES)
-                    Next i
-                Else
-                    MsgErr = WSLstTypEtq.GRP1.ZMSG
-                    TextBoxMsg.Text = MsgErr
-                    ErrorProvider.SetError(ComboBoxTypEtq, MsgErr)
-                    System.Media.SystemSounds.Exclamation.Play()
-                End If
-
-            Catch ex As Exception
-                MsgErr = "Erreur de récupération de la liste de types d'étiquettes ! "
-                TextBoxMsg.Text = MsgErr
-                ErrorProvider.SetError(ComboBoxTypEtq, MsgErr)
-                System.Media.SystemSounds.Exclamation.Play()
-            End Try
-
-        End If
-
         If MTextBoxMatr.Text <> "" And MsgErr = "" Then
             MTextBoxMatr.Enabled = False    'on a 1 seul opérateur présent sur le poste, donc on désactive la saisie du champ matricule
             'Sélection auto du 1er champ saisi
@@ -161,9 +136,15 @@ Public Class DEBPRO
     'fonction qui remplit les infos à partir de l'OF/opération
     Private Sub Infos_OFOP(ByVal matr As Integer, ByVal numof As String, ByVal numop As Integer, ByRef MsgErr As String)
         Dim lsttypop As String = "BOB,EMB,FAC"
-        Dim saipds As Integer
+        Dim resws As Integer
         Dim retMsg As String = String.Empty
         Dim repdef As String = String.Empty
+        Dim nbbob As Integer
+        Dim qtepcu As Integer
+        Dim nbunit As Integer
+        Dim i As Integer
+        Dim typetq As String = String.Empty
+        Dim LstTailPal As New WSTailPal
 
         'On récupère l'unité de fabrication et on la convertit dans un format lisible pour l'opérateur
         TextBoxUOM.Text = FenSfao.AffUnit(FenSfao.UnitFab(matr))
@@ -178,13 +159,13 @@ Public Class DEBPRO
             Else 'Contrôle de l'article produit
                 Try
                     Trace("Appel du web service WSSAIPDS")
-                    saipds = X3ws.WSSAIPDS(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), repdef, retMsg)
+                    resws = X3ws.WSSAIPDS(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), repdef, retMsg)
                 Catch ex As Exception
                     Trace("Exception à l'appel du web service WSSAIPDS")
                     MsgErr = "Erreur au contrôle de la saisie du poids"
                 End Try
 
-                Select Case saipds
+                Select Case resws
                     Case -1 'Erreur du web service
                         Trace(retMsg)
                         MsgErr = retMsg
@@ -207,19 +188,236 @@ Public Class DEBPRO
             ComboBoxSaiPds.Visible = False
         End If
 
-        'Si étape de production et plus d'un article produit (hors encours)
-        If FenSfao.EtapePro(numof, numop) = True AndAlso FenSfao.NbArt(numof, numop) > 1 Then
-            If FenSfao.OpExc(matr) > 0 Then
-                'Si opération exceptionnelle : saisie de l'article produit
-                LabelAmalg.Text = "Article produit"
-            Else
+        If MsgErr = "" Then
+            'Si étape de production et plus d'un article produit (hors encours)
+            If FenSfao.EtapePro(numof, numop) = True AndAlso FenSfao.NbArt(numof, numop) > 1 Then
+                If FenSfao.OpExc(matr) > 0 Then
+                    'Si opération exceptionnelle : saisie de l'article produit
+                    LabelAmalg.Text = "Article produit"
+                Else
+                    'Amalgame : recherche du nombre de bobines filles
+                    Try
+                        Trace("Appel du web service WSGETNBBOB")
+                        nbbob = X3ws.WSGETNBBOB(SFAO.Site.GRP1.FCY, numof, numop, retMsg)
+                    Catch ex As Exception
+                        Trace("Exception à l'appel du web service WSGETNBBOB")
+                        MsgErr = "Erreur à la recherche du nombre de bobines filles pour l'amalgame"
+                    End Try
 
+                    Select Case nbbob
+                        Case -1 'Erreur du web service
+                            Trace(retMsg)
+                            MsgErr = retMsg
+                        Case Else
+                            If nbbob <= 1 Then
+                                LabelAmalg.Text = ""
+                                TextAmalg.Enabled = False
+                                TextAmalg.Visible = False
+                            End If
+                    End Select
+                End If
+            Else
+                LabelAmalg.Visible = False
+                TextAmalg.Enabled = False
+                TextAmalg.Visible = False
             End If
-        Else
-            LabelAmalg.Visible = False
-            TextAmalg.Enabled = False
-            TextAmalg.Visible = False
         End If
+
+        If MsgErr = "" Then
+            'Récupération de la liste des types d'étiquettes
+            Try
+                Trace("Appel du web service WSGETLETQ")
+                WSLstTypEtq = X3ws.WSGETLETQ("P")
+                If WSLstTypEtq.GRP1.ZRET = 1 Then
+                    For i = 0 To WSLstTypEtq.GRP2.Count - 1
+                        ComboBoxTypEtq.Items.Add(WSLstTypEtq.GRP2(i).LNGDES)
+                    Next i
+                Else
+                    MsgErr = WSLstTypEtq.GRP1.ZMSG
+                    TextBoxMsg.Text = MsgErr
+                    ErrorProvider.SetError(ComboBoxTypEtq, MsgErr)
+                    System.Media.SystemSounds.Exclamation.Play()
+                End If
+
+            Catch ex As Exception
+                MsgErr = "Erreur de récupération de la liste de types d'étiquettes ! "
+                TextBoxMsg.Text = MsgErr
+                ErrorProvider.SetError(ComboBoxTypEtq, MsgErr)
+                System.Media.SystemSounds.Exclamation.Play()
+            End Try
+        End If
+
+        If MsgErr = "" Then
+            'Type d'étiquettes par défaut
+            Try
+                Trace("Appel du web service WSGETTETQ")
+                resws = X3ws.WSGETTETQ(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), typetq, retMsg)
+            Catch ex As Exception
+                Trace("Exception à l'appel du web service WSSAIPDS")
+                MsgErr = "Erreur au contrôle de la saisie du poids"
+            End Try
+
+            Select Case resws
+                Case -1 'Erreur du web service
+                    Trace(retMsg)
+                    MsgErr = retMsg
+                Case 0 'Erreur blocage 
+                    Trace(retMsg)
+                    MsgErr = retMsg
+                Case 1 'ok
+                    If typetq <> "" Then
+                        ComboBoxTypEtq.Text = typetq
+                    End If
+            End Select
+        End If
+
+        If MsgErr = "" Then
+            'Quantité UC
+            If lsttypop.IndexOf(Strings.Left(SFAO.Poste.GRP1.Y_TYPOP, 3)) = -1 OrElse FenSfao.OpExc(matr) > 0 Then
+                'Si type opération <> BOB/EMB/FAC ou opération exceptionnelle : pas de saisie
+                LabelQtéUC.Visible = False
+                MTextBoxQtéUC.Enabled = False
+                MTextBoxQtéUC.Visible = False
+            Else
+                Select Case Strings.Left(SFAO.Poste.GRP1.Y_TYPOP, 3)
+                    Case "BOB"
+                        LabelQtéUC.Text = "Métrage bobine"
+                    Case "EMB"
+                        If TextBoxUOM.Text = "UN" Then
+                            LabelQtéUC.Text = "Nb feuilles / paq."
+                        Else
+                            LabelQtéUC.Text = "Métrage bobine"
+                        End If
+                    Case "FAC"
+                        LabelQtéUC.Text = "Nb sachets / paq."
+                End Select
+
+                'Quantité conditionnement
+                Try
+                    Trace("Appel du web service WSGETQPCU")
+                    qtepcu = X3ws.WSGETQPCU(SFAO.Site.GRP1.FCY, numof, numop, retMsg)
+                Catch ex As Exception
+                    Trace("Exception à l'appel du web service WSGETQPCU")
+                    MsgErr = "Erreur à la recherche de la quantité de conditionnement"
+                End Try
+
+                Select Case qtepcu
+                    Case -1 'Erreur du web service
+                        Trace(retMsg)
+                        MsgErr = retMsg
+                    Case Else
+                        If qtepcu > 0 Then
+                            MTextBoxQtéUC.Text = qtepcu.ToString
+                        End If
+                End Select
+            End If
+        End If
+
+        If MsgErr = "" Then
+            'Nb UC / déclaration
+            Select Case Strings.Left(SFAO.Poste.GRP1.Y_TYPOP, 3)
+                Case "BOB"
+                    LabelNbUC.Text = "Nb bob. / tringlée"
+                Case "CCP"
+                    LabelNbUC.Text = "Nb bobines / décl."
+                Case "EMB"
+                    If TextBoxUOM.Text = "UN" Then
+                        LabelNbUC.Text = "Nb paquets / décl."
+                    Else
+                        LabelNbUC.Text = "Nb bobines / décl."
+                    End If
+                Case "FAC"
+                    LabelNbUC.Text = "Nb paquets / décl."
+                Case Else
+                    LabelNbUC.Visible = False
+                    MTextBoxNbUC.Enabled = False
+                    MTextBoxNbUC.Visible = False
+            End Select
+
+            If LabelNbUC.Visible Then
+                If FenSfao.OpExc(matr) > 0 Then
+                    'Si opération exceptionnelle
+                    MTextBoxNbUC.Text = "1"
+                ElseIf LabelAmalg.Visible = False Then
+                    'Si pas d'amalgamme : recherche du nombre de bobines filles
+                    If nbbob = 0 Then
+                        'Si webservice non exécuté précédemment
+                        Try
+                            Trace("Appel du web service WSGETNBBOB")
+                            nbbob = X3ws.WSGETNBBOB(SFAO.Site.GRP1.FCY, numof, numop, retMsg)
+                        Catch ex As Exception
+                            Trace("Exception à l'appel du web service WSGETNBBOB")
+                            MsgErr = "Erreur à la recherche du nombre de bobines filles"
+                        End Try
+
+                        Select Case nbbob
+                            Case -1 'Erreur du web service
+                                Trace(retMsg)
+                                MsgErr = retMsg
+                            Case Else
+
+                        End Select
+                    End If
+                    If MsgErr = "" Then
+                        If SFAO.Poste.GRP1.Y_TYPOP = "EMB" AndAlso nbbob < 10 Then
+                            MTextBoxNbUC.Text = "10"
+                        ElseIf nbbob > 1 Then
+                            MTextBoxNbUC.Text = nbbob.ToString
+                        Else
+                            MTextBoxNbUC.Text = "1"
+                        End If
+                    End If
+                End If
+            End If
+        End If
+
+        If MsgErr = "" Then
+            'Nb unités / format
+            If Strings.Left(SFAO.Poste.GRP1.Y_TYPOP, 3) = "EMB" Then
+                Try
+                    Trace("Appel du web service WSGETNBUN")
+                    nbunit = X3ws.WSGETNBUN(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), retMsg)
+                Catch ex As Exception
+                    Trace("Exception à l'appel du web service WSGETNBUN")
+                    MsgErr = "Erreur à la recherche du nombre d'unités par format"
+                End Try
+
+                Select Case nbunit
+                    Case -1 'Erreur du web service
+                        Trace(retMsg)
+                        MsgErr = retMsg
+                    Case Else
+                        MTextBoxNbUN.Text = nbunit.ToString
+                End Select
+            Else
+                LabelNbUN.Visible = False
+                MTextBoxNbUN.Enabled = False
+                MTextBoxNbUN.Visible = False
+            End If
+        End If
+
+        If MsgErr = "" AndAlso FenSfao.EtapePro(numof, numop) = True Then
+            'Si étape de production
+            Trace("Recherche des tailles de palettes")
+            Try
+                Trace("Appel du web service WSTAILPAL")
+                LstTailPal = X3ws.WSTAILPAL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text))
+            Catch ex As Exception
+                Trace("Exception à l'appel du web service WSTAILPAL")
+                MsgErr = "Erreur à la recherche des tailles de palettes"
+            End Try
+
+            If LstTailPal.GRP2.Count > 0 Then
+                For i = 0 To LstTailPal.GRP2.Count - 1
+                    If i = 0 Then
+                        RichTextBoxInfo.Text = LstTailPal.GRP2(i).ZLIBPAL + " : " + CStr(LstTailPal.GRP2(i).ZDIMPAL)
+                    Else
+                        RichTextBoxInfo.Text += vbNewLine + LstTailPal.GRP2(i).ZLIBPAL + " : " + CStr(LstTailPal.GRP2(i).ZDIMPAL)
+                    End If
+                Next
+            End If
+        End If
+
     End Sub
 
     Private Sub MTextBoxMatr_Validated(sender As Object, e As EventArgs) Handles MTextBoxMatr.Validated
@@ -249,6 +447,10 @@ Public Class DEBPRO
         Next
 
         'tout va bien on enregistre la fin d'opération + suivi auto du temps passé depuis le dernier évenement
+
+        'affichage le load dans 100 ms
+        Call FenSfao.WaitGif(True, 100)
+
         Try
             Trace("Appel du web service WSFINOPE")
             finop = X3ws.WSFINOPE(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), ComboBoxSaiPds.Text, ComboBoxTypEtq.Text, retMsg)
@@ -261,6 +463,10 @@ Public Class DEBPRO
                 GoTo ErreurFinop
             Case 0 'Erreur blocage 
                 Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+                Me.DialogResult = DialogResult.Abort
+                Me.Close()
+                'On masque le load dans 0.5s
+                Call FenSfao.WaitGif(False, 500)
             Case 1 'ok
                 Me.DialogResult = DialogResult.OK
         End Select
@@ -274,6 +480,9 @@ ErreurFinop:
         End If
         Me.DialogResult = DialogResult.Abort
         Me.Close()
+        'On masque le load dans 0.5s
+        Call FenSfao.WaitGif(False, 500)
+
     End Sub
 
     Private Sub ComboBoxSaiPds_GotFocus(sender As Object, e As EventArgs) Handles ComboBoxSaiPds.GotFocus
@@ -299,7 +508,7 @@ ErreurFinop:
     Private Sub ComboBoxTypEtq_Validating(sender As Object, e As CancelEventArgs) Handles ComboBoxTypEtq.Validating
         If ComboBoxTypEtq.Text = "" Then
             e.Cancel = True
-            ErrorProvider.SetError(ComboBoxTypEtq, "Motif de non solde obligatoire")
+            ErrorProvider.SetError(ComboBoxTypEtq, "Type d'étiquette obligatoire")
             ComboBoxTypEtq.Select()
         End If
     End Sub

@@ -52,10 +52,13 @@ Partial Class DEBPRO
         Me.TableLayoutPanel0 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.TextBoxMsg = New System.Windows.Forms.TextBox()
+        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.RichTextBoxInfo = New System.Windows.Forms.RichTextBox()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel0.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
+        Me.TableLayoutPanel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'BtnOk
@@ -90,7 +93,7 @@ Partial Class DEBPRO
         Me.Label1.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(3, 11)
+        Me.Label1.Location = New System.Drawing.Point(3, 6)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(176, 29)
         Me.Label1.TabIndex = 3
@@ -102,7 +105,7 @@ Partial Class DEBPRO
         Me.Label2.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(3, 63)
+        Me.Label2.Location = New System.Drawing.Point(3, 48)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(180, 29)
         Me.Label2.TabIndex = 4
@@ -114,7 +117,7 @@ Partial Class DEBPRO
         Me.TextBoxNom.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBoxNom.Enabled = False
         Me.TextBoxNom.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBoxNom.Location = New System.Drawing.Point(223, 60)
+        Me.TextBoxNom.Location = New System.Drawing.Point(223, 45)
         Me.TextBoxNom.Name = "TextBoxNom"
         Me.TextBoxNom.Size = New System.Drawing.Size(326, 35)
         Me.TextBoxNom.TabIndex = 2
@@ -125,7 +128,7 @@ Partial Class DEBPRO
         Me.Label4.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(3, 167)
+        Me.Label4.Location = New System.Drawing.Point(3, 132)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(152, 29)
         Me.Label4.TabIndex = 12
@@ -137,7 +140,7 @@ Partial Class DEBPRO
         Me.Label3.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(3, 115)
+        Me.Label3.Location = New System.Drawing.Point(3, 90)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(79, 29)
         Me.Label3.TabIndex = 13
@@ -153,7 +156,7 @@ Partial Class DEBPRO
         Me.MTextBoxMatr.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.MTextBoxMatr.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ErrorProvider.SetIconPadding(Me.MTextBoxMatr, 3)
-        Me.MTextBoxMatr.Location = New System.Drawing.Point(223, 8)
+        Me.MTextBoxMatr.Location = New System.Drawing.Point(223, 3)
         Me.MTextBoxMatr.Mask = "9999"
         Me.MTextBoxMatr.Name = "MTextBoxMatr"
         Me.MTextBoxMatr.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
@@ -168,7 +171,7 @@ Partial Class DEBPRO
         Me.MaskedTextBoxOP.Enabled = False
         Me.MaskedTextBoxOP.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ErrorProvider.SetIconPadding(Me.MaskedTextBoxOP, 3)
-        Me.MaskedTextBoxOP.Location = New System.Drawing.Point(223, 164)
+        Me.MaskedTextBoxOP.Location = New System.Drawing.Point(223, 129)
         Me.MaskedTextBoxOP.Mask = "99999 "
         Me.MaskedTextBoxOP.MaximumSize = New System.Drawing.Size(116, 35)
         Me.MaskedTextBoxOP.Name = "MaskedTextBoxOP"
@@ -187,7 +190,7 @@ Partial Class DEBPRO
         Me.ComboBoxSaiPds.FormattingEnabled = True
         Me.ErrorProvider.SetIconPadding(Me.ComboBoxSaiPds, 3)
         Me.ComboBoxSaiPds.Items.AddRange(New Object() {"OUI", "NON"})
-        Me.ComboBoxSaiPds.Location = New System.Drawing.Point(223, 269)
+        Me.ComboBoxSaiPds.Location = New System.Drawing.Point(223, 214)
         Me.ComboBoxSaiPds.Name = "ComboBoxSaiPds"
         Me.ComboBoxSaiPds.Size = New System.Drawing.Size(116, 33)
         Me.ComboBoxSaiPds.TabIndex = 20
@@ -199,7 +202,7 @@ Partial Class DEBPRO
         Me.ComboBoxTypEtq.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ComboBoxTypEtq.FormattingEnabled = True
         Me.ErrorProvider.SetIconPadding(Me.ComboBoxTypEtq, 3)
-        Me.ComboBoxTypEtq.Location = New System.Drawing.Point(223, 321)
+        Me.ComboBoxTypEtq.Location = New System.Drawing.Point(223, 256)
         Me.ComboBoxTypEtq.Name = "ComboBoxTypEtq"
         Me.ComboBoxTypEtq.Size = New System.Drawing.Size(180, 33)
         Me.ComboBoxTypEtq.TabIndex = 21
@@ -210,7 +213,7 @@ Partial Class DEBPRO
         Me.MTextBoxQtéUC.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MTextBoxQtéUC.HidePromptOnLeave = True
         Me.ErrorProvider.SetIconPadding(Me.MTextBoxQtéUC, 3)
-        Me.MTextBoxQtéUC.Location = New System.Drawing.Point(223, 424)
+        Me.MTextBoxQtéUC.Location = New System.Drawing.Point(223, 339)
         Me.MTextBoxQtéUC.Mask = "99999999"
         Me.MTextBoxQtéUC.MaximumSize = New System.Drawing.Size(116, 35)
         Me.MTextBoxQtéUC.Name = "MTextBoxQtéUC"
@@ -227,7 +230,7 @@ Partial Class DEBPRO
         Me.MTextBoxNbUC.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MTextBoxNbUC.HidePromptOnLeave = True
         Me.ErrorProvider.SetIconPadding(Me.MTextBoxNbUC, 3)
-        Me.MTextBoxNbUC.Location = New System.Drawing.Point(223, 476)
+        Me.MTextBoxNbUC.Location = New System.Drawing.Point(223, 381)
         Me.MTextBoxNbUC.Mask = "99"
         Me.MTextBoxNbUC.MaximumSize = New System.Drawing.Size(116, 35)
         Me.MTextBoxNbUC.Name = "MTextBoxNbUC"
@@ -244,7 +247,7 @@ Partial Class DEBPRO
         Me.MTextBoxNbUN.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MTextBoxNbUN.HidePromptOnLeave = True
         Me.ErrorProvider.SetIconPadding(Me.MTextBoxNbUN, 3)
-        Me.MTextBoxNbUN.Location = New System.Drawing.Point(223, 529)
+        Me.MTextBoxNbUN.Location = New System.Drawing.Point(223, 428)
         Me.MTextBoxNbUN.Mask = "99"
         Me.MTextBoxNbUN.MaximumSize = New System.Drawing.Size(116, 35)
         Me.MTextBoxNbUN.Name = "MTextBoxNbUN"
@@ -299,7 +302,7 @@ Partial Class DEBPRO
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.09091!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.09091!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.09091!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(552, 574)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(552, 471)
         Me.TableLayoutPanel1.TabIndex = 18
         '
         'LabelNbUN
@@ -307,11 +310,11 @@ Partial Class DEBPRO
         Me.LabelNbUN.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelNbUN.AutoSize = True
         Me.LabelNbUN.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelNbUN.Location = New System.Drawing.Point(3, 532)
+        Me.LabelNbUN.Location = New System.Drawing.Point(3, 431)
         Me.LabelNbUN.Name = "LabelNbUN"
-        Me.LabelNbUN.Size = New System.Drawing.Size(172, 29)
+        Me.LabelNbUN.Size = New System.Drawing.Size(201, 29)
         Me.LabelNbUN.TabIndex = 32
-        Me.LabelNbUN.Text = "Nb UN / format"
+        Me.LabelNbUN.Text = "Nb unités / format"
         Me.LabelNbUN.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'LabelNbUC
@@ -319,7 +322,7 @@ Partial Class DEBPRO
         Me.LabelNbUC.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelNbUC.AutoSize = True
         Me.LabelNbUC.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelNbUC.Location = New System.Drawing.Point(3, 479)
+        Me.LabelNbUC.Location = New System.Drawing.Point(3, 384)
         Me.LabelNbUC.Name = "LabelNbUC"
         Me.LabelNbUC.Size = New System.Drawing.Size(156, 29)
         Me.LabelNbUC.TabIndex = 30
@@ -331,7 +334,7 @@ Partial Class DEBPRO
         Me.LabelAmalg.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelAmalg.AutoSize = True
         Me.LabelAmalg.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelAmalg.Location = New System.Drawing.Point(3, 375)
+        Me.LabelAmalg.Location = New System.Drawing.Point(3, 300)
         Me.LabelAmalg.Name = "LabelAmalg"
         Me.LabelAmalg.Size = New System.Drawing.Size(182, 29)
         Me.LabelAmalg.TabIndex = 22
@@ -344,7 +347,7 @@ Partial Class DEBPRO
         Me.TextBoxOF.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
         Me.TextBoxOF.Enabled = False
         Me.TextBoxOF.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBoxOF.Location = New System.Drawing.Point(223, 112)
+        Me.TextBoxOF.Location = New System.Drawing.Point(223, 87)
         Me.TextBoxOF.Name = "TextBoxOF"
         Me.TextBoxOF.Size = New System.Drawing.Size(283, 35)
         Me.TextBoxOF.TabIndex = 3
@@ -354,7 +357,7 @@ Partial Class DEBPRO
         Me.LabelSaiPds.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelSaiPds.AutoSize = True
         Me.LabelSaiPds.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelSaiPds.Location = New System.Drawing.Point(3, 271)
+        Me.LabelSaiPds.Location = New System.Drawing.Point(3, 216)
         Me.LabelSaiPds.Name = "LabelSaiPds"
         Me.LabelSaiPds.Size = New System.Drawing.Size(207, 29)
         Me.LabelSaiPds.TabIndex = 16
@@ -366,7 +369,7 @@ Partial Class DEBPRO
         Me.LabelTypEtq.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelTypEtq.AutoSize = True
         Me.LabelTypEtq.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelTypEtq.Location = New System.Drawing.Point(3, 323)
+        Me.LabelTypEtq.Location = New System.Drawing.Point(3, 258)
         Me.LabelTypEtq.Name = "LabelTypEtq"
         Me.LabelTypEtq.Size = New System.Drawing.Size(179, 29)
         Me.LabelTypEtq.TabIndex = 17
@@ -378,7 +381,7 @@ Partial Class DEBPRO
         Me.LabelQtéUC.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelQtéUC.AutoSize = True
         Me.LabelQtéUC.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelQtéUC.Location = New System.Drawing.Point(3, 427)
+        Me.LabelQtéUC.Location = New System.Drawing.Point(3, 342)
         Me.LabelQtéUC.Name = "LabelQtéUC"
         Me.LabelQtéUC.Size = New System.Drawing.Size(143, 29)
         Me.LabelQtéUC.TabIndex = 23
@@ -390,7 +393,7 @@ Partial Class DEBPRO
         Me.Label5.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(3, 219)
+        Me.Label5.Location = New System.Drawing.Point(3, 174)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(186, 29)
         Me.Label5.TabIndex = 26
@@ -402,7 +405,7 @@ Partial Class DEBPRO
         Me.TextBoxUOM.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.TextBoxUOM.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
         Me.TextBoxUOM.Enabled = False
-        Me.TextBoxUOM.Location = New System.Drawing.Point(223, 216)
+        Me.TextBoxUOM.Location = New System.Drawing.Point(223, 171)
         Me.TextBoxUOM.Name = "TextBoxUOM"
         Me.TextBoxUOM.Size = New System.Drawing.Size(116, 35)
         Me.TextBoxUOM.TabIndex = 27
@@ -411,7 +414,7 @@ Partial Class DEBPRO
         '
         Me.TextAmalg.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.TextAmalg.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
-        Me.TextAmalg.Location = New System.Drawing.Point(223, 372)
+        Me.TextAmalg.Location = New System.Drawing.Point(223, 297)
         Me.TextAmalg.Name = "TextAmalg"
         Me.TextAmalg.Size = New System.Drawing.Size(283, 35)
         Me.TextAmalg.TabIndex = 28
@@ -424,12 +427,14 @@ Partial Class DEBPRO
         Me.TableLayoutPanel0.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
         Me.TableLayoutPanel0.ColumnCount = 1
         Me.TableLayoutPanel0.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel0.Controls.Add(Me.TableLayoutPanel3, 0, 2)
         Me.TableLayoutPanel0.Controls.Add(Me.TableLayoutPanel2, 0, 1)
         Me.TableLayoutPanel0.Controls.Add(Me.TableLayoutPanel1, 0, 0)
         Me.TableLayoutPanel0.Location = New System.Drawing.Point(12, 12)
         Me.TableLayoutPanel0.Name = "TableLayoutPanel0"
-        Me.TableLayoutPanel0.RowCount = 2
-        Me.TableLayoutPanel0.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85.0!))
+        Me.TableLayoutPanel0.RowCount = 3
+        Me.TableLayoutPanel0.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70.0!))
+        Me.TableLayoutPanel0.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.0!))
         Me.TableLayoutPanel0.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.0!))
         Me.TableLayoutPanel0.Size = New System.Drawing.Size(560, 686)
         Me.TableLayoutPanel0.TabIndex = 19
@@ -440,11 +445,11 @@ Partial Class DEBPRO
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.TextBoxMsg, 0, 0)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(4, 585)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(4, 482)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(552, 97)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(552, 96)
         Me.TableLayoutPanel2.TabIndex = 21
         '
         'TextBoxMsg
@@ -458,9 +463,36 @@ Partial Class DEBPRO
         Me.TextBoxMsg.Multiline = True
         Me.TextBoxMsg.Name = "TextBoxMsg"
         Me.TextBoxMsg.ShortcutsEnabled = False
-        Me.TextBoxMsg.Size = New System.Drawing.Size(546, 91)
+        Me.TextBoxMsg.Size = New System.Drawing.Size(546, 90)
         Me.TextBoxMsg.TabIndex = 9
         Me.TextBoxMsg.TabStop = False
+        '
+        'TableLayoutPanel3
+        '
+        Me.TableLayoutPanel3.ColumnCount = 1
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.Controls.Add(Me.RichTextBoxInfo, 0, 0)
+        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(4, 585)
+        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
+        Me.TableLayoutPanel3.RowCount = 1
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(552, 97)
+        Me.TableLayoutPanel3.TabIndex = 22
+        '
+        'RichTextBoxInfo
+        '
+        Me.RichTextBoxInfo.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.RichTextBoxInfo.DetectUrls = False
+        Me.RichTextBoxInfo.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBoxInfo.Enabled = False
+        Me.RichTextBoxInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RichTextBoxInfo.Location = New System.Drawing.Point(3, 3)
+        Me.RichTextBoxInfo.Name = "RichTextBoxInfo"
+        Me.RichTextBoxInfo.Size = New System.Drawing.Size(546, 91)
+        Me.RichTextBoxInfo.TabIndex = 0
+        Me.RichTextBoxInfo.TabStop = False
+        Me.RichTextBoxInfo.Text = ""
         '
         'DEBPRO
         '
@@ -489,6 +521,7 @@ Partial Class DEBPRO
         Me.TableLayoutPanel0.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
+        Me.TableLayoutPanel3.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -522,4 +555,6 @@ Partial Class DEBPRO
     Friend WithEvents MTextBoxQtéUC As MaskedTextBox
     Friend WithEvents LabelNbUN As Label
     Friend WithEvents MTextBoxNbUN As MaskedTextBox
+    Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
+    Friend WithEvents RichTextBoxInfo As RichTextBox
 End Class

@@ -541,3 +541,37 @@ Public Class WSLstPalGRP2
     End Sub
 End Class
 '########################################################################################################################
+
+Public Class WSTailPal
+    Public Property GRP1 As WSTailPalGRP1
+    Public Property GRP2 As List(Of WSTailPalGRP2)
+    Sub New()
+        GRP1 = New WSTailPalGRP1
+        GRP2 = New List(Of WSTailPalGRP2)
+    End Sub
+End Class
+Public Class WSTailPalGRP1
+    Public Property ZFCY As String
+    Public Property ZPOSTE As String
+    Public Property ZTYPOP As String
+    Public Property ZEMPNUM As Integer
+    Public Property ZRET As Integer
+    Public Property ZMSG As String
+    Sub New()
+        ZFCY = String.Empty
+        ZPOSTE = String.Empty
+        ZTYPOP = String.Empty
+        ZEMPNUM = 0
+        ZMSG = String.Empty
+        ZRET = 0
+    End Sub
+End Class
+Public Class WSTailPalGRP2
+    Public Property ZLIBPAL As String
+    Public Property ZDIMPAL As Integer
+    Sub New()
+        ZLIBPAL = String.Empty
+        ZDIMPAL = 0
+    End Sub
+End Class
+'########################################################################################################################
