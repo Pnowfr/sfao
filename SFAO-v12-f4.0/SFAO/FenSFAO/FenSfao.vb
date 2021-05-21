@@ -21,7 +21,7 @@ Public Class FenSfao
     Public WSsp As WSSitPs                  'classe de la situation du poste
     Public WSof As WSSitOF                  'classe de la situation des opérations
     Public WScp As WSSitCP                  'classe de la situation des composants
-    Public WSLstMns As New WSMns            'classe de la liste des motis de non solde
+    Public WSLstMns As New WSMns            'classe de la liste des motifs de non solde
     Public DtSFAO As String
 
     Private DblClc As Boolean
@@ -1384,6 +1384,114 @@ Public Class FenSfao
             Next
         End If
         Return xevent
+    End Function
+    'Fonction qui contrôle s'il y a un événement obligatoire
+    Public Sub EventOblig(ByVal _matr As Integer, ByRef _msgErr As String)
+        Dim xevtobl As Integer
+        Dim i As Integer
+        If WSsp.GRP2.Count > 0 Then
+            For i = 0 To WSsp.GRP2.Count - 1
+                If WSsp.GRP2(i).XEMPNUM > 0 AndAlso WSsp.GRP2(i).XEMPNUM = _matr Then
+                    If WSsp.GRP2(i).XEVENT > 0 Then
+                        xevtobl = WSsp.GRP2(i).ZEVTOBL
+                        Exit For
+                    End If
+                End If
+            Next
+            If xevtobl > 0 Then
+                _msgErr = "Phase %1% obligatoire !"
+                'Recherche du libellé dans la liste des phases du poste
+                For Each phs As Phase In Phases.OrderBy(Function(x) x.ordre)
+                    If phs.phase = xevtobl Then
+                        _msgErr = _msgErr.Replace("%1%", phs.desc)
+                        Exit For
+                    End If
+                Next
+            End If
+        End If
+    End Sub
+    'Fonction qui renvoie Vrai si l'on est à une étape de production
+    Public Function EtapePro(ByVal _of As String, ByVal _op As Integer) As Boolean
+        Dim etppro As Boolean
+        Dim i As Integer
+        If WSof.GRP2.Count > 0 Then
+            For i = 0 To WSof.GRP2.Count - 1
+                If WSof.GRP2(i).XMFGNUM = _of AndAlso WSof.GRP2(i).XOPENUM = _op Then
+                    If WSof.GRP2(i).ZMFGMST = 2 Then
+                        etppro = True
+                    Else
+                        etppro = False
+                    End If
+                    Exit For
+                End If
+            Next
+        End If
+        Return etppro
+    End Function
+    'Fonction qui renvoie Vrai si l'on est à une étape de palettisation
+    Public Function EtapePal(ByVal _of As String, ByVal _op As Integer) As Boolean
+        Dim etppal As Boolean
+        Dim i As Integer
+        If WSof.GRP2.Count > 0 Then
+            For i = 0 To WSof.GRP2.Count - 1
+                If WSof.GRP2(i).XMFGNUM = _of AndAlso WSof.GRP2(i).XOPENUM = _op Then
+                    If WSof.GRP2(i).ZOPEPAL = 2 Then
+                        etppal = True
+                    Else
+                        etppal = False
+                    End If
+                    Exit For
+                End If
+            Next
+        End If
+        Return etppal
+    End Function
+    'Fonction qui renvoie le nombre d'articles produits sur l'OF
+    Public Function NbArt(ByVal _of As String, ByVal _op As Integer) As Integer
+        Dim nbitm As Integer
+        Dim i As Integer
+        If WSof.GRP2.Count > 0 Then
+            For i = 0 To WSof.GRP2.Count - 1
+                If WSof.GRP2(i).XMFGNUM = _of AndAlso WSof.GRP2(i).XOPENUM = _op Then
+                    If WSof.GRP2(i).ZTCLCOD <> "EP" Then
+                        nbitm += 1
+                    End If
+                End If
+            Next
+        End If
+        Return nbitm
+    End Function
+    'Fonction qui renvoie l'unité de fabrication
+    Public Function UnitFab(ByVal _matr As Integer) As String
+        Dim uom As String = String.Empty
+        Dim i As Integer
+        If WSsp.GRP2.Count > 0 Then
+            For i = 0 To WSsp.GRP2.Count - 1
+                If WSsp.GRP2(i).XEMPNUM > 0 AndAlso WSsp.GRP2(i).XEMPNUM = _matr Then
+                    If WSsp.GRP2(i).ZOPEXC > 0 Then
+                        uom = WSsp.GRP2(i).ZPREUOM
+                    Else
+                        uom = WSsp.GRP2(i).ZOPEUOM
+                    End If
+                    Exit For
+                End If
+            Next
+        End If
+        Return uom
+    End Function
+    'Fonction qui convertit l'unité pour affichage dans un format lisible pour l'opérateur
+    Public Function AffUnit(ByVal _unit As String) As String
+        Dim unit As String = String.Empty
+        Select Case _unit
+            Case "MLF"
+                unit = "ML"
+            Case "M2"
+                unit = "M²"
+            Case Else
+                unit = _unit
+        End Select
+
+        Return unit
     End Function
     'on contrôle si un événement en cours bloque la sortie opérateur
     Public Sub EventEnCoursSortie(ByVal _matr As Integer, ByRef _xevent As Integer, ByRef _msgErr As String)

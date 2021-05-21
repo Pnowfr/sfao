@@ -45,9 +45,9 @@ Partial Class FINOP
         Me.MTextBoxTotEnc = New System.Windows.Forms.MaskedTextBox()
         Me.TableLayoutPanel0 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.RichTextBoxInfo = New System.Windows.Forms.RichTextBox()
-        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.TextBoxMsg = New System.Windows.Forms.TextBox()
+        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.RichTextBoxInfo = New System.Windows.Forms.RichTextBox()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel0.SuspendLayout()
@@ -241,7 +241,8 @@ Partial Class FINOP
         '
         'MTextBoxTotVer
         '
-        Me.MTextBoxTotVer.Location = New System.Drawing.Point(223, 290)
+        Me.MTextBoxTotVer.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.MTextBoxTotVer.Location = New System.Drawing.Point(223, 293)
         Me.MTextBoxTotVer.Mask = "999"
         Me.MTextBoxTotVer.MaximumSize = New System.Drawing.Size(116, 35)
         Me.MTextBoxTotVer.Name = "MTextBoxTotVer"
@@ -312,6 +313,7 @@ Partial Class FINOP
         '
         'MTextBoxTotEnc
         '
+        Me.MTextBoxTotEnc.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.MTextBoxTotEnc.Location = New System.Drawing.Point(223, 249)
         Me.MTextBoxTotEnc.Mask = "999"
         Me.MTextBoxTotEnc.MaximumSize = New System.Drawing.Size(116, 35)
@@ -357,33 +359,6 @@ Partial Class FINOP
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(552, 130)
         Me.TableLayoutPanel2.TabIndex = 21
         '
-        'RichTextBoxInfo
-        '
-        Me.RichTextBoxInfo.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.RichTextBoxInfo.DetectUrls = False
-        Me.RichTextBoxInfo.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.RichTextBoxInfo.Enabled = False
-        Me.RichTextBoxInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RichTextBoxInfo.Location = New System.Drawing.Point(3, 3)
-        Me.RichTextBoxInfo.Name = "RichTextBoxInfo"
-        Me.RichTextBoxInfo.Size = New System.Drawing.Size(546, 193)
-        Me.RichTextBoxInfo.TabIndex = 0
-        Me.RichTextBoxInfo.TabStop = False
-        Me.RichTextBoxInfo.Text = ""
-        '
-        'TableLayoutPanel3
-        '
-        Me.TableLayoutPanel3.ColumnCount = 1
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel3.Controls.Add(Me.RichTextBoxInfo, 0, 0)
-        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(4, 483)
-        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
-        Me.TableLayoutPanel3.RowCount = 1
-        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(552, 199)
-        Me.TableLayoutPanel3.TabIndex = 20
-        '
         'TextBoxMsg
         '
         Me.TextBoxMsg.BorderStyle = System.Windows.Forms.BorderStyle.None
@@ -398,6 +373,33 @@ Partial Class FINOP
         Me.TextBoxMsg.Size = New System.Drawing.Size(546, 124)
         Me.TextBoxMsg.TabIndex = 9
         Me.TextBoxMsg.TabStop = False
+        '
+        'TableLayoutPanel3
+        '
+        Me.TableLayoutPanel3.ColumnCount = 1
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.Controls.Add(Me.RichTextBoxInfo, 0, 0)
+        Me.TableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(4, 483)
+        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
+        Me.TableLayoutPanel3.RowCount = 1
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(552, 199)
+        Me.TableLayoutPanel3.TabIndex = 20
+        '
+        'RichTextBoxInfo
+        '
+        Me.RichTextBoxInfo.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.RichTextBoxInfo.DetectUrls = False
+        Me.RichTextBoxInfo.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBoxInfo.Enabled = False
+        Me.RichTextBoxInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RichTextBoxInfo.Location = New System.Drawing.Point(3, 3)
+        Me.RichTextBoxInfo.Name = "RichTextBoxInfo"
+        Me.RichTextBoxInfo.Size = New System.Drawing.Size(546, 193)
+        Me.RichTextBoxInfo.TabIndex = 0
+        Me.RichTextBoxInfo.TabStop = False
+        Me.RichTextBoxInfo.Text = ""
         '
         'FINOP
         '

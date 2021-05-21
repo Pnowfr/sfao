@@ -111,22 +111,22 @@ Public Class DEBINT
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
         If MsgErr = "" Then
             'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
-            FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
-            If MsgErr = "" Then
-                'si type matricule <> 1 (opérateur)
-                If FenSfao.TypeMatr(matr) <> 1 Then
-                    'si type non opérateur : on vérifie si opération hors OF en cours
-                    FenSfao.OpHof(matr, MsgErr)
-                End If
-                If MsgErr = "" Then
-                    'si ok on vérifie si l'opérateur a déjà une opération en cours
-                    'juste pour l'affichage OF/op
-                    FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
-                    'pour l'interruption, il n'est pas nécessaire d'avoir une opération en cours
-                    'on efface donc l'éventuel message d'erreur
-                    MsgErr = ""
-                End If
+            'FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
+            'If MsgErr = "" Then
+            'si type matricule <> 1 (opérateur)
+            If FenSfao.TypeMatr(matr) <> 1 Then
+                'si type non opérateur : on vérifie si opération hors OF en cours
+                FenSfao.OpHof(matr, MsgErr)
             End If
+            If MsgErr = "" Then
+                'si ok on vérifie si l'opérateur a déjà une opération en cours
+                'juste pour l'affichage OF/op
+                FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
+                'pour l'interruption, il n'est pas nécessaire d'avoir une opération en cours
+                'on efface donc l'éventuel message d'erreur
+                MsgErr = ""
+            End If
+            'End If
         End If
     End Sub
 
@@ -153,6 +153,10 @@ Public Class DEBINT
         Next
 
         'tout va bien on enregistre le début d'interruption
+
+        'affichage le load dans 100 ms
+        Call FenSfao.WaitGif(True, 100)
+
         Try
             debint = X3ws.WSDEBINT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), retMsg)
         Catch ex As Exception
@@ -164,6 +168,10 @@ Public Class DEBINT
                 GoTo ErreurDebint
             Case 0 'Erreur blocage 
                 Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+                Me.DialogResult = DialogResult.Abort
+                Me.Close()
+                'On masque le load dans 0.5s
+                Call FenSfao.WaitGif(False, 500)
             Case 1 'ok
                 Me.DialogResult = DialogResult.OK
         End Select
@@ -177,7 +185,8 @@ ErreurDebint:
         End If
         Me.DialogResult = DialogResult.Abort
         Me.Close()
-
+        'On masque le load dans 0.5s
+        Call FenSfao.WaitGif(False, 500)
 
     End Sub
 

@@ -111,21 +111,24 @@ Public Class DEBDEM
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
         If MsgErr = "" Then
             'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
-            FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
-            If MsgErr = "" Then
-                'si ok on vérifie si opérateur est en opération hors OF
-                FenSfao.OpHof(matr, MsgErr)
+            'FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
+            'If MsgErr = "" Then
+            'si ok on vérifie si opérateur est en opération hors OF
+            FenSfao.OpHof(matr, MsgErr)
                 If MsgErr = "" Then
                     'si ok on vérifie si l'opérateur a déjà une opération en cours
                     FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
                     If MsgErr = "" Then
-                        'si ok on vérifie si l'opérateur n'est pas déjà en démontage
-                        If FenSfao.EventEnCours(matr) = CInt(Me.Tag) Then
-                            MsgErr = "Vous êtes déjà en démontage"
+                        FenSfao.EventOblig(matr, MsgErr)
+                        If MsgErr = "" Then
+                            'si ok on vérifie si l'opérateur n'est pas déjà en démontage
+                            If FenSfao.EventEnCours(matr) = CInt(Me.Tag) Then
+                                MsgErr = "Vous êtes déjà en démontage"
+                            End If
                         End If
                     End If
                 End If
-            End If
+            'End If
         End If
     End Sub
 
@@ -164,6 +167,10 @@ Public Class DEBDEM
         Next
 
         'tout va bien on enregistre le début d'interruption
+
+        'affichage le load dans 100 ms
+        Call FenSfao.WaitGif(True, 100)
+
         Try
             debdem = X3ws.WSDEBDEM(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), retMsg)
         Catch ex As Exception
@@ -175,6 +182,10 @@ Public Class DEBDEM
                 GoTo ErreurDebdem
             Case 0 'Erreur blocage 
                 Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+                Me.DialogResult = DialogResult.Abort
+                Me.Close()
+                'On masque le load dans 0.5s
+                Call FenSfao.WaitGif(False, 500)
             Case 1 'ok
                 Me.DialogResult = DialogResult.OK
         End Select
@@ -188,7 +199,8 @@ ErreurDebdem:
         End If
         Me.DialogResult = DialogResult.Abort
         Me.Close()
-
+        'On masque le load dans 0.5s
+        Call FenSfao.WaitGif(False, 500)
 
     End Sub
 

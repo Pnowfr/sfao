@@ -134,15 +134,15 @@ Public Class DEBRGL
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
         If MsgErr = "" Then
             'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
-            FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
-            If MsgErr = "" Then
-                'si ok on vérifie si opérateur est en opération hors OF
-                FenSfao.OpHof(matr, MsgErr)
+            'FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
+            'If MsgErr = "" Then
+            'si ok on vérifie si opérateur est en opération hors OF
+            FenSfao.OpHof(matr, MsgErr)
                 If MsgErr = "" Then
                     'si ok on vérifie si l'opérateur a déjà une opération en cours
                     FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
                 End If
-            End If
+            'End If
         End If
     End Sub
 
@@ -221,6 +221,10 @@ Public Class DEBRGL
         Next
 
         'tout va bien on enregistre le début de réglage
+
+        'affichage le load dans 100 ms
+        Call FenSfao.WaitGif(True, 100)
+
         Try
             debrgl = X3ws.WSDEBRGL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), PhaseSelect, retMsg)
         Catch ex As Exception
@@ -232,6 +236,10 @@ Public Class DEBRGL
                 GoTo ErreurDebrgl
             Case 0 'Erreur blocage 
                 Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+                Me.DialogResult = DialogResult.Abort
+                Me.Close()
+                'On masque le load dans 0.5s
+                Call FenSfao.WaitGif(False, 500)
             Case 1 'ok
                 Me.DialogResult = DialogResult.OK
         End Select
@@ -245,11 +253,9 @@ ErreurDebrgl:
         End If
         Me.DialogResult = DialogResult.Abort
         Me.Close()
-
-
-    End Sub
-
-    Private Sub BtnOk_EnabledChanged(sender As Object, e As EventArgs) Handles BtnOk.EnabledChanged
+        'On masque le load dans 0.5s
+        Call FenSfao.WaitGif(False, 500)
 
     End Sub
+
 End Class
