@@ -93,7 +93,7 @@ Public Class ENTOP
                 ElseIf AutrePoste <> "" And AutrePoste <> SFAO.Poste.GRP1.WST Then 'si matricule présent sur un aurtre poste
                     result = MsgBox("Matricule déjà présent sur le poste " & AutrePoste & "." & Environment.NewLine & "Voulez-vous saisir son départ ?", CType(MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, MsgBoxStyle))
                     If result = MsgBoxResult.Yes Then
-                        'TODO PNO lancer la sortie du matricule d'un autre poste
+                        'lancerment de la sortie du matricule d'un autre poste
                         SOROP.SetWstSor = AutrePoste                'spécifie le poste sur le quel se fera la sortie
                         SOROP.SetMtrSor = Matricule                 'spécifie le matricule à sortir
                         SOROP.SetNomSor = TextBoxNom.Text           'spécifie le nom du matricule à sortir

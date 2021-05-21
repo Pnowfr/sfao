@@ -105,3 +105,4 @@ C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.vbprojAssemblyReference.ca
 C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.DEBDEM.resources
 C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.DEBINT.resources
 C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.FINOP.resources
+C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.DEBPRO.resources
