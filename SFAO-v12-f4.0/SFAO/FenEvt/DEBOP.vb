@@ -114,15 +114,15 @@ Public Class DEBOP
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
         If MsgErr = "" Then
             'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
-            FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
-            If MsgErr = "" Then
-                'si ok on vérifie si opérateur est en opération hors OF
-                FenSfao.OpHof(matr, MsgErr)
+            'FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
+            'If MsgErr = "" Then
+            'si ok on vérifie si opérateur est en opération hors OF
+            FenSfao.OpHof(matr, MsgErr)
                 If MsgErr = "" Then
                     'si ok on vérifie si l'opérateur a déjà une opération en cours
                     FenSfao.OpEnCours(matr, MsgErr)
                 End If
-            End If
+            'End If
         End If
     End Sub
     Private Sub MTextBoxMatr_Validated(sender As Object, e As EventArgs) Handles MTextBoxMatr.Validated

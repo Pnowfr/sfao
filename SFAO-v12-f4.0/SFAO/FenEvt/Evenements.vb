@@ -6,6 +6,7 @@ Module Evenements
     'Fonction qui déclenche l'affichage d'un événement, par défaut c'est une événement de début. pour un événement de fin on peut indiquer l'événement appelant
     Public Function AfficheEvt(ByVal NumEvt As Integer, Optional ByVal DebFin As String = "D", Optional ByVal EvtEnCours As Integer = 0) As DialogResult
         AfficheEvt = DialogResult.None
+        Dim MsgErr As String = String.Empty
 
         If UpdSFAO = True Then '020421PNO.n
             SFAO.UpdateTimer.Stop() 'on met en pose la vérification de mise à jour pendant l'execution des événements
@@ -19,33 +20,63 @@ Module Evenements
                 AfficheEvt = LanceEvt(NumEvt, CType(SOROP, Form))
             Case 1010 'Début opération 
                 If DebFin = "D" Then    'début événement simple 
-                    'si aucun opérateur présent on ne permet pas de déclencher un début opération
-                    If NbrMatr(True) > 0 Then
-                        AfficheEvt = LanceEvt(NumEvt, CType(DEBOP, Form))
+                    'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
+                    FenSfao.DureeMaxPresenceDepassee(MsgErr, True)
+                    If MsgErr = "" Then
+                        'Contrôle s'il y a au moins un opérateur présent
+                        If NbrMatr(True) > 0 Then
+                            AfficheEvt = LanceEvt(NumEvt, CType(DEBOP, Form))
+                        End If
                     End If
                 Else
                     'on ne déclenche pas la fin d'opération automatiquement 
                     'seul de départ opérateur permet de déclencher une 'fin d'opération'
+                    'TODO PNO : la fin d'opération se déclanche par l'événement 1090 FINOP ?
                     If EvtEnCours = 1100 Then 'départ opérateur
                         'TODO affichage d'une fenêtre temporaire pour déclencher la fin d'opération en cours
                     End If
                     AfficheEvt = DialogResult.OK
                 End If
             Case 1020 'Matières utilisées
-
-                If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
-                    AfficheEvt = LanceEvt(NumEvt, CType(MATUTL, Form))
+                'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
+                FenSfao.DureeMaxPresenceDepassee(MsgErr, True)
+                If MsgErr = "" Then
+                    'Contrôle s'il y a au moins un opérateur présent et une opération en cours
+                    If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
+                        AfficheEvt = LanceEvt(NumEvt, CType(MATUTL, Form))
+                    End If
                 End If
 
             Case 1030 'Réglages
                 If DebFin = "D" Then    'début événement simple
-                    If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
-                        AfficheEvt = LanceEvt(NumEvt, CType(DEBRGL, Form))
+                    'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
+                    FenSfao.DureeMaxPresenceDepassee(MsgErr, True)
+                    If MsgErr = "" Then
+                        'Contrôle s'il y a au moins un opérateur présent et une opération en cours
+                        If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
+                            AfficheEvt = LanceEvt(NumEvt, CType(DEBRGL, Form))
+                        End If
                     End If
                 Else
                     'TODO voir comment on déclanche la fin d'un réglage ????
 
                 End If
+
+            Case 1040 'Production
+                If DebFin = "D" Then    'début événement simple
+                    'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
+                    FenSfao.DureeMaxPresenceDepassee(MsgErr, True)
+                    If MsgErr = "" Then
+                        'Contrôle s'il y a au moins un opérateur présent et une opération en cours
+                        If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
+                            AfficheEvt = LanceEvt(NumEvt, CType(DEBPRO, Form))
+                        End If
+                    End If
+                Else
+                    'TODO voir comment on déclanche la fin de production ????
+
+                End If
+
             Case 1050 'Test déclaration
                 'MsgBox("Test ZPL")
                 'MsgBox("Test ZPL 2 ")
@@ -80,8 +111,13 @@ Module Evenements
 
             Case 1070 'Démontage 
                 If DebFin = "D" Then    'début événement simple
-                    If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
-                        AfficheEvt = LanceEvt(NumEvt, CType(DEBDEM, Form))
+                    'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
+                    FenSfao.DureeMaxPresenceDepassee(MsgErr, True)
+                    If MsgErr = "" Then
+                        'Contrôle s'il y a au moins un opérateur présent et une opération en cours
+                        If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
+                            AfficheEvt = LanceEvt(NumEvt, CType(DEBDEM, Form))
+                        End If
                     End If
                 Else
                     'TODO voir comment on déclanche la fin d'une interruption ????
@@ -90,8 +126,14 @@ Module Evenements
 
             Case 1080 'Interruption 
                 If DebFin = "D" Then    'début événement simple
-                    If NbrMatr(True) > 0 Then
-                        AfficheEvt = LanceEvt(NumEvt, CType(DEBINT, Form))
+                    'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
+                    FenSfao.DureeMaxPresenceDepassee(MsgErr, True)
+                    If MsgErr = "" Then
+                        'Contrôle s'il y a au moins un opérateur présent
+                        '(opération en cours non obligatoire pour une interruption)
+                        If NbrMatr(True) > 0 Then
+                            AfficheEvt = LanceEvt(NumEvt, CType(DEBINT, Form))
+                        End If
                     End If
                 Else
                     'TODO voir comment on déclanche la fin d'une interruption ????
@@ -99,8 +141,13 @@ Module Evenements
                 End If
 
             Case 1090 'Fin opération
-                If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
-                    AfficheEvt = LanceEvt(NumEvt, CType(FINOP, Form))
+                'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
+                FenSfao.DureeMaxPresenceDepassee(MsgErr, True)
+                If MsgErr = "" Then
+                    'Contrôle s'il y a au moins un opérateur présent et une opération en cours
+                    If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
+                        AfficheEvt = LanceEvt(NumEvt, CType(FINOP, Form))
+                    End If
                 End If
 
             Case 1283
