@@ -7,7 +7,7 @@ Imports System.ComponentModel
 Imports System.Text.RegularExpressions
 Public Class DEBPRO
     Private ofop As WSOFOPInfo
-    Public WSLstTypEtq As New WSTypEtq            'classe de la liste des types d'étiquettes
+    Private WSLstTypEtq As New WSTypEtq            'classe de la liste des types d'étiquettes
 
     Private Sub DEBPRO_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim zTailFnt As Single
@@ -46,7 +46,11 @@ Public Class DEBPRO
         If MTextBoxMatr.Text <> "" And MsgErr = "" Then
             MTextBoxMatr.Enabled = False    'on a 1 seul opérateur présent sur le poste, donc on désactive la saisie du champ matricule
             'Sélection auto du 1er champ saisi
-
+            If ComboBoxSaiPds.Visible = True Then
+                ComboBoxSaiPds.Select()
+            Else
+                ComboBoxTypEtq.Select()
+            End If
         Else
             'Sélection auto du 1er champ saisi
             MTextBoxMatr.Select()
@@ -56,6 +60,7 @@ Public Class DEBPRO
         zTailFnt = FenSfao.TaillePolice(18, 9)
         fnt = New Font("Microsoft Sans Serif", zTailFnt, FontStyle.Regular)
         Me.Font = fnt
+        'TODO PNO : voir comment réduire la taille de police pour les titres de colonne
 
     End Sub
     'Fonction qui gère le changement de taille des polices en fonction de la taille de la fenêtre
@@ -144,7 +149,7 @@ Public Class DEBPRO
         Dim nbunit As Integer
         Dim i As Integer
         Dim typetq As String = String.Empty
-        Dim LstTailPal As New WSTailPal
+        Dim titcol As String = String.Empty
 
         'On récupère l'unité de fabrication et on la convertit dans un format lisible pour l'opérateur
         TextBoxUOM.Text = FenSfao.AffUnit(FenSfao.UnitFab(matr))
@@ -157,6 +162,7 @@ Public Class DEBPRO
                 ComboBoxSaiPds.Enabled = False
                 ComboBoxSaiPds.Visible = False
             Else 'Contrôle de l'article produit
+                Trace("Contrôle de la saisie du poids")
                 Try
                     Trace("Appel du web service WSSAIPDS")
                     resws = X3ws.WSSAIPDS(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), repdef, retMsg)
@@ -196,6 +202,7 @@ Public Class DEBPRO
                     LabelAmalg.Text = "Article produit"
                 Else
                     'Amalgame : recherche du nombre de bobines filles
+                    Trace("Recherche du nombre de bobines filles (amalgame)")
                     Try
                         Trace("Appel du web service WSGETNBBOB")
                         nbbob = X3ws.WSGETNBBOB(SFAO.Site.GRP1.FCY, numof, numop, retMsg)
@@ -225,30 +232,30 @@ Public Class DEBPRO
 
         If MsgErr = "" Then
             'Récupération de la liste des types d'étiquettes
+            Trace("Récupération de la liste des types d'étiquettes")
             Try
                 Trace("Appel du web service WSGETLETQ")
                 WSLstTypEtq = X3ws.WSGETLETQ("P")
-                If WSLstTypEtq.GRP1.ZRET = 1 Then
-                    For i = 0 To WSLstTypEtq.GRP2.Count - 1
-                        ComboBoxTypEtq.Items.Add(WSLstTypEtq.GRP2(i).LNGDES)
-                    Next i
-                Else
-                    MsgErr = WSLstTypEtq.GRP1.ZMSG
-                    TextBoxMsg.Text = MsgErr
-                    ErrorProvider.SetError(ComboBoxTypEtq, MsgErr)
-                    System.Media.SystemSounds.Exclamation.Play()
-                End If
-
             Catch ex As Exception
+                Trace("Exception à l'appel du web service WSGETLETQ")
                 MsgErr = "Erreur de récupération de la liste de types d'étiquettes ! "
+            End Try
+
+            If WSLstTypEtq.GRP1.ZRET = 1 Then
+                For i = 0 To WSLstTypEtq.GRP2.Count - 1
+                    ComboBoxTypEtq.Items.Add(WSLstTypEtq.GRP2(i).LNGDES)
+                Next i
+            Else
+                MsgErr = WSLstTypEtq.GRP1.ZMSG
                 TextBoxMsg.Text = MsgErr
                 ErrorProvider.SetError(ComboBoxTypEtq, MsgErr)
                 System.Media.SystemSounds.Exclamation.Play()
-            End Try
+            End If
         End If
 
         If MsgErr = "" Then
             'Type d'étiquettes par défaut
+            Trace("Recherche du type d'étiquettes par défaut")
             Try
                 Trace("Appel du web service WSGETTETQ")
                 resws = X3ws.WSGETTETQ(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), typetq, retMsg)
@@ -293,6 +300,7 @@ Public Class DEBPRO
                 End Select
 
                 'Quantité conditionnement
+                Trace("Recherche de la quantité de conditionnement")
                 Try
                     Trace("Appel du web service WSGETQPCU")
                     qtepcu = X3ws.WSGETQPCU(SFAO.Site.GRP1.FCY, numof, numop, retMsg)
@@ -342,6 +350,7 @@ Public Class DEBPRO
                     'Si pas d'amalgamme : recherche du nombre de bobines filles
                     If nbbob = 0 Then
                         'Si webservice non exécuté précédemment
+                        Trace("Recherche du nombre de bobines filles (Nb UC / déclaration)")
                         Try
                             Trace("Appel du web service WSGETNBBOB")
                             nbbob = X3ws.WSGETNBBOB(SFAO.Site.GRP1.FCY, numof, numop, retMsg)
@@ -374,6 +383,7 @@ Public Class DEBPRO
         If MsgErr = "" Then
             'Nb unités / format
             If Strings.Left(SFAO.Poste.GRP1.Y_TYPOP, 3) = "EMB" Then
+                Trace("Recherche du nombre d'unités par format (emballage)")
                 Try
                     Trace("Appel du web service WSGETNBUN")
                     nbunit = X3ws.WSGETNBUN(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), retMsg)
@@ -396,25 +406,41 @@ Public Class DEBPRO
             End If
         End If
 
-        If MsgErr = "" AndAlso FenSfao.EtapePro(numof, numop) = True Then
-            'Si étape de production
-            Trace("Recherche des tailles de palettes")
-            Try
-                Trace("Appel du web service WSTAILPAL")
-                LstTailPal = X3ws.WSTAILPAL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text))
-            Catch ex As Exception
-                Trace("Exception à l'appel du web service WSTAILPAL")
-                MsgErr = "Erreur à la recherche des tailles de palettes"
-            End Try
-
-            If LstTailPal.GRP2.Count > 0 Then
-                For i = 0 To LstTailPal.GRP2.Count - 1
-                    If i = 0 Then
-                        RichTextBoxInfo.Text = LstTailPal.GRP2(i).ZLIBPAL + " : " + CStr(LstTailPal.GRP2(i).ZDIMPAL)
-                    Else
-                        RichTextBoxInfo.Text += vbNewLine + LstTailPal.GRP2(i).ZLIBPAL + " : " + CStr(LstTailPal.GRP2(i).ZDIMPAL)
+        If MsgErr = "" Then
+            If FenSfao.EtapePro(numof, numop) = True AndAlso FenSfao.EtapePal(numof, numop) = True AndAlso FenSfao.OpExc(matr) = 0 Then
+                'Si étape de production et de palettisation, opération non exceptionnelle
+                'Saisie taille des palettes par PF
+                Select Case Strings.Left(SFAO.Poste.GRP1.Y_TYPOP, 3)
+                    Case "EMB"
+                        If TextBoxUOM.Text = "UN" Then
+                            LabelPal.Text = "Nb paquets / palette"
+                        Else
+                            LabelPal.Text = "Nb bobines / palette"
+                        End If
+                    Case "FAC"
+                        LabelPal.Text = "Nb paquets / palette"
+                    Case Else
+                        LabelPal.Text = "Nb bobines / palette"
+                End Select
+                If FenSfao.WSof.GRP2.Count > 0 Then
+                    For i = 0 To FenSfao.WSof.GRP2.Count - 1
+                        If FenSfao.WSof.GRP2(i).ZCODAMLG <> String.Empty Then
+                            titcol = "Column" + FenSfao.WSof.GRP2(i).ZCODAMLG
+                            DataGridPal.Columns(titcol).HeaderText = FenSfao.WSof.GRP2(i).ZITMREF
+                        End If
+                    Next
+                End If
+                For Each col As DataGridViewColumn In DataGridPal.Columns
+                    If col.HeaderText.Length = 1 Then
+                        col.Visible = False
                     End If
                 Next
+                'On ajoute une ligne de saisie
+                DataGridPal.Rows.Add()
+            Else
+                LabelPal.Visible = False
+                DataGridPal.Visible = False
+                DataGridPal.Enabled = False
             End If
         End If
 
@@ -435,7 +461,10 @@ Public Class DEBPRO
 
     Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles BtnOk.Click
         Dim retMsg As String = String.Empty
-        Dim finop As Integer = -1
+        Dim titcol As String
+        Dim msgpal As String
+        Dim WSLstDebPro As New WSDebPro
+        Dim i As Integer
         Dim result As MsgBoxResult
         result = MsgBoxResult.Ok
 
@@ -445,36 +474,89 @@ Public Class DEBPRO
                 Exit Sub
             End If
         Next
+        If ComboBoxSaiPds.Visible = True AndAlso ComboBoxSaiPds.Text = "" Then
+            ErrorProvider.SetError(ComboBoxSaiPds, "Oui/Non")
+            ComboBoxSaiPds.Select()
+            Exit Sub
+        End If
+        If ComboBoxTypEtq.Text = "" Then
+            ErrorProvider.SetError(ComboBoxTypEtq, "Type d'étiquette obligatoire")
+            ComboBoxTypEtq.Select()
+            Exit Sub
+        End If
+        If TextAmalg.Visible = True AndAlso TextAmalg.Text = "" Then
+            ErrorProvider.SetError(TextAmalg, "Séquence d'amalgame obligatoire")
+            TextAmalg.Select()
+            Exit Sub
+        End If
+
+        If DataGridPal.Visible = True Then
+            'Contrôle saisie des tailles palettes
+            If FenSfao.WSof.GRP2.Count > 0 Then
+                For i = 0 To FenSfao.WSof.GRP2.Count - 1
+                    If FenSfao.WSof.GRP2(i).ZCODAMLG <> String.Empty Then
+                        titcol = "Column" + FenSfao.WSof.GRP2(i).ZCODAMLG
+                        If DataGridPal.Item(DataGridPal.Columns(titcol).Index, 0).EditedFormattedValue.ToString = "" Then
+                            msgpal = LabelPal.Text + " non spécifié : La déclaration automatique va être désactivée !"
+                            Trace(msgpal)
+                            msgpal += vbNewLine + "Voulez-vous continuer ?"
+                            result = MsgBox(msgpal, CType(MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, MsgBoxStyle))
+                            If result = MsgBoxResult.No Then
+                                Exit Sub
+                            End If
+                        Else
+                            Dim wsdp2 As New WSDebProGRP2
+                            wsdp2.ZNPAL = FenSfao.WSof.GRP2(i).ZLIGITM
+                            wsdp2.ZTPAL = CInt(DataGridPal.Item(DataGridPal.Columns(titcol).Index, 0).EditedFormattedValue.ToString)
+                            WSLstDebPro.GRP2.Add(wsdp2)
+                        End If
+                    End If
+                Next
+            End If
+        End If
 
         'tout va bien on enregistre la fin d'opération + suivi auto du temps passé depuis le dernier évenement
 
         'affichage le load dans 100 ms
         Call FenSfao.WaitGif(True, 100)
 
+        WSLstDebPro.GRP1.ZFCY = SFAO.Site.GRP1.FCY
+        WSLstDebPro.GRP1.ZPOSTE = SFAO.Poste.GRP1.WST
+        WSLstDebPro.GRP1.ZTYPOP = SFAO.Poste.GRP1.Y_TYPOP
+        WSLstDebPro.GRP1.ZEMPNUM = CInt(MTextBoxMatr.Text)
+        WSLstDebPro.GRP1.ZEVTNUM = CInt(Me.Tag)
+        WSLstDebPro.GRP1.ZTYPETQ = ComboBoxTypEtq.Text
+        WSLstDebPro.GRP1.ZSAIPDS = ComboBoxSaiPds.Text
+        WSLstDebPro.GRP1.ZAMALGAME = TextAmalg.Text
+        If MTextBoxQtéUC.Text <> "" Then
+            WSLstDebPro.GRP1.ZQTYPCU = CInt(MTextBoxQtéUC.Text)
+        End If
+        If MTextBoxNbUC.Text <> "" Then
+            WSLstDebPro.GRP1.ZNBPCU = CInt(MTextBoxNbUC.Text)
+        End If
+        If MTextBoxNbUN.Text <> "" Then
+            WSLstDebPro.GRP1.ZNBUN = CInt(MTextBoxNbUN.Text)
+        End If
+
         Try
-            Trace("Appel du web service WSFINOPE")
-            finop = X3ws.WSFINOPE(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), ComboBoxSaiPds.Text, ComboBoxTypEtq.Text, retMsg)
+            Trace("Appel du web service WSDEBPRO")
+            WSLstDebPro = X3ws.WSDEBPRO(WSLstDebPro)
         Catch ex As Exception
-            GoTo ErreurFinop
+            Trace("Exception à l'appel du web service WSDEBPRO")
+            GoTo ErreurDebpro
         End Try
 
-        Select Case finop
-            Case -1 'Erreur du web service
-                GoTo ErreurFinop
-            Case 0 'Erreur blocage 
-                Trace(retMsg, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
-                Me.DialogResult = DialogResult.Abort
-                Me.Close()
-                'On masque le load dans 0.5s
-                Call FenSfao.WaitGif(False, 500)
-            Case 1 'ok
-                Me.DialogResult = DialogResult.OK
-        End Select
+        If WSLstDebPro.GRP1.ZRET = 1 Then
+            Me.DialogResult = DialogResult.OK
+        Else
+            retMsg = WSLstTypEtq.GRP1.ZMSG
+            GoTo ErreurDebpro
+        End If
 
         Exit Sub
 
-ErreurFinop:
-        Trace("Erreur d'enregistrement de fin d'opération ! ", FichierTrace.niveau.alerte)
+ErreurDebpro:
+        Trace("Erreur d'enregistrement de début de production ! ", FichierTrace.niveau.alerte)
         If retMsg <> "" Then
             Trace(retMsg, FichierTrace.niveau.erreur)
         End If
@@ -516,6 +598,102 @@ ErreurFinop:
     Private Sub ComboBoxTypEtq_Validated(sender As Object, e As EventArgs) Handles ComboBoxTypEtq.Validated
         'on efface les erreurs précédentes
         ErrorProvider.SetError(ComboBoxTypEtq, "")
+        TextBoxMsg.Text = ""
+    End Sub
+
+    Private Sub TextAmalg_GotFocus(sender As Object, e As EventArgs) Handles TextAmalg.GotFocus
+        If ErrorProvider.GetError(TextAmalg).ToString = "" Then
+            TextBoxMsg.Text = AmalgMsg()
+        End If
+        TextAmalg.Select()
+    End Sub
+    Private Function AmalgMsg() As String
+        Dim MsgInf As String
+        Dim i As Integer
+        MsgInf = "Codes amalgames :" + vbNewLine
+        If FenSfao.WSof.GRP2.Count > 0 Then
+            For i = 0 To FenSfao.WSof.GRP2.Count - 1
+                If FenSfao.WSof.GRP2(i).ZCODAMLG <> String.Empty Then
+                    MsgInf += FenSfao.WSof.GRP2(i).ZCODAMLG + " = " + FenSfao.WSof.GRP2(i).ZITMREF + " - "
+                End If
+            Next
+        End If
+
+        Return MsgInf
+    End Function
+
+    Private Sub TextAmalg_Validating(sender As Object, e As CancelEventArgs) Handles TextAmalg.Validating
+        Dim LstAmlg As String = String.Empty
+        Dim i As Integer
+
+        If TextAmalg.Text = "" Then
+            e.Cancel = True
+            ErrorProvider.SetError(TextAmalg, "Séquence d'amalgame obligatoire")
+            TextAmalg.Select()
+        Else
+            If FenSfao.OpExc(CInt(MTextBoxMatr.Text)) > 0 Then
+                'Contrôle : une seule bobine autorisée
+                If TextAmalg.Text.Length > 1 Then
+                    e.Cancel = True
+                    ErrorProvider.SetError(TextAmalg, "Opération exceptionnelle : 1 seule bobine produite autorisée")
+                    TextBoxMsg.Text = "Opération exceptionnelle : 1 seule bobine produite autorisée"
+                    TextBoxMsg.Text += vbNewLine + AmalgMsg()
+                    TextAmalg.Select()
+                    Exit Sub
+                End If
+            End If
+            If FenSfao.WSof.GRP2.Count > 0 Then
+                For i = 0 To FenSfao.WSof.GRP2.Count - 1
+                    If FenSfao.WSof.GRP2(i).ZCODAMLG <> String.Empty Then
+                        LstAmlg += FenSfao.WSof.GRP2(i).ZCODAMLG
+                    End If
+                Next
+            End If
+            For Each ch As Char In TextAmalg.Text
+                If LstAmlg.Contains(ch) = False Then
+                    e.Cancel = True
+                    ErrorProvider.SetError(TextAmalg, "Caractère <" + ch + "> incorrect dans la séquence d'amalgame")
+                    TextBoxMsg.Text = "Caractère <" + ch + "> incorrect dans la séquence d'amalgame !"
+                    TextBoxMsg.Text += vbNewLine + AmalgMsg()
+                    TextAmalg.Select()
+                    Exit Sub
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub TextAmalg_Validated(sender As Object, e As EventArgs) Handles TextAmalg.Validated
+        'on efface les erreurs précédentes
+        ErrorProvider.SetError(TextAmalg, "")
+        TextBoxMsg.Text = ""
+    End Sub
+
+    Private Sub MTextBoxNbUC_Validating(sender As Object, e As CancelEventArgs) Handles MTextBoxNbUC.Validating
+        If CInt(MTextBoxNbUC.Text) > 30 Then
+            e.Cancel = True
+            ErrorProvider.SetError(MTextBoxNbUC, "Nombre de conditionnements <= 30")
+            TextBoxMsg.Text = "Le nombre de conditionnements doit être inférieur ou égal à 30 !"
+            MTextBoxNbUC.Select()
+        End If
+    End Sub
+
+    Private Sub MTextBoxNbUC_Validated(sender As Object, e As EventArgs) Handles MTextBoxNbUC.Validated
+        'on efface les erreurs précédentes
+        ErrorProvider.SetError(TextAmalg, "")
+        TextBoxMsg.Text = ""
+    End Sub
+
+    Private Sub MTextBoxNbUN_Validating(sender As Object, e As CancelEventArgs) Handles MTextBoxNbUN.Validating
+        If CInt(MTextBoxNbUN.Text) = 0 Then
+            e.Cancel = True
+            ErrorProvider.SetError(MTextBoxNbUN, LabelNbUN.Text + " obligatoire")
+            MTextBoxNbUN.Select()
+        End If
+    End Sub
+
+    Private Sub MTextBoxNbUN_Validated(sender As Object, e As EventArgs) Handles MTextBoxNbUN.Validated
+        'on efface les erreurs précédentes
+        ErrorProvider.SetError(TextAmalg, "")
         TextBoxMsg.Text = ""
     End Sub
 

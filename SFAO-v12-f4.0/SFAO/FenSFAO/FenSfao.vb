@@ -1428,6 +1428,24 @@ Public Class FenSfao
         End If
         Return etppro
     End Function
+    'Fonction qui renvoie Vrai si l'on est à une étape de palettisation
+    Public Function EtapePal(ByVal _of As String, ByVal _op As Integer) As Boolean
+        Dim etppal As Boolean
+        Dim i As Integer
+        If WSof.GRP2.Count > 0 Then
+            For i = 0 To WSof.GRP2.Count - 1
+                If WSof.GRP2(i).XMFGNUM = _of AndAlso WSof.GRP2(i).XOPENUM = _op Then
+                    If WSof.GRP2(i).ZOPEPAL = 2 Then
+                        etppal = True
+                    Else
+                        etppal = False
+                    End If
+                    Exit For
+                End If
+            Next
+        End If
+        Return etppal
+    End Function
     'Fonction qui renvoie le nombre d'articles produits sur l'OF
     Public Function NbArt(ByVal _of As String, ByVal _op As Integer) As Integer
         Dim nbitm As Integer

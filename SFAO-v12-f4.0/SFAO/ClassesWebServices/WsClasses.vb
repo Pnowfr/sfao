@@ -346,6 +346,8 @@ Public Class WSSitOFGRP2
     Public Property ZQTYR As Decimal
     Public Property ZLSTPAL As Integer
     Public Property ZTCLCOD As String
+    Public Property ZCODAMLG As String
+    Public Property ZOPEPAL As Integer
 
     Sub New()
         XMFGNUM = String.Empty
@@ -362,6 +364,8 @@ Public Class WSSitOFGRP2
         ZQTYR = 0
         ZLSTPAL = 0
         ZTCLCOD = String.Empty
+        ZCODAMLG = String.Empty
+        ZOPEPAL = 0
     End Sub
 End Class
 
@@ -542,19 +546,26 @@ Public Class WSLstPalGRP2
 End Class
 '########################################################################################################################
 
-Public Class WSTailPal
-    Public Property GRP1 As WSTailPalGRP1
-    Public Property GRP2 As List(Of WSTailPalGRP2)
+Public Class WSDebPro
+    Public Property GRP1 As WSDebProGRP1
+    Public Property GRP2 As List(Of WSDebProGRP2)
     Sub New()
-        GRP1 = New WSTailPalGRP1
-        GRP2 = New List(Of WSTailPalGRP2)
+        GRP1 = New WSDebProGRP1
+        GRP2 = New List(Of WSDebProGRP2)
     End Sub
 End Class
-Public Class WSTailPalGRP1
+Public Class WSDebProGRP1
     Public Property ZFCY As String
     Public Property ZPOSTE As String
     Public Property ZTYPOP As String
     Public Property ZEMPNUM As Integer
+    Public Property ZEVTNUM As Integer
+    Public Property ZTYPETQ As String
+    Public Property ZSAIPDS As String
+    Public Property ZAMALGAME As String
+    Public Property ZQTYPCU As Integer
+    Public Property ZNBPCU As Integer
+    Public Property ZNBUN As Integer
     Public Property ZRET As Integer
     Public Property ZMSG As String
     Sub New()
@@ -562,16 +573,23 @@ Public Class WSTailPalGRP1
         ZPOSTE = String.Empty
         ZTYPOP = String.Empty
         ZEMPNUM = 0
+        ZEVTNUM = 0
+        ZTYPETQ = String.Empty
+        ZSAIPDS = String.Empty
+        ZAMALGAME = String.Empty
+        ZQTYPCU = 0
+        ZNBPCU = 0
+        ZNBUN = 0
         ZMSG = String.Empty
         ZRET = 0
     End Sub
 End Class
-Public Class WSTailPalGRP2
-    Public Property ZLIBPAL As String
-    Public Property ZDIMPAL As Integer
+Public Class WSDebProGRP2
+    Public Property ZNPAL As Integer
+    Public Property ZTPAL As Integer
     Sub New()
-        ZLIBPAL = String.Empty
-        ZDIMPAL = 0
+        ZNPAL = 0
+        ZTPAL = 0
     End Sub
 End Class
 '########################################################################################################################

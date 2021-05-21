@@ -837,10 +837,9 @@ Public Class X3WebServ
         Return ret
     End Function
 
-    'Web service qui récupère les tailles de palettes
-    Public Function WSTAILPAL(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer) As WSTailPal
+    'Web service qui enregistre un début de production
+    Public Function WSDEBPRO(ByVal _wsdb As WSDebPro) As WSDebPro
         Dim params As String
-        Dim json As New WSTailPal
         Dim settings As JsonSerializerSettings
         Dim retxml As String = String.Empty
         Dim MsgErrWs As String = String.Empty
@@ -850,21 +849,16 @@ Public Class X3WebServ
                     .MissingMemberHandling = MissingMemberHandling.Ignore
                 }
 
-        json.GRP1.ZFCY = _site
-        json.GRP1.ZPOSTE = _poste
-        json.GRP1.ZTYPOP = _typop
-        json.GRP1.ZEMPNUM = _empnum
+        params = ClassToJson(Of WSDebPro)(_wsdb, False, settings)
 
-        params = ClassToJson(Of WSTailPal)(json, False, settings)
-
-        If X3WSC.Run("WSTAILPAL", params, retxml, MsgErrWs, True) = 1 Then
-            json = JsonToClass(Of WSTailPal)(retxml, settings)
+        If X3WSC.Run("WSDEBPRO", params, retxml, MsgErrWs, True) = 1 Then
+            _wsdb = JsonToClass(Of WSDebPro)(retxml, settings)
         Else
-            json.GRP1.ZRET = 0
-            json.GRP1.ZMSG = MsgErrWs
+            _wsdb.GRP1.ZRET = 0
+            _wsdb.GRP1.ZMSG = MsgErrWs
         End If
 
-        Return json
+        Return _wsdb
     End Function
 
     '########################################################################################################################
