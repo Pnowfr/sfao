@@ -427,6 +427,9 @@ Public Class DEBPRO
                         If FenSfao.WSof.GRP2(i).ZCODAMLG <> String.Empty Then
                             titcol = "Column" + FenSfao.WSof.GRP2(i).ZCODAMLG
                             DataGridPal.Columns(titcol).HeaderText = FenSfao.WSof.GRP2(i).ZITMREF
+                        Else
+                            titcol = "ColumnA"
+                            DataGridPal.Columns(titcol).HeaderText = FenSfao.WSof.GRP2(i).ZITMREF
                         End If
                     Next
                 End If
