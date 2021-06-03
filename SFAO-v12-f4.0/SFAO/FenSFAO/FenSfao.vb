@@ -433,7 +433,7 @@ Public Class FenSfao
             Lab3Reb.ForeColor = Color.White
         End If
     End Sub
-    Private Sub SituationCps()
+    Public Sub SituationCps()
         Dim i As Integer
         Dim OfOp, PrvOfOp, OfOpAff As String
         Dim Art, PrvArt, ArtAff As String

@@ -60,7 +60,7 @@ Public Class DEBPRO
         zTailFnt = FenSfao.TaillePolice(18, 9)
         fnt = New Font("Microsoft Sans Serif", zTailFnt, FontStyle.Regular)
         Me.Font = fnt
-        'TODO PNO : voir comment réduire la taille de police pour les titres de colonne
+        'TODO PNO : voir comment mettre une police plus petite pour les titres de colonne
 
     End Sub
     'Fonction qui gère le changement de taille des polices en fonction de la taille de la fenêtre
@@ -118,15 +118,13 @@ Public Class DEBPRO
         'on contrôle si l'opérateur est présent sur le poste
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
         If MsgErr = "" Then
-            'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
-            'FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
-            'If MsgErr = "" Then
             'si ok on vérifie si opérateur est en opération hors OF
             FenSfao.OpHof(matr, MsgErr)
             If MsgErr = "" Then
                 'si ok on vérifie si l'opérateur a déjà une opération en cours
                 FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
                 If MsgErr = "" Then
+                    'si ok on vérifie s'il y a un événement (phase) obligatoire
                     FenSfao.EventOblig(matr, MsgErr)
                     If MsgErr = "" Then
                         'On remplit les champs affichés
@@ -134,7 +132,6 @@ Public Class DEBPRO
                     End If
                 End If
             End If
-            'End If
         End If
     End Sub
 
@@ -169,6 +166,7 @@ Public Class DEBPRO
                 Catch ex As Exception
                     Trace("Exception à l'appel du web service WSSAIPDS")
                     MsgErr = "Erreur au contrôle de la saisie du poids"
+                    Exit Sub
                 End Try
 
                 Select Case resws
@@ -209,6 +207,7 @@ Public Class DEBPRO
                     Catch ex As Exception
                         Trace("Exception à l'appel du web service WSGETNBBOB")
                         MsgErr = "Erreur à la recherche du nombre de bobines filles pour l'amalgame"
+                        Exit Sub
                     End Try
 
                     Select Case nbbob
@@ -239,6 +238,7 @@ Public Class DEBPRO
             Catch ex As Exception
                 Trace("Exception à l'appel du web service WSGETLETQ")
                 MsgErr = "Erreur de récupération de la liste de types d'étiquettes ! "
+                Exit Sub
             End Try
 
             If WSLstTypEtq.GRP1.ZRET = 1 Then
@@ -262,6 +262,7 @@ Public Class DEBPRO
             Catch ex As Exception
                 Trace("Exception à l'appel du web service WSSAIPDS")
                 MsgErr = "Erreur au contrôle de la saisie du poids"
+                Exit Sub
             End Try
 
             Select Case resws
@@ -307,6 +308,7 @@ Public Class DEBPRO
                 Catch ex As Exception
                     Trace("Exception à l'appel du web service WSGETQPCU")
                     MsgErr = "Erreur à la recherche de la quantité de conditionnement"
+                    Exit Sub
                 End Try
 
                 Select Case qtepcu
@@ -357,6 +359,7 @@ Public Class DEBPRO
                         Catch ex As Exception
                             Trace("Exception à l'appel du web service WSGETNBBOB")
                             MsgErr = "Erreur à la recherche du nombre de bobines filles"
+                            Exit Sub
                         End Try
 
                         Select Case nbbob
@@ -390,6 +393,7 @@ Public Class DEBPRO
                 Catch ex As Exception
                     Trace("Exception à l'appel du web service WSGETNBUN")
                     MsgErr = "Erreur à la recherche du nombre d'unités par format"
+                    Exit Sub
                 End Try
 
                 Select Case nbunit

@@ -64,6 +64,7 @@ Public Class PosteWs
     Public Property WSTTYP As TypePost
     Public Property ZENAFLG As Integer
     Public Property ZGRP As Integer
+    Public Property ZNUMFRN As Integer
     Public Property ZRET As Integer
     Public Property ZMSG As String
     Public Sub New()
@@ -76,6 +77,7 @@ Public Class PosteWs
         WSTTYP = TypePost.Null
         ZENAFLG = 0
         ZGRP = 0
+        ZNUMFRN = 0
         ZRET = 0
         ZMSG = String.Empty
     End Sub
@@ -402,6 +404,7 @@ Public Class WSSitCPGRP2
     Public Property XOPENUM As Integer
     Public Property ZITMREF As String
     Public Property ZITMDES As String
+    Public Property ZTCLCOD As String
     Public Property ZSUPGRP As String
     Public Property ZUOM As String
     Public Property RETQTY As Decimal
@@ -414,6 +417,7 @@ Public Class WSSitCPGRP2
         XOPENUM = 0
         ZITMREF = String.Empty
         ZITMDES = String.Empty
+        ZTCLCOD = String.Empty
         ZSUPGRP = String.Empty
         ZUOM = String.Empty
         RETQTY = 0

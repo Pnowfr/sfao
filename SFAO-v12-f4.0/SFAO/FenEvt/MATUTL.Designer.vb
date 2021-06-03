@@ -40,7 +40,7 @@ Partial Class MATUTL
         Me.Label6 = New System.Windows.Forms.Label()
         Me.LabelLotF = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.MTextBoxTotEnc = New System.Windows.Forms.MaskedTextBox()
+        Me.MTextBoxQté = New System.Windows.Forms.MaskedTextBox()
         Me.TextBoxDesign = New System.Windows.Forms.TextBox()
         Me.TextBoxLot = New System.Windows.Forms.TextBox()
         Me.TextBoxLotF = New System.Windows.Forms.TextBox()
@@ -191,7 +191,7 @@ Partial Class MATUTL
         Me.TableLayoutPanel1.Controls.Add(Me.Label6, 0, 5)
         Me.TableLayoutPanel1.Controls.Add(Me.LabelLotF, 0, 7)
         Me.TableLayoutPanel1.Controls.Add(Me.Label5, 0, 4)
-        Me.TableLayoutPanel1.Controls.Add(Me.MTextBoxTotEnc, 1, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.MTextBoxQté, 1, 5)
         Me.TableLayoutPanel1.Controls.Add(Me.TextBoxDesign, 1, 3)
         Me.TableLayoutPanel1.Controls.Add(Me.TextBoxLot, 1, 4)
         Me.TableLayoutPanel1.Controls.Add(Me.TextBoxLotF, 1, 7)
@@ -280,17 +280,17 @@ Partial Class MATUTL
         Me.Label5.Text = "N° lot / sous-lot"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'MTextBoxTotEnc
+        'MTextBoxQté
         '
-        Me.MTextBoxTotEnc.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.MTextBoxTotEnc.Location = New System.Drawing.Point(223, 274)
-        Me.MTextBoxTotEnc.MaximumSize = New System.Drawing.Size(116, 35)
-        Me.MTextBoxTotEnc.Name = "MTextBoxTotEnc"
-        Me.MTextBoxTotEnc.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.MTextBoxTotEnc.Size = New System.Drawing.Size(116, 35)
-        Me.MTextBoxTotEnc.TabIndex = 24
-        Me.MTextBoxTotEnc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.MTextBoxTotEnc.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
+        Me.MTextBoxQté.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.MTextBoxQté.Location = New System.Drawing.Point(223, 274)
+        Me.MTextBoxQté.MaximumSize = New System.Drawing.Size(116, 35)
+        Me.MTextBoxQté.Name = "MTextBoxQté"
+        Me.MTextBoxQté.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
+        Me.MTextBoxQté.Size = New System.Drawing.Size(116, 35)
+        Me.MTextBoxQté.TabIndex = 24
+        Me.MTextBoxQté.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.MTextBoxQté.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
         '
         'TextBoxDesign
         '
@@ -318,9 +318,10 @@ Partial Class MATUTL
         '
         Me.TextBoxLotF.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.TextBoxLotF.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
+        Me.TextBoxLotF.Enabled = False
         Me.TextBoxLotF.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TextBoxLotF.Location = New System.Drawing.Point(223, 380)
-        Me.TextBoxLotF.MaxLength = 20
+        Me.TextBoxLotF.MaxLength = 15
         Me.TextBoxLotF.Name = "TextBoxLotF"
         Me.TextBoxLotF.Size = New System.Drawing.Size(283, 35)
         Me.TextBoxLotF.TabIndex = 32
@@ -430,7 +431,7 @@ Partial Class MATUTL
     Friend WithEvents TextBoxLot As TextBox
     Friend WithEvents Label7 As Label
     Friend WithEvents LabelLotF As Label
-    Friend WithEvents MTextBoxTotEnc As MaskedTextBox
+    Friend WithEvents MTextBoxQté As MaskedTextBox
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
     Friend WithEvents TextBoxMsg As TextBox
     Friend WithEvents TextBoxDesign As TextBox
