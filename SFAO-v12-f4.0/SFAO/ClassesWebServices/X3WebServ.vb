@@ -936,6 +936,64 @@ Public Class X3WebServ
         Return ret
     End Function
 
+    'Web service qui enregistre un début de production
+    Public Function WSLOTRELIQ(ByVal _site As String, ByVal _art As String, ByVal _nsup As Integer, ByVal _stoloc As String, ByVal _of As String) As WSLstLot
+        Dim params As String
+        Dim json As New WSLstLot
+        Dim settings As JsonSerializerSettings
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+
+        settings = New JsonSerializerSettings() With {
+                    .NullValueHandling = NullValueHandling.Ignore,
+                    .MissingMemberHandling = MissingMemberHandling.Ignore
+                }
+
+        json.GRP1.ZFCY = _site
+        json.GRP1.ZITMREF = _art
+        json.GRP1.ZNUMSUP = _nsup
+        json.GRP1.ZSTOLOC = _stoloc
+        json.GRP1.ZMFGNUM = _of
+        json.GRP1.ZSTA = "A"
+
+        params = ClassToJson(Of WSLstLot)(json, False, settings)
+
+        If X3WSC.Run("WSLOTRELIQ", params, retxml, MsgErrWs, True) = 1 Then
+            json = JsonToClass(Of WSLstLot)(retxml, settings)
+        Else
+            json.GRP1.ZRET = 0
+            json.GRP1.ZMSG = MsgErrWs
+        End If
+
+        Return json
+    End Function
+
+    'Web service qui renvoie la liste des reliquats (lots) de matières utilisées pour un OF donné
+    Public Function WSCSORELIQ(ByVal _site As String, ByVal _poste As String, ByVal _typop As String, ByVal _empnum As Integer, ByVal _art As String, ByVal _nsup As Integer,
+                               ByVal _stoloc As String, ByVal _lot As String, ByVal _slot As String, ByVal _qte As Decimal, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZTYPOP = _typop, .ZEMPNUM = _empnum, .ZITMREF = _art, .ZNUMSUP = _nsup,
+                                              .ZSTOLOC = _stoloc, .ZLOT = _lot, .ZSLO = _slot, .ZQTE = _qte, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSCSORELIQ", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
     '########################################################################################################################
     'Liste des classes utilisées pour les web services
     '########################################################################################################################

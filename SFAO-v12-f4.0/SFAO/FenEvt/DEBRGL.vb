@@ -5,7 +5,6 @@
 Imports System.ComponentModel
 Imports System.Text.RegularExpressions
 Public Class DEBRGL
-    Private ofop As WSOFOPInfo
 
     Public Sub New()
 

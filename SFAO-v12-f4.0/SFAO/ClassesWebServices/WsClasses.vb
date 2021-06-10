@@ -548,6 +548,48 @@ Public Class WSLstPalGRP2
         ZPALNVLD = String.Empty
     End Sub
 End Class
+
+'########################################################################################################################
+
+Public Class WSLstLot
+    Public Property GRP1 As WSLstLotGRP1
+    Public Property GRP2 As List(Of WSLstLotGRP2)
+    Sub New()
+        GRP1 = New WSLstLotGRP1
+        GRP2 = New List(Of WSLstLotGRP2)
+    End Sub
+End Class
+Public Class WSLstLotGRP1
+    Public Property ZFCY As String
+    Public Property ZITMREF As String
+    Public Property ZNUMSUP As Integer
+    Public Property ZSTOLOC As String
+    Public Property ZMFGNUM As String
+    Public Property ZSTA As String
+    Public Property ZRET As Integer
+    Public Property ZMSG As String
+    Sub New()
+        ZFCY = String.Empty
+        ZITMREF = String.Empty
+        ZNUMSUP = 0
+        ZSTOLOC = String.Empty
+        ZMFGNUM = String.Empty
+        ZSTA = String.Empty
+        ZMSG = String.Empty
+        ZRET = 0
+    End Sub
+End Class
+Public Class WSLstLotGRP2
+    Public Property ZLOT As String
+    Public Property ZSLO As String
+    Public Property ZQTE As Decimal
+    Sub New()
+        ZLOT = String.Empty
+        ZSLO = String.Empty
+        ZQTE = 0
+    End Sub
+End Class
+
 '########################################################################################################################
 
 Public Class WSDebPro

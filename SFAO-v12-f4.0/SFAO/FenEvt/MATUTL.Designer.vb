@@ -167,7 +167,7 @@ Partial Class MATUTL
         Me.ErrorProvider.SetIconPadding(Me.ComboBoxArt, 3)
         Me.ComboBoxArt.Location = New System.Drawing.Point(223, 116)
         Me.ComboBoxArt.Name = "ComboBoxArt"
-        Me.ComboBoxArt.Size = New System.Drawing.Size(180, 33)
+        Me.ComboBoxArt.Size = New System.Drawing.Size(283, 33)
         Me.ComboBoxArt.TabIndex = 30
         '
         'TableLayoutPanel1

@@ -6,7 +6,6 @@
 Imports System.ComponentModel
 Imports System.Text.RegularExpressions
 Public Class FINOP
-    Private ofop As WSOFOPInfo
 
     Private Sub FINOP_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim zTailFnt As Single
@@ -118,9 +117,9 @@ Public Class FINOP
 
     'fonction qui contrôle les palettes non validées
     Private Function PalNvld(ByVal numof As String, ByRef MsgErr As String) As MsgBoxResult
-        Dim LstPalNvld As New WSLstPal
+        Dim LstPalNvld As WSLstPal
         Dim i As Integer
-        Dim msgpal As String = String.Empty
+        Dim msgpal As String
         Dim sep As String = String.Empty
         Dim result As MsgBoxResult
         result = MsgBoxResult.Ok
@@ -171,9 +170,8 @@ ErreurPalNvld:
         Dim unite As String = String.Empty
         Dim qteLnk1 As Decimal = 0
         Dim qteLnk2 As Decimal = 0
-        Dim retMsg As String = String.Empty
-        Dim getqpro As Integer = -1
-        Dim getqcso As Integer = -1
+        Dim getqpro As Integer
+        Dim getqcso As Integer
         Dim qtepro As Decimal = 0
         Dim ecart As Decimal = 0
 
@@ -377,12 +375,11 @@ ErreurBilanOP:
         Dim retMsg As String = String.Empty
         Dim nbapl As Integer
         Dim nbpal As Integer
-        Dim ctrlapl As Integer = -1
+        Dim ctrlapl As Integer
         Dim msgapl As String
-        Dim conso As Integer = -1
-        Dim finop As Integer = -1
+        Dim conso As Integer
+        Dim finop As Integer
         Dim result As MsgBoxResult
-        result = MsgBoxResult.Ok
 
         'Si gestion du solde d'opération
         If LabelSoldOp.Visible Then
@@ -519,7 +516,6 @@ ErreurFinop:
     End Sub
 
     Private Sub ComboBoxSoldOp_Validated(sender As Object, e As EventArgs) Handles ComboBoxSoldOp.Validated
-
         'on efface les erreurs précédentes
         ErrorProvider.SetError(ComboBoxSoldOp, "")
         TextBoxMsg.Text = ""

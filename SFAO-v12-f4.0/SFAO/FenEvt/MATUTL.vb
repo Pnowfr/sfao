@@ -6,6 +6,9 @@
 Imports System.ComponentModel
 Imports System.Text.RegularExpressions
 Public Class MATUTL
+    Dim numof As String = String.Empty
+    Dim qtemax As Decimal
+    Dim inutile As Boolean = False 'Si la matière est déjà montée sur la machine
 
     Private Sub MATUTL_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim zTailFnt As Single
@@ -117,7 +120,6 @@ Public Class MATUTL
 
     'fonction qui contrôle le matricule (contrôle si matricule présent, si durée présence dépassé, si opération hors OF ou opération std en cours)
     Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String, Optional ByVal afficheMsg As Boolean = True)
-        Dim numof As String = String.Empty
         Dim numop As String = String.Empty
 
         'on contrôle si l'opérateur est présent sur le poste
@@ -142,7 +144,7 @@ Public Class MATUTL
 
     'fonction qui liste les matières/composants
     Private Sub List_Mat(ByVal nof As String, ByVal nop As Integer, ByRef MsgErr As String, Optional ByVal afficheMsg As Boolean = True)
-        Dim nvlmat As Integer = -1
+        Dim nvlmat As Integer
         Dim retMsg As String = String.Empty
         Dim i As Integer
 
@@ -175,7 +177,11 @@ Public Class MATUTL
         If FenSfao.WScp.GRP2.Count > 0 Then
             For i = 0 To FenSfao.WScp.GRP2.Count - 1
                 If FenSfao.WScp.GRP2(i).XMFGNUM = nof AndAlso FenSfao.WScp.GRP2(i).XOPENUM = nop Then
-                    ComboBoxArt.Items.Add(FenSfao.WScp.GRP2(i).ZITMREF)
+                    If Strings.Left(FenSfao.WScp.GRP2(i).ZSUPGRP, 1) = "S" Then
+                        ComboBoxArt.Items.Add(FenSfao.WScp.GRP2(i).ZITMREF + " - " + FenSfao.WScp.GRP2(i).ZSUPGRP)
+                    Else
+                        ComboBoxArt.Items.Add(FenSfao.WScp.GRP2(i).ZITMREF)
+                    End If
                 End If
             Next
         End If
@@ -198,14 +204,16 @@ Public Class MATUTL
 
     Private Sub Aff_ITM(ByRef art As String, ByRef MsgErr As String)
         Dim i As Integer
-        Dim ctrlot As Integer = -1
-        Dim lotbps As Integer = -1
+        Dim ctrlot As Integer
+        Dim lotbps As Integer
         Dim retMsg As String = String.Empty
         Dim qte As Decimal
+        Dim itmref As String
 
         If art <> "" Then
+            itmref = Strings.Split(art, " - ").First
             For i = 0 To FenSfao.WScp.GRP2.Count - 1
-                If FenSfao.WScp.GRP2(i).ZITMREF = art Then
+                If FenSfao.WScp.GRP2(i).ZITMREF = itmref Then
                     TextBoxDesign.Text = FenSfao.WScp.GRP2(i).ZITMDES
                     TextBoxUnité.Text = FenSfao.WScp.GRP2(i).ZUOM
                     'si lot vide et matière non support
@@ -213,7 +221,7 @@ Public Class MATUTL
                         'Recherche : si un seul lot, on le remplit automatiquement
                         Try
                             Trace("Appel du web service WSCTRCPLOT")
-                            ctrlot = X3ws.WSCTRCPLOT(SFAO.Site.GRP1.FCY, ComboBoxArt.Text, TextBoxLot.Text, SFAO.Poste.GRP1.ZATELOC, SFAO.Poste.GRP1.STOLOC, qte, retMsg)
+                            ctrlot = X3ws.WSCTRCPLOT(SFAO.Site.GRP1.FCY, itmref, TextBoxLot.Text, SFAO.Poste.GRP1.ZATELOC, SFAO.Poste.GRP1.STOLOC, qte, retMsg)
                         Catch ex As Exception
                             Trace("Exception à l'appel du web service WSCTRNVMAT")
                             MsgErr = "Erreur au contrôle du lot"
@@ -226,14 +234,15 @@ Public Class MATUTL
                         End If
                     End If
 
-                    'Si support <> EP, SF, SI : saisie n° bobine fournisseur
+                    'Affichage lot et n° bobine fournisseur
                     If SFAO.Poste.GRP1.ZNUMFRN = 2 Then
+                        'Si support mais pas EP, SF, SI : saisie n° bobine fournisseur
                         If Strings.Left(FenSfao.WScp.GRP2(i).ZSUPGRP, 1) = "S" AndAlso InStr("SF,SI", FenSfao.WScp.GRP2(i).ZTCLCOD) = 0 Then
                             LabelLotF.Visible = True
                             TextBoxLotF.Visible = True
                             LabelSloF.Visible = True
                             TextBoxSloF.Visible = True
-                            TextBoxSloF.Enabled = True
+                            TextBoxSloF.Enabled = False
                             TextBoxLotF.Text = ""
                             TextBoxSloF.Text = ""
                             If TextBoxLot.Text <> "" Then
@@ -242,17 +251,20 @@ Public Class MATUTL
                                 TextBoxSloF.Text = ""
                                 Try
                                     Trace("Appel du web service WSLOTBPS")
-                                    ctrlot = X3ws.WSLOTBPS(ComboBoxArt.Text, TextBoxLot.Text, TextBoxLotF.Text, TextBoxSloF.Text)
+                                    lotbps = X3ws.WSLOTBPS(itmref, TextBoxLot.Text, TextBoxLotF.Text, TextBoxSloF.Text)
                                 Catch ex As Exception
                                     Trace("Exception à l'appel du web service WSLOTBPS")
                                     MsgErr = "Erreur à la recherche du lot fournisseur"
                                     Exit Sub
                                 End Try
-                                If ctrlot = -1 Then 'Erreur du web service
+                                If lotbps = -1 Then 'Erreur du web service
                                     Trace(retMsg)
                                     MsgErr = retMsg
                                     Exit Sub
+                                ElseIf TextBoxLotF.Text <> "" AndAlso TextBoxSloF.Text = "" Then
+                                    TextBoxSloF.Enabled = True
                                 End If
+
                             End If
                         Else
                             'champs de saisie lot / sous-lot fournisseur invisibles
@@ -269,6 +281,7 @@ Public Class MATUTL
             Next
         Else
             TextBoxDesign.Text = ""
+            TextBoxUnité.Text = ""
         End If
     End Sub
 
@@ -284,6 +297,13 @@ Public Class MATUTL
 
     Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles BtnOk.Click
         Dim retMsg As String = String.Empty
+        Dim itmref As String
+        Dim nsup As Integer
+        Dim lotReliq As WSLstLot
+        Dim msgReliq As String
+        Dim result As MsgBoxResult
+        Dim csorlq As Integer
+        Dim i As Integer
 
         'Dans certains cas la validation passe même si tous les champs ne sont pas valides
         For Each ctl As Control In Me.TableLayoutPanel1.Controls
@@ -296,15 +316,70 @@ Public Class MATUTL
             ErrorProvider.SetError(TextBoxLot, "N° lot/sous-lot obligatoire")
             TextBoxLot.Select()
             Exit Sub
-        Else
-            If ComboBoxArt.Text = "" Then
-                ErrorProvider.SetError(ComboBoxArt, "Article obligatoire")
-                ComboBoxArt.Select()
-                Exit Sub
-            End If
+        ElseIf ComboBoxArt.Text = "" Then
+            ErrorProvider.SetError(ComboBoxArt, "Article obligatoire")
+            ComboBoxArt.Select()
+            Exit Sub
+        ElseIf MTextBoxQté.Text = "" Then
+            ErrorProvider.SetError(MTextBoxQté, "Quantité utilisée obligatoire")
+            MTextBoxQté.Select()
+            Exit Sub
         End If
 
-        'tout va bien on enregistre la conso des encres/vernis et la fin d'opération
+        'tout va bien on propose la consommation des éventuels reliquats et on enregistre la matière utilisée
+        itmref = Strings.Split(ComboBoxArt.Text, " - ").First
+        If Strings.InStr(ComboBoxArt.Text, " - ") > 0 Then
+            nsup = CInt(Strings.Right(ComboBoxArt.Text, 1))
+        End If
+
+        'Recherche des reliquats (lot "entamé" et qté restante < 10 %) et proposition de les consommer automatiquement
+        Trace("Recherche des reliquats")
+        Try
+            Trace("Appel du web service WSLOTRELIQ")
+            lotReliq = X3ws.WSLOTRELIQ(SFAO.Site.GRP1.FCY, itmref, nsup, SFAO.Poste.GRP1.STOLOC, numof)
+        Catch ex As Exception
+            GoTo ErreurMatutl
+        End Try
+
+        Select Case lotReliq.GRP1.ZRET
+            Case -1 'Erreur du web service
+                GoTo ErreurMatutl
+            Case 0 'Erreur blocage 
+                Trace(lotReliq.GRP1.ZMSG, FichierTrace.niveau.avertissement) 'on affiche le message à l'utilisateur
+            Case 1 'ok
+                'S'il y a des lots en reliquats, on propose de les consommer
+                If lotReliq.GRP2.Count > 0 Then
+                    Trace("Consommation de reliquats proposée :")
+                    For i = 0 To lotReliq.GRP2.Count - 1
+                        If lotReliq.GRP2(i).ZLOT <> "" Then
+                            msgReliq = "Il reste " + lotReliq.GRP2(i).ZQTE.ToString + " " + TextBoxUnité.Text + " du lot " + lotReliq.GRP2(i).ZLOT + lotReliq.GRP2(i).ZSLO
+                            Trace(msgReliq)
+                            msgReliq += vbNewLine + "Voulez-vous consommer le reste ?"
+                            result = MsgBox(msgReliq, CType(MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, MsgBoxStyle))
+                            If result = MsgBoxResult.Yes Then
+                                'Consommation du lot sur l'OF/opération dans la situation poste
+                                Try
+                                    Trace("Appel du web service WSCSORELIQ")
+                                    csorlq = X3ws.WSCSORELIQ(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), itmref, nsup, SFAO.Poste.GRP1.STOLOC,
+                                                             lotReliq.GRP2(i).ZLOT, lotReliq.GRP2(i).ZSLO, lotReliq.GRP2(i).ZQTE, retMsg)
+                                Catch ex As Exception
+                                    Trace("Exception à l'appel du web service WSCSORELIQ")
+                                    retMsg = "Erreur de consommation du lot " + lotReliq.GRP2(i).ZLOT + lotReliq.GRP2(i).ZSLO
+                                    GoTo ErreurMatutl
+                                End Try
+
+                                Select Case csorlq
+                                    Case -1 'Erreur du web service
+                                        GoTo ErreurMatutl
+                                    Case 1 'ok
+
+                                End Select
+                            End If
+                        End If
+                    Next
+                End If
+
+        End Select
 
         'affichage le load dans 100 ms
         Call FenSfao.WaitGif(True, 100)
@@ -331,15 +406,32 @@ ErreurMatutl:
 
     Private Sub TextBoxLot_Validating(sender As Object, e As CancelEventArgs) Handles TextBoxLot.Validating
         Dim MsgErr As String = String.Empty
-        Dim ctrlot As Integer = -1
+        Dim numof As String = String.Empty
+        Dim numop As String = String.Empty
+        Dim itmref As String
+        Dim ctrlot As Integer
         Dim retMsg As String = String.Empty
         Dim qte As Decimal
+        Dim lot As String
+        Dim MsgEp As MsgBoxResult
+        Dim i As Integer
 
         If TextBoxLot.Text <> "" Then
-            'On contrôle si le lot existe et, si oui, la quantité disponible
+            'On remet les champs à récupérer du lot à vide (en cas d'erreur du web service)
+            MTextBoxQté.Text = ""
+            qtemax = 0
+            If SFAO.Poste.GRP1.ZNUMFRN = 2 Then
+                TextBoxLotF.Text = ""
+                TextBoxSloF.Text = ""
+            End If
+            itmref = Strings.Split(ComboBoxArt.Text, " - ").First
+
+            'On contrôle si le lot existe et on sélectionne le code article si besoin
+            'si oui, la quantité disponible
+            Trace("Vérification de l'existence du lot : " + TextBoxLot.Text)
             Try
                 Trace("Appel du web service WSCTRCPLOT")
-                ctrlot = X3ws.WSCTRCPLOT(SFAO.Site.GRP1.FCY, ComboBoxArt.Text, TextBoxLot.Text, SFAO.Poste.GRP1.ZATELOC, SFAO.Poste.GRP1.STOLOC, qte, retMsg)
+                ctrlot = X3ws.WSCTRCPLOT(SFAO.Site.GRP1.FCY, itmref, TextBoxLot.Text, SFAO.Poste.GRP1.ZATELOC, SFAO.Poste.GRP1.STOLOC, qte, retMsg)
             Catch ex As Exception
                 Trace("Exception à l'appel du web service WSCTRNVMAT")
                 MsgErr = "Erreur au contrôle du lot"
@@ -356,13 +448,57 @@ ErreurMatutl:
                     MsgErr = retMsg
                     GoTo ErreurTextBoxLot
                 Case 1 'ok
-
+                    inutile = False
                 Case 2 'déjà monté sur la machine
-
+                    inutile = True
             End Select
 
-            Aff_ITM(ComboBoxArt.Text, MsgErr)
-            MTextBoxQté.Text = qte.ToString("### ### ###")
+            qtemax = qte
+            If ComboBoxArt.Text = "" Then
+                ComboBoxArt.SelectedIndex = ComboBoxArt.FindString(itmref)
+            End If
+
+            'Si encours, on vérifie l'OF/opération
+            FenSfao.OFOpMatr(CInt(MTextBoxMatr.Text), numof, numop, MsgErr)
+            If MsgErr <> "" Then
+                GoTo ErreurTextBoxLot
+            End If
+            If FenSfao.CatArtCp(numof, CInt(numop), Strings.Split(ComboBoxArt.Text, " - ").First) = "EP" Then
+                Trace("Lot d'un encours : on vérifie l'OF et l'opération")
+                If TextBoxLot.Text.Length > 5 Then
+                    lot = Strings.Left(TextBoxLot.Text, TextBoxLot.Text.Length - 5)
+                    i = lot.IndexOf("/")
+                    If i = -1 Then
+                        MsgErr = "N° de lot erroné pour un encours de production : " + lot
+                        Trace(MsgErr)
+                        GoTo ErreurTextBoxLot
+                    ElseIf Strings.Left(lot, i) <> numof Then
+                        MsgErr = "Attention, cet encours provient d'un autre OF " + Strings.Left(lot, i) + " ! Voulez-vous continuer ?"
+                        Trace(MsgErr)
+                        MsgEp = MsgBox(MsgErr, CType(MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, MsgBoxStyle))
+                        If MsgEp = MsgBoxResult.No Then
+                            Me.DialogResult = DialogResult.Abort
+                            Me.Close()
+                        End If
+                    ElseIf lot.Substring(i + 1) > numop Then
+                        MsgErr = "Attention, cet encours provient de l'opération " + lot.Substring(i + 1) + ", après l'opération en cours ! Voulez-vous continuer ?"
+                        Trace(MsgErr)
+                        MsgEp = MsgBox(MsgErr, CType(MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, MsgBoxStyle))
+                        If MsgEp = MsgBoxResult.No Then
+                            Me.DialogResult = DialogResult.Abort
+                            Me.Close()
+                        End If
+                    ElseIf lot.Substring(i + 1) = numop Then
+                        MsgErr = "Attention, cet encours est déjà passé par cette opération ! Voulez-vous continuer ?"
+                        Trace(MsgErr)
+                        MsgEp = MsgBox(MsgErr, CType(MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MessageBoxDefaultButton.Button2, MsgBoxStyle))
+                        If MsgEp = MsgBoxResult.No Then
+                            Me.DialogResult = DialogResult.Abort
+                            Me.Close()
+                        End If
+                    End If
+                End If
+            End If
         End If
 
         Exit Sub
@@ -376,8 +512,35 @@ ErreurTextBoxLot:
     End Sub
 
     Private Sub TextBoxLot_Validated(sender As Object, e As EventArgs) Handles TextBoxLot.Validated
+        Dim MsgErr As String = String.Empty
+
+        Aff_ITM(ComboBoxArt.Text, MsgErr)
+        If MsgErr <> "" Then
+            Trace(MsgErr, FichierTrace.niveau.erreur)
+        Else
+            MTextBoxQté.Text = qtemax.ToString("### ### ###")
+        End If
+
         'on efface les erreurs précédentes
         ErrorProvider.SetError(TextBoxLot, "")
-        TextBoxLot.Text = ""
+        TextBoxMsg.Text = ""
+    End Sub
+
+    Private Sub MTextBoxQté_Validating(sender As Object, e As CancelEventArgs) Handles MTextBoxQté.Validating
+        Dim MsgErr As String
+        If CDec(MTextBoxQté.Text) > qtemax Then
+            MsgErr = "Quantité supérieure au stock disponible (" + qtemax.ToString + " " + TextBoxUnité.Text + ")"
+            e.Cancel = True 'zone invalide
+            ErrorProvider.SetError(MTextBoxQté, MsgErr)
+            TextBoxMsg.Text = MsgErr
+            System.Media.SystemSounds.Exclamation.Play() 'son erreur
+            MTextBoxQté.Select() 'sélection du contrôle
+        End If
+    End Sub
+
+    Private Sub MTextBoxQté_Validated(sender As Object, e As EventArgs) Handles MTextBoxQté.Validated
+        'on efface les erreurs précédentes
+        ErrorProvider.SetError(MTextBoxQté, "")
+        TextBoxMsg.Text = ""
     End Sub
 End Class
