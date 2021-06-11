@@ -603,7 +603,6 @@ End Class
 Public Class WSDebProGRP1
     Public Property ZFCY As String
     Public Property ZPOSTE As String
-    Public Property ZTYPOP As String
     Public Property ZEMPNUM As Integer
     Public Property ZEVTNUM As Integer
     Public Property ZTYPETQ As String
@@ -617,7 +616,6 @@ Public Class WSDebProGRP1
     Sub New()
         ZFCY = String.Empty
         ZPOSTE = String.Empty
-        ZTYPOP = String.Empty
         ZEMPNUM = 0
         ZEVTNUM = 0
         ZTYPETQ = String.Empty

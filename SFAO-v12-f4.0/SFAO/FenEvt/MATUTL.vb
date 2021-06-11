@@ -35,7 +35,7 @@ Public Class MATUTL
         'on a un seul matricule sur le poste
         If MTextBoxMatr.Text <> "" Then
             'on doit valider le matricule
-            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr, False) 'sans affichage des erreurs
+            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr)
             If MsgErr <> "" Then
                 TextBoxMsg.Text = MsgErr
                 ErrorProvider.SetError(MTextBoxMatr, MsgErr)
@@ -103,8 +103,7 @@ Public Class MATUTL
             TextBoxMsg.Text = MsgErr
         Else
             'on doit valider le matricule
-            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr, True) 'avec affichage des erreurs
-
+            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr)
             'en cas d'erreur on déclare l'erreur sur le ErrorProvider
             If MsgErr <> "" Then
                 Trace("[MTextBoxMatr_Validating] : " & MsgErr)
@@ -119,7 +118,7 @@ Public Class MATUTL
     End Sub
 
     'fonction qui contrôle le matricule (contrôle si matricule présent, si durée présence dépassé, si opération hors OF ou opération std en cours)
-    Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String, Optional ByVal afficheMsg As Boolean = True)
+    Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String)
         Dim numop As String = String.Empty
 
         'on contrôle si l'opérateur est présent sur le poste
@@ -135,7 +134,7 @@ Public Class MATUTL
                     FenSfao.EventOblig(matr, MsgErr)
                     If MsgErr = "" Then
                         'si ok on liste les matières
-                        List_Mat(numof, CInt(numop), MsgErr, afficheMsg)
+                        List_Mat(numof, CInt(numop), MsgErr)
                     End If
                 End If
             End If
@@ -143,7 +142,7 @@ Public Class MATUTL
     End Sub
 
     'fonction qui liste les matières/composants
-    Private Sub List_Mat(ByVal nof As String, ByVal nop As Integer, ByRef MsgErr As String, Optional ByVal afficheMsg As Boolean = True)
+    Private Sub List_Mat(ByVal nof As String, ByVal nop As Integer, ByRef MsgErr As String)
         Dim nvlmat As Integer
         Dim retMsg As String = String.Empty
         Dim i As Integer
@@ -154,7 +153,7 @@ Public Class MATUTL
         'On contrôle si des matières ont été ajoutées à l'OF (avec màj de la situation matières si besoin)
         Try
             Trace("Appel du web service WSCTRNVMAT")
-            nvlmat = X3ws.WSCTRNVMAT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), retMsg)
+            nvlmat = X3ws.WSCTRNVMAT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), retMsg)
         Catch ex As Exception
             Trace("Exception à l'appel du web service WSCTRNVMAT")
             MsgErr = "Erreur au contrôle de la saisie du poids"
@@ -177,7 +176,7 @@ Public Class MATUTL
         If FenSfao.WScp.GRP2.Count > 0 Then
             For i = 0 To FenSfao.WScp.GRP2.Count - 1
                 If FenSfao.WScp.GRP2(i).XMFGNUM = nof AndAlso FenSfao.WScp.GRP2(i).XOPENUM = nop Then
-                    If Strings.Left(FenSfao.WScp.GRP2(i).ZSUPGRP, 1) = "S" Then
+                    If InStr("S,G", Strings.Left(FenSfao.WScp.GRP2(i).ZSUPGRP, 1)) > 0 Then
                         ComboBoxArt.Items.Add(FenSfao.WScp.GRP2(i).ZITMREF + " - " + FenSfao.WScp.GRP2(i).ZSUPGRP)
                     Else
                         ComboBoxArt.Items.Add(FenSfao.WScp.GRP2(i).ZITMREF)
@@ -221,7 +220,8 @@ Public Class MATUTL
                         'Recherche : si un seul lot, on le remplit automatiquement
                         Try
                             Trace("Appel du web service WSCTRCPLOT")
-                            ctrlot = X3ws.WSCTRCPLOT(SFAO.Site.GRP1.FCY, itmref, TextBoxLot.Text, SFAO.Poste.GRP1.ZATELOC, SFAO.Poste.GRP1.STOLOC, qte, retMsg)
+                            ctrlot = X3ws.WSCTRCPLOT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), itmref, TextBoxLot.Text,
+                                                     SFAO.Poste.GRP1.ZATELOC, SFAO.Poste.GRP1.STOLOC, qte, retMsg)
                         Catch ex As Exception
                             Trace("Exception à l'appel du web service WSCTRNVMAT")
                             MsgErr = "Erreur au contrôle du lot"
@@ -298,11 +298,13 @@ Public Class MATUTL
     Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles BtnOk.Click
         Dim retMsg As String = String.Empty
         Dim itmref As String
+        Dim supgrp As String = String.Empty
         Dim nsup As Integer
         Dim lotReliq As WSLstLot
         Dim msgReliq As String
         Dim result As MsgBoxResult
         Dim csorlq As Integer
+        Dim matutl As Integer
         Dim i As Integer
 
         'Dans certains cas la validation passe même si tous les champs ne sont pas valides
@@ -329,7 +331,10 @@ Public Class MATUTL
         'tout va bien on propose la consommation des éventuels reliquats et on enregistre la matière utilisée
         itmref = Strings.Split(ComboBoxArt.Text, " - ").First
         If Strings.InStr(ComboBoxArt.Text, " - ") > 0 Then
-            nsup = CInt(Strings.Right(ComboBoxArt.Text, 1))
+            supgrp = Strings.Right(ComboBoxArt.Text, 2)
+            If Strings.Left(supgrp, 1) = "S" Then
+                nsup = CInt(Strings.Right(supgrp, 1))
+            End If
         End If
 
         'Recherche des reliquats (lot "entamé" et qté restante < 10 %) et proposition de les consommer automatiquement
@@ -360,7 +365,7 @@ Public Class MATUTL
                                 'Consommation du lot sur l'OF/opération dans la situation poste
                                 Try
                                     Trace("Appel du web service WSCSORELIQ")
-                                    csorlq = X3ws.WSCSORELIQ(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), itmref, nsup, SFAO.Poste.GRP1.STOLOC,
+                                    csorlq = X3ws.WSCSORELIQ(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), itmref, nsup, SFAO.Poste.GRP1.STOLOC,
                                                              lotReliq.GRP2(i).ZLOT, lotReliq.GRP2(i).ZSLO, lotReliq.GRP2(i).ZQTE, retMsg)
                                 Catch ex As Exception
                                     Trace("Exception à l'appel du web service WSCSORELIQ")
@@ -384,7 +389,31 @@ Public Class MATUTL
         'affichage le load dans 100 ms
         Call FenSfao.WaitGif(True, 100)
 
+        'Transfert du support/encours de l'atelier vers l'emplacement machine ou consommation des autres matières
+        If Not inutile Then
+            Try
+                Trace("Appel du web service WSMATUTL")
+                If TextBoxSloF.Enabled Then
+                    matutl = X3ws.WSMATUTL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), itmref, supgrp, SFAO.Poste.GRP1.STOLOC,
+                                           TextBoxLot.Text, CDec(MTextBoxQté.Text), TextBoxUnité.Text, TextBoxSloF.Text, retMsg)
+                Else
+                    matutl = X3ws.WSMATUTL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), itmref, supgrp, SFAO.Poste.GRP1.STOLOC,
+                                           TextBoxLot.Text, CDec(MTextBoxQté.Text), TextBoxUnité.Text, "", retMsg)
+                End If
+            Catch ex As Exception
+                Trace("Exception à l'appel du web service WSMATUTL")
+                retMsg = "Erreur de transfert du lot " + TextBoxLot.Text
+                GoTo ErreurMatutl
+            End Try
 
+            If matutl = 1 Then
+                Me.DialogResult = DialogResult.OK
+            Else
+                GoTo ErreurMatutl
+            End If
+        Else
+            Me.DialogResult = DialogResult.OK
+        End If
 
         Exit Sub
 
@@ -431,7 +460,8 @@ ErreurMatutl:
             Trace("Vérification de l'existence du lot : " + TextBoxLot.Text)
             Try
                 Trace("Appel du web service WSCTRCPLOT")
-                ctrlot = X3ws.WSCTRCPLOT(SFAO.Site.GRP1.FCY, itmref, TextBoxLot.Text, SFAO.Poste.GRP1.ZATELOC, SFAO.Poste.GRP1.STOLOC, qte, retMsg)
+                ctrlot = X3ws.WSCTRCPLOT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), itmref, TextBoxLot.Text,
+                                         SFAO.Poste.GRP1.ZATELOC, SFAO.Poste.GRP1.STOLOC, qte, retMsg)
             Catch ex As Exception
                 Trace("Exception à l'appel du web service WSCTRNVMAT")
                 MsgErr = "Erreur au contrôle du lot"

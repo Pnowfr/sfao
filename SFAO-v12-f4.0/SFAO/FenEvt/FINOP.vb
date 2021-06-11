@@ -33,7 +33,7 @@ Public Class FINOP
         'on a un seul matricule sur le poste
         If MTextBoxMatr.Text <> "" Then
             'on doit valider le matricule
-            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr, False) 'sans affichage des erreurs
+            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr)
             If MsgErr <> "" Then
                 TextBoxMsg.Text = MsgErr
                 ErrorProvider.SetError(MTextBoxMatr, MsgErr)
@@ -187,7 +187,7 @@ ErreurPalNvld:
 
         Try
             Trace("Appel du web service WSGETQPRO")
-            getqpro = X3ws.WSGETQPRO(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, matr, qteAQ, qteQN, qteR, nbPcu, uom, MsgErr)
+            getqpro = X3ws.WSGETQPRO(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, matr, qteAQ, qteQN, qteR, nbPcu, uom, MsgErr)
         Catch ex As Exception
             GoTo ErreurBilanOP
         End Try
@@ -220,7 +220,7 @@ ErreurPalNvld:
 
         Try
             Trace("Appel du web service WSGETQCSO")
-            getqcso = X3ws.WSGETQCSO(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, SFAO.Poste.GRP1.STOLOC, matr, qteSup1, qteSup2, qteRet, unite, qteLnk1, qteLnk2, MsgErr)
+            getqcso = X3ws.WSGETQCSO(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.STOLOC, matr, qteSup1, qteSup2, qteRet, unite, qteLnk1, qteLnk2, MsgErr)
         Catch ex As Exception
             GoTo ErreurBilanOP
         End Try
@@ -297,7 +297,7 @@ ErreurBilanOP:
         Else
 
             'on doit valider le matricule
-            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr, True) 'avec affichage des erreurs
+            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr)
 
             'en cas d'erreur on déclare l'erreur sur le ErrorProvider
             If MsgErr <> "" Then
@@ -313,7 +313,7 @@ ErreurBilanOP:
     End Sub
 
     'fonction qui contrôle le matricule (contrôle si matricule présent, si durée présence dépassé, si opération hors OF ou opération std en cours)
-    Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String, Optional ByVal afficheMsg As Boolean = True)
+    Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String)
 
         'on contrôle si l'opérateur est présent sur le poste
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
@@ -410,7 +410,7 @@ ErreurBilanOP:
             'Si cde/appel, contrôle du nombre de palettes produites / nombre d'appels
             Try
                 Trace("Appel du web service WSNBPALAPL")
-                ctrlapl = X3ws.WSNBPALAPL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), nbapl, nbpal, retMsg)
+                ctrlapl = X3ws.WSNBPALAPL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), nbapl, nbpal, retMsg)
             Catch ex As Exception
                 GoTo ErreurFinop
             End Try
@@ -450,7 +450,7 @@ ErreurBilanOP:
         If MTextBoxTotEnc.Visible AndAlso MTextBoxTotVer.Visible AndAlso (CDec(MTextBoxTotEnc.Text) > 0 Or CDec(MTextBoxTotVer.Text) > 0) Then
             Try
                 Trace("Appel du web service WSCSOENC")
-                conso = X3ws.WSCSOENC(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), CDec(MTextBoxTotEnc.Text), CDec(MTextBoxTotVer.Text), retMsg)
+                conso = X3ws.WSCSOENC(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), CInt(Me.Tag), CDec(MTextBoxTotEnc.Text), CDec(MTextBoxTotVer.Text), retMsg)
             Catch ex As Exception
                 GoTo ErreurFinop
             End Try
@@ -472,7 +472,7 @@ ErreurBilanOP:
         'on enregistre la fin d'opération + suivi auto du temps passé depuis le dernier évenement
         Try
             Trace("Appel du web service WSFINOPE")
-            finop = X3ws.WSFINOPE(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), ComboBoxSoldOp.Text, ComboBoxMotifNS.Text, retMsg)
+            finop = X3ws.WSFINOPE(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), CInt(Me.Tag), ComboBoxSoldOp.Text, ComboBoxMotifNS.Text, retMsg)
         Catch ex As Exception
             GoTo ErreurFinop
         End Try
