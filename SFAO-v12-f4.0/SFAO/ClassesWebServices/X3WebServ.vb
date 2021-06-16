@@ -913,8 +913,8 @@ Public Class X3WebServ
         Return ret
     End Function
 
-    'Web service qui contrôle si des matières ont été ajoutées à l'OF (avec màj de la situation matières si besoin)
-    Public Function WSLOTBPS(ByVal _art As String, ByVal _lot As String, ByRef _lotfrn As String, ByRef _bobfrn As String) As Integer
+    'Web service qui renvoie le lot et le n° bobine fournisseur
+    Public Function WSGETLOTF(ByVal _art As String, ByVal _lot As String, ByRef _lotfrn As String, ByRef _bobfrn As String) As Integer
         Dim par As Object
         Dim params As String
         Dim retxml As String = String.Empty
@@ -922,14 +922,39 @@ Public Class X3WebServ
         Dim json As JObject
         Dim ret As Integer
 
-        par = New With {Key .GRP1 = New With {.ZITMREF = _art, .ZLOTSLO = _lot, .ZLOTFRN = _lotfrn, .ZBPSLOB = _bobfrn}}
+        par = New With {Key .GRP1 = New With {.ZITMREF = _art, .ZLOTSLO = _lot, .ZLOTFRN = _lotfrn, .ZBOBFRN = _bobfrn}}
         params = JsonConvert.SerializeObject(par)
 
-        If X3WSC.Run("WSLOTBPS", params, retxml, MsgErrWs, True) = 1 Then
+        If X3WSC.Run("WSGETLOTF", params, retxml, MsgErrWs, True) = 1 Then
             json = JObject.Parse(retxml)
             _lotfrn = json.SelectToken("GRP1").SelectToken("ZLOTFRN").ToString
-            _bobfrn = json.SelectToken("GRP1").SelectToken("ZBPSLOB").ToString
+            _bobfrn = json.SelectToken("GRP1").SelectToken("ZBOBFRN").ToString
             ret = 1
+        Else
+            ret = -1
+        End If
+
+        Return ret
+    End Function
+
+    'Web service qui modifie le lot et le n° bobine fournisseur
+    Public Function WSSETLOTF(ByVal _art As String, ByVal _lot As String, ByVal _lotfrn As String, ByVal _bobfrn As String, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZITMREF = _art, .ZLOTSLO = _lot, .ZLOTFRN = _lotfrn, .ZBOBFRN = _bobfrn, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSSETLOTF", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+            _lotfrn = json.SelectToken("GRP1").SelectToken("ZLOTFRN").ToString
+            _bobfrn = json.SelectToken("GRP1").SelectToken("ZBOBFRN").ToString
         Else
             ret = -1
         End If
@@ -997,7 +1022,7 @@ Public Class X3WebServ
 
     'Web service qui renvoie la liste des reliquats (lots) de matières utilisées pour un OF donné
     Public Function WSMATUTL(ByVal _site As String, ByVal _poste As String, ByVal _empnum As Integer, ByVal _art As String, ByVal _supgrp As String,
-                               ByVal _stoloc As String, ByVal _lot As String, ByVal _qte As Decimal, ByVal _unité As String, ByVal _nbobf As String, ByRef _retmsg As String) As Integer
+                               ByVal _stoloc As String, ByVal _lot As String, ByVal _qte As Decimal, ByVal _unité As String, ByRef _retmsg As String) As Integer
         Dim par As Object
         Dim params As String
         Dim retxml As String = String.Empty
@@ -1006,7 +1031,7 @@ Public Class X3WebServ
         Dim ret As Integer
 
         par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZEMPNUM = _empnum, .ZITMREF = _art, .ZSUPGRP = _supgrp,
-                                              .ZSTOLOC = _stoloc, .ZLOTSLO = _lot, .ZQTE = _qte, .ZUOM = _unité, .ZBOBFRN = _nbobf, .ZRET = 0, .ZMSG = ""}}
+                                              .ZSTOLOC = _stoloc, .ZLOTSLO = _lot, .ZQTE = _qte, .ZUOM = _unité, .ZRET = 0, .ZMSG = ""}}
         params = JsonConvert.SerializeObject(par)
 
         If X3WSC.Run("WSMATUTL", params, retxml, MsgErrWs, True) = 1 Then
