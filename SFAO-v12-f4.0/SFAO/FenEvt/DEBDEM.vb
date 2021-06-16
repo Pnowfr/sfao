@@ -110,25 +110,22 @@ Public Class DEBDEM
         'on contrôle si l'opérateur est présent sur le poste
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
         If MsgErr = "" Then
-            'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
-            'FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
-            'If MsgErr = "" Then
             'si ok on vérifie si opérateur est en opération hors OF
             FenSfao.OpHof(matr, MsgErr)
+            If MsgErr = "" Then
+                'si ok on vérifie si l'opérateur a déjà une opération en cours
+                FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
                 If MsgErr = "" Then
-                    'si ok on vérifie si l'opérateur a déjà une opération en cours
-                    FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
+                    'si ok on vérifie s'il y a un événement (phase) obligatoire
+                    FenSfao.EventOblig(matr, MsgErr)
                     If MsgErr = "" Then
-                        FenSfao.EventOblig(matr, MsgErr)
-                        If MsgErr = "" Then
-                            'si ok on vérifie si l'opérateur n'est pas déjà en démontage
-                            If FenSfao.EventEnCours(matr) = CInt(Me.Tag) Then
-                                MsgErr = "Vous êtes déjà en démontage"
-                            End If
+                        'si ok on vérifie si l'opérateur n'est pas déjà en démontage
+                        If FenSfao.EventEnCours(matr) = CInt(Me.Tag) Then
+                            MsgErr = "Vous êtes déjà en démontage"
                         End If
                     End If
                 End If
-            'End If
+            End If
         End If
     End Sub
 

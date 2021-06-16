@@ -285,7 +285,7 @@
     <Compile Include="FenEvt\FINOP.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FenEvt\MATUTL.designer.vb">
+    <Compile Include="FenEvt\MATUTL.Designer.vb">
       <DependentUpon>MATUTL.vb</DependentUpon>
     </Compile>
     <Compile Include="FenEvt\MATUTL.vb">
@@ -377,7 +377,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FenEvt\MATUTL.resx">
       <DependentUpon>MATUTL.vb</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FenEvt\SOROP.resx">
       <DependentUpon>SOROP.vb</DependentUpon>
