@@ -6,7 +6,6 @@
 Imports System.ComponentModel
 Imports System.Text.RegularExpressions
 Public Class FINOP
-    Private ofop As WSOFOPInfo
 
     Private Sub FINOP_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim zTailFnt As Single
@@ -34,7 +33,7 @@ Public Class FINOP
         'on a un seul matricule sur le poste
         If MTextBoxMatr.Text <> "" Then
             'on doit valider le matricule
-            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr, False) 'sans affichage des erreurs
+            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr)
             If MsgErr <> "" Then
                 TextBoxMsg.Text = MsgErr
                 ErrorProvider.SetError(MTextBoxMatr, MsgErr)
@@ -118,9 +117,9 @@ Public Class FINOP
 
     'fonction qui contrôle les palettes non validées
     Private Function PalNvld(ByVal numof As String, ByRef MsgErr As String) As MsgBoxResult
-        Dim LstPalNvld As New WSLstPal
+        Dim LstPalNvld As WSLstPal
         Dim i As Integer
-        Dim msgpal As String = String.Empty
+        Dim msgpal As String
         Dim sep As String = String.Empty
         Dim result As MsgBoxResult
         result = MsgBoxResult.Ok
@@ -171,9 +170,8 @@ ErreurPalNvld:
         Dim unite As String = String.Empty
         Dim qteLnk1 As Decimal = 0
         Dim qteLnk2 As Decimal = 0
-        Dim retMsg As String = String.Empty
-        Dim getqpro As Integer = -1
-        Dim getqcso As Integer = -1
+        Dim getqpro As Integer
+        Dim getqcso As Integer
         Dim qtepro As Decimal = 0
         Dim ecart As Decimal = 0
 
@@ -189,7 +187,7 @@ ErreurPalNvld:
 
         Try
             Trace("Appel du web service WSGETQPRO")
-            getqpro = X3ws.WSGETQPRO(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, matr, qteAQ, qteQN, qteR, nbPcu, uom, MsgErr)
+            getqpro = X3ws.WSGETQPRO(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, matr, qteAQ, qteQN, qteR, nbPcu, uom, MsgErr)
         Catch ex As Exception
             GoTo ErreurBilanOP
         End Try
@@ -222,7 +220,7 @@ ErreurPalNvld:
 
         Try
             Trace("Appel du web service WSGETQCSO")
-            getqcso = X3ws.WSGETQCSO(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, SFAO.Poste.GRP1.STOLOC, matr, qteSup1, qteSup2, qteRet, unite, qteLnk1, qteLnk2, MsgErr)
+            getqcso = X3ws.WSGETQCSO(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.STOLOC, matr, qteSup1, qteSup2, qteRet, unite, qteLnk1, qteLnk2, MsgErr)
         Catch ex As Exception
             GoTo ErreurBilanOP
         End Try
@@ -299,7 +297,7 @@ ErreurBilanOP:
         Else
 
             'on doit valider le matricule
-            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr, True) 'avec affichage des erreurs
+            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr)
 
             'en cas d'erreur on déclare l'erreur sur le ErrorProvider
             If MsgErr <> "" Then
@@ -315,21 +313,17 @@ ErreurBilanOP:
     End Sub
 
     'fonction qui contrôle le matricule (contrôle si matricule présent, si durée présence dépassé, si opération hors OF ou opération std en cours)
-    Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String, Optional ByVal afficheMsg As Boolean = True)
+    Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String)
 
         'on contrôle si l'opérateur est présent sur le poste
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
         If MsgErr = "" Then
-            'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
-            'FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
-            'If MsgErr = "" Then
             'si ok on vérifie si opérateur est en opération hors OF
             FenSfao.OpHof(matr, MsgErr)
-                If MsgErr = "" Then
-                    'si ok on vérifie si l'opérateur a déjà une opération en cours
-                    FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
-                End If
-            'End If
+            If MsgErr = "" Then
+                'si ok on vérifie si l'opérateur a déjà une opération en cours
+                FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
+            End If
         End If
     End Sub
 
@@ -381,12 +375,11 @@ ErreurBilanOP:
         Dim retMsg As String = String.Empty
         Dim nbapl As Integer
         Dim nbpal As Integer
-        Dim ctrlapl As Integer = -1
+        Dim ctrlapl As Integer
         Dim msgapl As String
-        Dim conso As Integer = -1
-        Dim finop As Integer = -1
+        Dim conso As Integer
+        Dim finop As Integer
         Dim result As MsgBoxResult
-        result = MsgBoxResult.Ok
 
         'Si gestion du solde d'opération
         If LabelSoldOp.Visible Then
@@ -417,7 +410,7 @@ ErreurBilanOP:
             'Si cde/appel, contrôle du nombre de palettes produites / nombre d'appels
             Try
                 Trace("Appel du web service WSNBPALAPL")
-                ctrlapl = X3ws.WSNBPALAPL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), nbapl, nbpal, retMsg)
+                ctrlapl = X3ws.WSNBPALAPL(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), nbapl, nbpal, retMsg)
             Catch ex As Exception
                 GoTo ErreurFinop
             End Try
@@ -457,7 +450,7 @@ ErreurBilanOP:
         If MTextBoxTotEnc.Visible AndAlso MTextBoxTotVer.Visible AndAlso (CDec(MTextBoxTotEnc.Text) > 0 Or CDec(MTextBoxTotVer.Text) > 0) Then
             Try
                 Trace("Appel du web service WSCSOENC")
-                conso = X3ws.WSCSOENC(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), CDec(MTextBoxTotEnc.Text), CDec(MTextBoxTotVer.Text), retMsg)
+                conso = X3ws.WSCSOENC(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), CInt(Me.Tag), CDec(MTextBoxTotEnc.Text), CDec(MTextBoxTotVer.Text), retMsg)
             Catch ex As Exception
                 GoTo ErreurFinop
             End Try
@@ -479,7 +472,7 @@ ErreurBilanOP:
         'on enregistre la fin d'opération + suivi auto du temps passé depuis le dernier évenement
         Try
             Trace("Appel du web service WSFINOPE")
-            finop = X3ws.WSFINOPE(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), CInt(Me.Tag), ComboBoxSoldOp.Text, ComboBoxMotifNS.Text, retMsg)
+            finop = X3ws.WSFINOPE(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), CInt(Me.Tag), ComboBoxSoldOp.Text, ComboBoxMotifNS.Text, retMsg)
         Catch ex As Exception
             GoTo ErreurFinop
         End Try
@@ -523,7 +516,6 @@ ErreurFinop:
     End Sub
 
     Private Sub ComboBoxSoldOp_Validated(sender As Object, e As EventArgs) Handles ComboBoxSoldOp.Validated
-
         'on efface les erreurs précédentes
         ErrorProvider.SetError(ComboBoxSoldOp, "")
         TextBoxMsg.Text = ""

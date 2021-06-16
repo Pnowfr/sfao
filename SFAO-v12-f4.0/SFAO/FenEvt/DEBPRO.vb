@@ -6,7 +6,6 @@
 Imports System.ComponentModel
 Imports System.Text.RegularExpressions
 Public Class DEBPRO
-    Private ofop As WSOFOPInfo
     Private WSLstTypEtq As New WSTypEtq            'classe de la liste des types d'étiquettes
 
     Private Sub DEBPRO_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -14,7 +13,6 @@ Public Class DEBPRO
         Dim fnt As Font
         Dim i As Integer
         Dim MsgErr As String = String.Empty
-        Dim retMsg As String = String.Empty
 
         Trace("Affichage fenêtre DEBPRO")
 
@@ -35,7 +33,7 @@ Public Class DEBPRO
         'on a un seul matricule sur le poste
         If MTextBoxMatr.Text <> "" Then
             'on doit valider le matricule
-            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr, False) 'sans affichage des erreurs
+            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr)
             If MsgErr <> "" Then
                 TextBoxMsg.Text = MsgErr
                 ErrorProvider.SetError(MTextBoxMatr, MsgErr)
@@ -60,7 +58,7 @@ Public Class DEBPRO
         zTailFnt = FenSfao.TaillePolice(18, 9)
         fnt = New Font("Microsoft Sans Serif", zTailFnt, FontStyle.Regular)
         Me.Font = fnt
-        'TODO PNO : voir comment réduire la taille de police pour les titres de colonne
+        'TODO PNO : voir comment mettre une police plus petite pour les titres de colonne
 
     End Sub
     'Fonction qui gère le changement de taille des polices en fonction de la taille de la fenêtre
@@ -97,8 +95,7 @@ Public Class DEBPRO
         Else
 
             'on doit valider le matricule
-            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr, True) 'avec affichage des erreurs
-
+            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr)
             'en cas d'erreur on déclare l'erreur sur le ErrorProvider
             If MsgErr <> "" Then
                 Trace("[MTextBoxMatr_Validating] : " & MsgErr)
@@ -113,20 +110,18 @@ Public Class DEBPRO
     End Sub
 
     'fonction qui contrôle le matricule (contrôle si matricule présent, si durée présence dépassé, si opération hors OF ou opération std en cours)
-    Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String, Optional ByVal afficheMsg As Boolean = True)
+    Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String)
 
         'on contrôle si l'opérateur est présent sur le poste
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
         If MsgErr = "" Then
-            'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
-            'FenSfao.DureeMaxPresenceDepassee(MsgErr, afficheMsg)
-            'If MsgErr = "" Then
             'si ok on vérifie si opérateur est en opération hors OF
             FenSfao.OpHof(matr, MsgErr)
             If MsgErr = "" Then
                 'si ok on vérifie si l'opérateur a déjà une opération en cours
                 FenSfao.OFOpMatr(matr, TextBoxOF.Text, MaskedTextBoxOP.Text, MsgErr)
                 If MsgErr = "" Then
+                    'si ok on vérifie s'il y a un événement (phase) obligatoire
                     FenSfao.EventOblig(matr, MsgErr)
                     If MsgErr = "" Then
                         'On remplit les champs affichés
@@ -134,7 +129,6 @@ Public Class DEBPRO
                     End If
                 End If
             End If
-            'End If
         End If
     End Sub
 
@@ -149,7 +143,7 @@ Public Class DEBPRO
         Dim nbunit As Integer
         Dim i As Integer
         Dim typetq As String = String.Empty
-        Dim titcol As String = String.Empty
+        Dim titcol As String
 
         'On récupère l'unité de fabrication et on la convertit dans un format lisible pour l'opérateur
         TextBoxUOM.Text = FenSfao.AffUnit(FenSfao.UnitFab(matr))
@@ -165,10 +159,11 @@ Public Class DEBPRO
                 Trace("Contrôle de la saisie du poids")
                 Try
                     Trace("Appel du web service WSSAIPDS")
-                    resws = X3ws.WSSAIPDS(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), repdef, retMsg)
+                    resws = X3ws.WSSAIPDS(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), repdef, retMsg)
                 Catch ex As Exception
                     Trace("Exception à l'appel du web service WSSAIPDS")
                     MsgErr = "Erreur au contrôle de la saisie du poids"
+                    Exit Sub
                 End Try
 
                 Select Case resws
@@ -209,6 +204,7 @@ Public Class DEBPRO
                     Catch ex As Exception
                         Trace("Exception à l'appel du web service WSGETNBBOB")
                         MsgErr = "Erreur à la recherche du nombre de bobines filles pour l'amalgame"
+                        Exit Sub
                     End Try
 
                     Select Case nbbob
@@ -239,6 +235,7 @@ Public Class DEBPRO
             Catch ex As Exception
                 Trace("Exception à l'appel du web service WSGETLETQ")
                 MsgErr = "Erreur de récupération de la liste de types d'étiquettes ! "
+                Exit Sub
             End Try
 
             If WSLstTypEtq.GRP1.ZRET = 1 Then
@@ -258,10 +255,11 @@ Public Class DEBPRO
             Trace("Recherche du type d'étiquettes par défaut")
             Try
                 Trace("Appel du web service WSGETTETQ")
-                resws = X3ws.WSGETTETQ(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, SFAO.Poste.GRP1.Y_TYPOP, CInt(MTextBoxMatr.Text), typetq, retMsg)
+                resws = X3ws.WSGETTETQ(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), typetq, retMsg)
             Catch ex As Exception
                 Trace("Exception à l'appel du web service WSSAIPDS")
                 MsgErr = "Erreur au contrôle de la saisie du poids"
+                Exit Sub
             End Try
 
             Select Case resws
@@ -307,6 +305,7 @@ Public Class DEBPRO
                 Catch ex As Exception
                     Trace("Exception à l'appel du web service WSGETQPCU")
                     MsgErr = "Erreur à la recherche de la quantité de conditionnement"
+                    Exit Sub
                 End Try
 
                 Select Case qtepcu
@@ -357,6 +356,7 @@ Public Class DEBPRO
                         Catch ex As Exception
                             Trace("Exception à l'appel du web service WSGETNBBOB")
                             MsgErr = "Erreur à la recherche du nombre de bobines filles"
+                            Exit Sub
                         End Try
 
                         Select Case nbbob
@@ -390,6 +390,7 @@ Public Class DEBPRO
                 Catch ex As Exception
                     Trace("Exception à l'appel du web service WSGETNBUN")
                     MsgErr = "Erreur à la recherche du nombre d'unités par format"
+                    Exit Sub
                 End Try
 
                 Select Case nbunit
@@ -427,6 +428,9 @@ Public Class DEBPRO
                         If FenSfao.WSof.GRP2(i).ZCODAMLG <> String.Empty Then
                             titcol = "Column" + FenSfao.WSof.GRP2(i).ZCODAMLG
                             DataGridPal.Columns(titcol).HeaderText = FenSfao.WSof.GRP2(i).ZITMREF
+                        Else
+                            titcol = "ColumnA"
+                            DataGridPal.Columns(titcol).HeaderText = FenSfao.WSof.GRP2(i).ZITMREF
                         End If
                     Next
                 End If
@@ -447,12 +451,9 @@ Public Class DEBPRO
     End Sub
 
     Private Sub MTextBoxMatr_Validated(sender As Object, e As EventArgs) Handles MTextBoxMatr.Validated
-        Dim MsgErr As String = String.Empty
-
         'on efface les erreurs précédentes
         ErrorProvider.SetError(MTextBoxMatr, "")
         TextBoxMsg.Text = ""
-
     End Sub
 
     Private Sub BtnFin_Click(sender As Object, e As EventArgs) Handles BtnFin.Click
@@ -466,7 +467,6 @@ Public Class DEBPRO
         Dim WSLstDebPro As New WSDebPro
         Dim i As Integer
         Dim result As MsgBoxResult
-        result = MsgBoxResult.Ok
 
         'Dans certains cas la validation passe même si tous les champs ne sont pas valides
         For Each ctl As Control In Me.TableLayoutPanel1.Controls
@@ -505,9 +505,10 @@ Public Class DEBPRO
                                 Exit Sub
                             End If
                         Else
-                            Dim wsdp2 As New WSDebProGRP2
-                            wsdp2.ZNPAL = FenSfao.WSof.GRP2(i).ZLIGITM
-                            wsdp2.ZTPAL = CInt(DataGridPal.Item(DataGridPal.Columns(titcol).Index, 0).EditedFormattedValue.ToString)
+                            Dim wsdp2 As New WSDebProGRP2 With {
+                                .ZNPAL = FenSfao.WSof.GRP2(i).ZLIGITM,
+                                .ZTPAL = CInt(DataGridPal.Item(DataGridPal.Columns(titcol).Index, 0).EditedFormattedValue.ToString)
+                            }
                             WSLstDebPro.GRP2.Add(wsdp2)
                         End If
                     End If
@@ -522,7 +523,6 @@ Public Class DEBPRO
 
         WSLstDebPro.GRP1.ZFCY = SFAO.Site.GRP1.FCY
         WSLstDebPro.GRP1.ZPOSTE = SFAO.Poste.GRP1.WST
-        WSLstDebPro.GRP1.ZTYPOP = SFAO.Poste.GRP1.Y_TYPOP
         WSLstDebPro.GRP1.ZEMPNUM = CInt(MTextBoxMatr.Text)
         WSLstDebPro.GRP1.ZEVTNUM = CInt(Me.Tag)
         WSLstDebPro.GRP1.ZTYPETQ = ComboBoxTypEtq.Text

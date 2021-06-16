@@ -14,8 +14,6 @@ Public Class FenSfao
     Private MPosX As Integer
     Private MPosY As Integer
 
-    Private TaillePoliceBtn As Integer
-    Private TaillePoliceLbl As Integer
     Private WsTimInt As Integer
 
     Public WSsp As WSSitPs                  'classe de la situation du poste
@@ -251,12 +249,13 @@ Public Class FenSfao
         'Récupération de la liste des phases 
         For e = 0 To SFAO.Events.GRP2.Count - 1
             If SFAO.Events.GRP2(e).ZTYPEMSG = WSEvtGRP2.TypeMsg.Phase Then
-                Dim phs As New Phase
-                phs.evenement = SFAO.Events.GRP2(e).MSGNUM
-                phs.phase = SFAO.Events.GRP2(e).XPHASE
-                phs.desc = SFAO.Events.GRP2(e).ZPHSDESC
-                phs.desl = SFAO.Events.GRP2(e).ZPHSDESL
-                phs.ordre = SFAO.Events.GRP2(e).XORDRE
+                Dim phs As New Phase With {
+                    .evenement = SFAO.Events.GRP2(e).MSGNUM,
+                    .phase = SFAO.Events.GRP2(e).XPHASE,
+                    .desc = SFAO.Events.GRP2(e).ZPHSDESC,
+                    .desl = SFAO.Events.GRP2(e).ZPHSDESL,
+                    .ordre = SFAO.Events.GRP2(e).XORDRE
+                }
                 Phases.Add(phs)
                 Trace("Phase(s) du poste : " & SFAO.Events.GRP2(e).ZPHSDESC & "(" & SFAO.Events.GRP2(e).XPHASE.ToString & ")")
             End If
@@ -433,7 +432,7 @@ Public Class FenSfao
             Lab3Reb.ForeColor = Color.White
         End If
     End Sub
-    Private Sub SituationCps()
+    Public Sub SituationCps()
         Dim i As Integer
         Dim OfOp, PrvOfOp, OfOpAff As String
         Dim Art, PrvArt, ArtAff As String
@@ -1481,7 +1480,7 @@ Public Class FenSfao
     End Function
     'Fonction qui convertit l'unité pour affichage dans un format lisible pour l'opérateur
     Public Function AffUnit(ByVal _unit As String) As String
-        Dim unit As String = String.Empty
+        Dim unit As String
         Select Case _unit
             Case "MLF"
                 unit = "ML"
@@ -1493,8 +1492,21 @@ Public Class FenSfao
 
         Return unit
     End Function
+    'Fonction qui renvoie l'unité de fabrication
+    Public Function CatArtCp(ByVal _of As String, ByVal _op As Integer, ByVal _art As String) As String
+        Dim categ As String = String.Empty
+        Dim i As Integer
+        If WScp.GRP2.Count > 0 Then
+            For i = 0 To WScp.GRP2.Count - 1
+                If WScp.GRP2(i).XMFGNUM = _of AndAlso WScp.GRP2(i).XOPENUM = _op AndAlso WScp.GRP2(i).ZITMREF = _art Then
+                    categ = WScp.GRP2(i).ZTCLCOD
+                End If
+            Next
+        End If
+        Return categ
+    End Function
     'on contrôle si un événement en cours bloque la sortie opérateur
-    Public Sub EventEnCoursSortie(ByVal _matr As Integer, ByRef _xevent As Integer, ByRef _msgErr As String)
+    Public Sub EventEnCoursSortie(ByVal _matr As Integer, ByRef _msgErr As String)
         Dim i As Integer
         If WSsp.GRP2.Count > 0 Then
             For i = 0 To WSsp.GRP2.Count - 1

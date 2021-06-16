@@ -31,7 +31,6 @@ Module Evenements
                 Else
                     'on ne déclenche pas la fin d'opération automatiquement 
                     'seul de départ opérateur permet de déclencher une 'fin d'opération'
-                    'TODO PNO : la fin d'opération se déclanche par l'événement 1090 FINOP ?
                     If EvtEnCours = 1100 Then 'départ opérateur
                         'TODO affichage d'une fenêtre temporaire pour déclencher la fin d'opération en cours
                     End If

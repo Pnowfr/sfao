@@ -101,8 +101,8 @@ C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.vbproj.CopyComplete
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.exe
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.xml
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.pdb
-C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.vbprojAssemblyReference.cache
 C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.DEBDEM.resources
 C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.DEBINT.resources
 C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.FINOP.resources
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.DEBPRO.resources
+C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.vbproj.AssemblyReference.cache
