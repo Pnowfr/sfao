@@ -149,6 +149,16 @@ Module Evenements
                     End If
                 End If
 
+            Case 1220 'Retour Matières
+                'on doit vérifier si un des opérateurs présents sur ce poste a dépasse le temps de présence autorisé
+                FenSfao.DureeMaxPresenceDepassee(MsgErr, True)
+                If MsgErr = "" Then
+                    'Contrôle s'il y a au moins un opérateur présent et une opération en cours
+                    If NbrMatr(True) > 0 AndAlso NbrOpe(True) > 0 Then
+                        AfficheEvt = LanceEvt(NumEvt, CType(RETMAT, Form))
+                    End If
+                End If
+
             Case 1283
                 AfficheEvt = LanceEvt(NumEvt, CType(AUTOCTRL, Form))
             Case Else

@@ -291,6 +291,12 @@
     <Compile Include="FenEvt\MATUTL.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FenEvt\RETMAT.Designer.vb">
+      <DependentUpon>RETMAT.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FenEvt\RETMAT.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FenEvt\SOROP.Designer.vb">
       <DependentUpon>SOROP.vb</DependentUpon>
     </Compile>
@@ -377,6 +383,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FenEvt\MATUTL.resx">
       <DependentUpon>MATUTL.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FenEvt\RETMAT.resx">
+      <DependentUpon>RETMAT.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FenEvt\SOROP.resx">
       <DependentUpon>SOROP.vb</DependentUpon>

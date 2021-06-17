@@ -106,3 +106,4 @@ C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.DEBINT.resources
 C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.FINOP.resources
 C:\Projets\SFAO\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.DEBPRO.resources
 C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.vbproj.AssemblyReference.cache
+C:\Projets\sfao\SFAO-v12-f4.0\SFAO\obj\x86\Debug\SFAO.RETMAT.resources

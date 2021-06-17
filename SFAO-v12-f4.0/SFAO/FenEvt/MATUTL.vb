@@ -470,7 +470,7 @@ ErreurMatutl:
                 ctrlot = X3ws.WSCTRCPLOT(SFAO.Site.GRP1.FCY, SFAO.Poste.GRP1.WST, CInt(MTextBoxMatr.Text), itmref, TextBoxLot.Text,
                                          SFAO.Poste.GRP1.ZATELOC, SFAO.Poste.GRP1.STOLOC, qte, retMsg)
             Catch ex As Exception
-                Trace("Exception à l'appel du web service WSCTRNVMAT")
+                Trace("Exception à l'appel du web service WSCTRCPLOT")
                 MsgErr = "Erreur au contrôle du lot"
                 GoTo ErreurTextBoxLot
             End Try
