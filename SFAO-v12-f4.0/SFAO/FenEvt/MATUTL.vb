@@ -1,6 +1,6 @@
 ﻿'------------------------------------------------------------------------------------------------------------------------
 'Modifications:
-'[270321PNO] : ajout du séparateur //
+'
 '------------------------------------------------------------------------------------------------------------------------
 
 Imports System.ComponentModel
@@ -251,7 +251,7 @@ Public Class MATUTL
                                 TextBoxSloF.Text = ""
                                 Try
                                     Trace("Appel du web service WSLOTBPS")
-                                    lotbps = X3ws.WSGETLOTF(itmref, TextBoxLot.Text, TextBoxLotF.Text, TextBoxSloF.Text)
+                                    lotbps = X3ws.WSGETLOTF(itmref, TextBoxLot.Text, TextBoxLotF.Text, TextBoxSloF.Text, retMsg)
                                 Catch ex As Exception
                                     Trace("Exception à l'appel du web service WSLOTBPS")
                                     MsgErr = "Erreur à la recherche du lot fournisseur"
@@ -264,7 +264,6 @@ Public Class MATUTL
                                 ElseIf TextBoxLotF.Text <> "" AndAlso TextBoxSloF.Text = "" Then
                                     TextBoxSloF.Enabled = True
                                 End If
-
                             End If
                         Else
                             'champs de saisie lot / sous-lot fournisseur invisibles
@@ -443,7 +442,7 @@ ErreurMatutl:
     End Sub
 
     Private Sub TextBoxLot_Validating(sender As Object, e As CancelEventArgs) Handles TextBoxLot.Validating
-        Dim MsgErr As String = String.Empty
+        Dim MsgErr As String
         Dim itmref As String
         Dim ctrlot As Integer
         Dim retMsg As String = String.Empty
@@ -452,14 +451,14 @@ ErreurMatutl:
         Dim MsgEp As MsgBoxResult
         Dim i As Integer
 
+        MTextBoxQté.Text = ""
+        qtemax = 0
+        If SFAO.Poste.GRP1.ZNUMFRN = 2 Then
+            TextBoxLotF.Text = ""
+            TextBoxSloF.Text = ""
+        End If
+
         If TextBoxLot.Text <> "" Then
-            'On remet les champs à récupérer du lot à vide (en cas d'erreur du web service)
-            MTextBoxQté.Text = ""
-            qtemax = 0
-            If SFAO.Poste.GRP1.ZNUMFRN = 2 Then
-                TextBoxLotF.Text = ""
-                TextBoxSloF.Text = ""
-            End If
             itmref = Strings.Split(ComboBoxArt.Text, " - ").First
 
             'On contrôle si le lot existe et on sélectionne le code article si besoin
@@ -486,6 +485,11 @@ ErreurMatutl:
                     GoTo ErreurTextBoxLot
                 Case 1 'ok
                     inutile = False
+                    If retMsg <> "" Then
+                        'Simple message d'information sans erreur
+                        Trace(retMsg)
+                        MsgBox(retMsg)
+                    End If
                 Case 2 'déjà monté sur la machine
                     inutile = True
             End Select
@@ -493,6 +497,11 @@ ErreurMatutl:
             qtemax = qte
             If ComboBoxArt.Text = "" Then
                 ComboBoxArt.SelectedIndex = ComboBoxArt.FindString(itmref)
+                If ComboBoxArt.SelectedIndex = -1 Then
+                    Trace("Matière non prévue pour cet OF : " + itmref)
+                    MsgErr = "Matière non prévue pour cet OF : " + itmref
+                    GoTo ErreurTextBoxLot
+                End If
             End If
 
             'Si encours, on vérifie l'OF/opération
@@ -547,11 +556,15 @@ ErreurTextBoxLot:
     Private Sub TextBoxLot_Validated(sender As Object, e As EventArgs) Handles TextBoxLot.Validated
         Dim MsgErr As String = String.Empty
 
-        Aff_ITM(ComboBoxArt.Text, MsgErr)
-        If MsgErr <> "" Then
-            Trace(MsgErr, FichierTrace.niveau.erreur)
+        If ComboBoxArt.Text <> "" Then
+            Aff_ITM(ComboBoxArt.Text, MsgErr)
+            If MsgErr <> "" Then
+                Trace(MsgErr, FichierTrace.niveau.erreur)
+            Else
+                MTextBoxQté.Text = qtemax.ToString("### ### ###")
+            End If
         Else
-            MTextBoxQté.Text = qtemax.ToString("### ### ###")
+            ComboBoxArt.Select()
         End If
 
         'on efface les erreurs précédentes
