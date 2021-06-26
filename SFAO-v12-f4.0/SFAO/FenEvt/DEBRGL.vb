@@ -40,7 +40,7 @@ Public Class DEBRGL
         'on a un seul matricule sur le poste
         If MTextBoxMatr.Text <> "" Then
             'on doit valider le matricule
-            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr, False) 'sans affichage des erreurs
+            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr)
             If MsgErr <> "" Then
                 TextBoxMsg.Text = MsgErr
                 ErrorProvider.SetError(MTextBoxMatr, MsgErr)
@@ -110,7 +110,7 @@ Public Class DEBRGL
         Else
 
             'on doit valider le matricule
-            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr, True) 'avec affichage des erreurs
+            MatrOFOP_Valid(CInt(MTextBoxMatr.Text), MsgErr)
 
             'en cas d'erreur on déclare l'erreur sur le ErrorProvider
             If MsgErr <> "" Then
@@ -127,7 +127,7 @@ Public Class DEBRGL
 
 
     'fonction qui contrôle le matricule (contrôle si matricule présent, si durée présence dépassé, si opération hors OF ou opération std en cours)
-    Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String, Optional ByVal afficheMsg As Boolean = True)
+    Private Sub MatrOFOP_Valid(ByVal matr As Integer, ByRef MsgErr As String)
 
         'on contrôle si l'opérateur est présent sur le poste
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)

@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class MATUTL
+Partial Class RETMAT
     Inherits System.Windows.Forms.Form
 
     'Form remplace la méthode Dispose pour nettoyer la liste des composants.
@@ -32,19 +32,19 @@ Partial Class MATUTL
         Me.Label4 = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.MTextBoxMatr = New System.Windows.Forms.MaskedTextBox()
-        Me.ComboBoxArt = New System.Windows.Forms.ComboBox()
+        Me.ComboBoxSup = New System.Windows.Forms.ComboBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.LabelSloF = New System.Windows.Forms.Label()
-        Me.TextBoxUnité = New System.Windows.Forms.TextBox()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.LabelLotF = New System.Windows.Forms.Label()
-        Me.MTextBoxQté = New System.Windows.Forms.MaskedTextBox()
-        Me.TextBoxLotF = New System.Windows.Forms.TextBox()
-        Me.TextBoxSloF = New System.Windows.Forms.TextBox()
+        Me.MTextBoxQtéTh = New System.Windows.Forms.MaskedTextBox()
         Me.TextBoxLot = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.TextBoxDesign = New System.Windows.Forms.TextBox()
+        Me.TextBoxUnité = New System.Windows.Forms.TextBox()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.MTextBoxQté = New System.Windows.Forms.MaskedTextBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.TextBoxArt = New System.Windows.Forms.TextBox()
         Me.TableLayoutPanel0 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.TextBoxMsg = New System.Windows.Forms.TextBox()
@@ -158,17 +158,17 @@ Partial Class MATUTL
         Me.MTextBoxMatr.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.MTextBoxMatr.ValidatingType = GetType(Integer)
         '
-        'ComboBoxArt
+        'ComboBoxSup
         '
-        Me.ComboBoxArt.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.ComboBoxArt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ComboBoxArt.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ComboBoxArt.FormattingEnabled = True
-        Me.ErrorProvider.SetIconPadding(Me.ComboBoxArt, 3)
-        Me.ComboBoxArt.Location = New System.Drawing.Point(223, 169)
-        Me.ComboBoxArt.Name = "ComboBoxArt"
-        Me.ComboBoxArt.Size = New System.Drawing.Size(283, 33)
-        Me.ComboBoxArt.TabIndex = 30
+        Me.ComboBoxSup.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ComboBoxSup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.ComboBoxSup.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ComboBoxSup.FormattingEnabled = True
+        Me.ErrorProvider.SetIconPadding(Me.ComboBoxSup, 3)
+        Me.ComboBoxSup.Location = New System.Drawing.Point(223, 275)
+        Me.ComboBoxSup.Name = "ComboBoxSup"
+        Me.ComboBoxSup.Size = New System.Drawing.Size(116, 33)
+        Me.ComboBoxSup.TabIndex = 38
         '
         'TableLayoutPanel1
         '
@@ -178,24 +178,24 @@ Partial Class MATUTL
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.LabelSloF, 0, 8)
-        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxUnité, 1, 6)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label7, 0, 6)
+        Me.TableLayoutPanel1.Controls.Add(Me.ComboBoxSup, 1, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.MTextBoxQtéTh, 1, 7)
         Me.TableLayoutPanel1.Controls.Add(Me.TextBoxNom, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.MTextBoxMatr, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label1, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 0, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 0, 5)
-        Me.TableLayoutPanel1.Controls.Add(Me.LabelLotF, 0, 7)
-        Me.TableLayoutPanel1.Controls.Add(Me.MTextBoxQté, 1, 5)
-        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxLotF, 1, 7)
-        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxSloF, 1, 8)
         Me.TableLayoutPanel1.Controls.Add(Me.TextBoxLot, 1, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 2)
-        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxDesign, 1, 4)
-        Me.TableLayoutPanel1.Controls.Add(Me.ComboBoxArt, 1, 3)
         Me.TableLayoutPanel1.Controls.Add(Me.Label5, 0, 4)
         Me.TableLayoutPanel1.Controls.Add(Me.Label4, 0, 3)
+        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxDesign, 1, 4)
+        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxUnité, 1, 8)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label10, 0, 8)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label8, 0, 6)
+        Me.TableLayoutPanel1.Controls.Add(Me.MTextBoxQté, 1, 6)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label6, 0, 5)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label9, 0, 7)
+        Me.TableLayoutPanel1.Controls.Add(Me.TextBoxArt, 1, 3)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(4, 4)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 9
@@ -211,98 +211,18 @@ Partial Class MATUTL
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(552, 481)
         Me.TableLayoutPanel1.TabIndex = 18
         '
-        'LabelSloF
+        'MTextBoxQtéTh
         '
-        Me.LabelSloF.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.LabelSloF.AutoSize = True
-        Me.LabelSloF.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelSloF.Location = New System.Drawing.Point(3, 438)
-        Me.LabelSloF.Name = "LabelSloF"
-        Me.LabelSloF.Size = New System.Drawing.Size(186, 29)
-        Me.LabelSloF.TabIndex = 31
-        Me.LabelSloF.Text = "N° bobine fourn."
-        Me.LabelSloF.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'TextBoxUnité
-        '
-        Me.TextBoxUnité.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.TextBoxUnité.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
-        Me.TextBoxUnité.Enabled = False
-        Me.TextBoxUnité.Location = New System.Drawing.Point(223, 327)
-        Me.TextBoxUnité.Name = "TextBoxUnité"
-        Me.TextBoxUnité.Size = New System.Drawing.Size(116, 35)
-        Me.TextBoxUnité.TabIndex = 29
-        '
-        'Label7
-        '
-        Me.Label7.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(3, 330)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(69, 29)
-        Me.Label7.TabIndex = 22
-        Me.Label7.Text = "Unité"
-        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label6
-        '
-        Me.Label6.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(3, 277)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(103, 29)
-        Me.Label6.TabIndex = 17
-        Me.Label6.Text = "Quantité"
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'LabelLotF
-        '
-        Me.LabelLotF.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.LabelLotF.AutoSize = True
-        Me.LabelLotF.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelLotF.Location = New System.Drawing.Point(3, 383)
-        Me.LabelLotF.Name = "LabelLotF"
-        Me.LabelLotF.Size = New System.Drawing.Size(196, 29)
-        Me.LabelLotF.TabIndex = 23
-        Me.LabelLotF.Text = "N° lot fournisseur"
-        Me.LabelLotF.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'MTextBoxQté
-        '
-        Me.MTextBoxQté.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.MTextBoxQté.Location = New System.Drawing.Point(223, 274)
-        Me.MTextBoxQté.MaximumSize = New System.Drawing.Size(116, 35)
-        Me.MTextBoxQté.Name = "MTextBoxQté"
-        Me.MTextBoxQté.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.MTextBoxQté.Size = New System.Drawing.Size(116, 35)
-        Me.MTextBoxQté.TabIndex = 24
-        Me.MTextBoxQté.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.MTextBoxQté.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
-        '
-        'TextBoxLotF
-        '
-        Me.TextBoxLotF.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.TextBoxLotF.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
-        Me.TextBoxLotF.Enabled = False
-        Me.TextBoxLotF.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBoxLotF.Location = New System.Drawing.Point(223, 380)
-        Me.TextBoxLotF.MaxLength = 15
-        Me.TextBoxLotF.Name = "TextBoxLotF"
-        Me.TextBoxLotF.Size = New System.Drawing.Size(283, 35)
-        Me.TextBoxLotF.TabIndex = 32
-        '
-        'TextBoxSloF
-        '
-        Me.TextBoxSloF.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.TextBoxSloF.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
-        Me.TextBoxSloF.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBoxSloF.Location = New System.Drawing.Point(223, 435)
-        Me.TextBoxSloF.MaxLength = 20
-        Me.TextBoxSloF.Name = "TextBoxSloF"
-        Me.TextBoxSloF.Size = New System.Drawing.Size(283, 35)
-        Me.TextBoxSloF.TabIndex = 33
+        Me.MTextBoxQtéTh.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.MTextBoxQtéTh.Enabled = False
+        Me.MTextBoxQtéTh.Location = New System.Drawing.Point(223, 380)
+        Me.MTextBoxQtéTh.MaximumSize = New System.Drawing.Size(116, 35)
+        Me.MTextBoxQtéTh.Name = "MTextBoxQtéTh"
+        Me.MTextBoxQtéTh.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
+        Me.MTextBoxQtéTh.Size = New System.Drawing.Size(116, 35)
+        Me.MTextBoxQtéTh.TabIndex = 36
+        Me.MTextBoxQtéTh.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.MTextBoxQtéTh.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
         '
         'TextBoxLot
         '
@@ -336,6 +256,85 @@ Partial Class MATUTL
         Me.TextBoxDesign.Size = New System.Drawing.Size(326, 35)
         Me.TextBoxDesign.TabIndex = 27
         Me.TextBoxDesign.TabStop = False
+        '
+        'TextBoxUnité
+        '
+        Me.TextBoxUnité.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.TextBoxUnité.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
+        Me.TextBoxUnité.Enabled = False
+        Me.TextBoxUnité.Location = New System.Drawing.Point(223, 435)
+        Me.TextBoxUnité.Name = "TextBoxUnité"
+        Me.TextBoxUnité.Size = New System.Drawing.Size(116, 35)
+        Me.TextBoxUnité.TabIndex = 29
+        '
+        'Label10
+        '
+        Me.Label10.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label10.AutoSize = True
+        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Location = New System.Drawing.Point(3, 438)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(69, 29)
+        Me.Label10.TabIndex = 22
+        Me.Label10.Text = "Unité"
+        Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label8
+        '
+        Me.Label8.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(3, 330)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(103, 29)
+        Me.Label8.TabIndex = 17
+        Me.Label8.Text = "Quantité"
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'MTextBoxQté
+        '
+        Me.MTextBoxQté.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.MTextBoxQté.Location = New System.Drawing.Point(223, 327)
+        Me.MTextBoxQté.MaximumSize = New System.Drawing.Size(116, 35)
+        Me.MTextBoxQté.Name = "MTextBoxQté"
+        Me.MTextBoxQté.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
+        Me.MTextBoxQté.Size = New System.Drawing.Size(116, 35)
+        Me.MTextBoxQté.TabIndex = 24
+        Me.MTextBoxQté.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.MTextBoxQté.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
+        '
+        'Label6
+        '
+        Me.Label6.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(3, 277)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(126, 29)
+        Me.Label6.TabIndex = 31
+        Me.Label6.Text = "N° support"
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label9
+        '
+        Me.Label9.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(3, 383)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(162, 29)
+        Me.Label9.TabIndex = 35
+        Me.Label9.Text = "Quantité théo."
+        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'TextBoxArt
+        '
+        Me.TextBoxArt.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.TextBoxArt.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
+        Me.TextBoxArt.Enabled = False
+        Me.TextBoxArt.Location = New System.Drawing.Point(223, 168)
+        Me.TextBoxArt.MaxLength = 20
+        Me.TextBoxArt.Name = "TextBoxArt"
+        Me.TextBoxArt.Size = New System.Drawing.Size(283, 35)
+        Me.TextBoxArt.TabIndex = 37
         '
         'TableLayoutPanel0
         '
@@ -385,7 +384,7 @@ Partial Class MATUTL
         Me.TextBoxMsg.TabIndex = 9
         Me.TextBoxMsg.TabStop = False
         '
-        'MATUTL
+        'RETMAT
         '
         Me.AcceptButton = Me.BtnOk
         Me.AutoScaleDimensions = New System.Drawing.SizeF(14.0!, 29.0!)
@@ -400,11 +399,11 @@ Partial Class MATUTL
         Me.MaximumSize = New System.Drawing.Size(800, 1000)
         Me.MinimizeBox = False
         Me.MinimumSize = New System.Drawing.Size(299, 300)
-        Me.Name = "MATUTL"
+        Me.Name = "RETMAT"
         Me.ShowIcon = False
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Matières utilisées"
+        Me.Text = "Retour matière en stock"
         Me.TopMost = True
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)
@@ -427,18 +426,18 @@ Partial Class MATUTL
     Friend WithEvents MTextBoxMatr As MaskedTextBox
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents TableLayoutPanel0 As TableLayoutPanel
-    Friend WithEvents Label6 As Label
+    Friend WithEvents Label8 As Label
     Friend WithEvents TextBoxLot As TextBox
-    Friend WithEvents Label7 As Label
-    Friend WithEvents LabelLotF As Label
+    Friend WithEvents Label10 As Label
     Friend WithEvents MTextBoxQté As MaskedTextBox
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
     Friend WithEvents TextBoxMsg As TextBox
     Friend WithEvents TextBoxDesign As TextBox
     Friend WithEvents Label3 As Label
     Friend WithEvents TextBoxUnité As TextBox
-    Friend WithEvents ComboBoxArt As ComboBox
-    Friend WithEvents LabelSloF As Label
-    Friend WithEvents TextBoxLotF As TextBox
-    Friend WithEvents TextBoxSloF As TextBox
+    Friend WithEvents Label6 As Label
+    Friend WithEvents MTextBoxQtéTh As MaskedTextBox
+    Friend WithEvents Label9 As Label
+    Friend WithEvents TextBoxArt As TextBox
+    Friend WithEvents ComboBoxSup As ComboBox
 End Class
