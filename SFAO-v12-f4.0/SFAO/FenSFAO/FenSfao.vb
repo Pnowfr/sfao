@@ -1492,7 +1492,56 @@ Public Class FenSfao
 
         Return unit
     End Function
-    'Fonction qui renvoie l'unité de fabrication
+    'Fonction qui renvoie le n° de lot/slo fabriqué à partir du n° de bobine
+    Public Function LotFab(ByVal _of As String, ByVal _op As Integer, ByVal _bob As Integer) As String
+        Dim lotslo As String = String.Empty
+        Dim i As Integer
+        If WSof.GRP2.Count > 0 Then
+            For i = 0 To WSof.GRP2.Count - 1
+                If WSof.GRP2(i).XMFGNUM = _of AndAlso WSof.GRP2(i).XOPENUM = _op Then
+                    lotslo = _of
+                    If WSof.GRP2(i).ZMFGMST <> 2 Then
+                        lotslo += "/" + _op.ToString
+                    End If
+                    lotslo += "B" + _bob.ToString("D4")
+                    Exit For
+                End If
+            Next
+        End If
+        Return lotslo
+    End Function
+    Public Sub LotSlo(ByVal _lotslo As String, ByRef _lot As String, ByRef _slo As String)
+        If _lotslo.Length > 5 Then
+            _lot = Strings.Left(_lotslo, _lotslo.Length - 5)
+            _slo = Strings.Right(_lotslo, 5)
+        Else
+            _lot = ""
+            _slo = ""
+        End If
+    End Sub
+    'Fonction qui renvoie le n° de lot/slo fabriqué à partir du n° de bobine
+    Public Function CtrlLotOFOp(ByVal _of As String, ByVal _op As Integer, ByVal _lot As String) As Boolean
+        Dim result As Boolean = False
+        Dim i As Integer
+        If WSof.GRP2.Count > 0 Then
+            For i = 0 To WSof.GRP2.Count - 1
+                If WSof.GRP2(i).XMFGNUM = _of AndAlso WSof.GRP2(i).XOPENUM = _op Then
+                    If WSof.GRP2(i).ZMFGMST = 2 Then
+                        If _lot = _of Then
+                            result = True
+                        End If
+                    Else
+                        If _lot = _of + "/" + _op.ToString Then
+                            result = True
+                        End If
+                    End If
+                    Exit For
+                End If
+            Next
+        End If
+        Return result
+    End Function
+    'Fonction qui renvoie la catégorie du composant
     Public Function CatArtCp(ByVal _of As String, ByVal _op As Integer, ByVal _art As String) As String
         Dim categ As String = String.Empty
         Dim i As Integer

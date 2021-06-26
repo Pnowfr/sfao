@@ -33,7 +33,7 @@ Public Class DEBOP
         'on a un seul matricule sur le poste
         If MTextBoxMatr.Text <> "" Then
             'on doit valider le matricule
-            Matr_Valid(CInt(MTextBoxMatr.Text), MsgErr, False) 'sans affichage des erreurs
+            Matr_Valid(CInt(MTextBoxMatr.Text), MsgErr)
             If MsgErr <> "" Then
                 TextBoxMsg.Text = MsgErr
                 ErrorProvider.SetError(MTextBoxMatr, MsgErr)
@@ -91,7 +91,7 @@ Public Class DEBOP
         Else
 
             'on doit valider le matricule
-            Matr_Valid(CInt(MTextBoxMatr.Text), MsgErr, True) 'avec affichage des erreurs
+            Matr_Valid(CInt(MTextBoxMatr.Text), MsgErr)
 
             'en cas d'erreur on déclare l'erreur sur le ErrorProvider
             If MsgErr <> "" Then
@@ -108,7 +108,7 @@ Public Class DEBOP
 
 
     'fonction qui contrôle le matricule (contrôle si matricule présent, si durée présence dépassé, si opération hors OF ou opération std en cours)
-    Private Sub Matr_Valid(ByVal matr As Integer, ByRef MsgErr As String, Optional ByVal afficheMsg As Boolean = True)
+    Private Sub Matr_Valid(ByVal matr As Integer, ByRef MsgErr As String)
 
         'on contrôle si l'opérateur est présent sur le poste
         FenSfao.CtrlMatr(matr, MsgErr, TextBoxNom.Text)
@@ -307,7 +307,7 @@ Public Class DEBOP
 
     Private Sub BtnOk_Click(sender As Object, e As EventArgs) Handles BtnOk.Click
         Dim retMsg As String = String.Empty
-        Dim debop As Integer = -1
+        Dim debop As Integer
 
         'Dans certains cas la validation passe même si tous les champs ne sont pas valides
         For Each ctl As Control In Me.TableLayoutPanel1.Controls
