@@ -41,10 +41,8 @@ Public Class X3WebServ
         'Attention : ne pas enregistrer de trace si tout est ok dans cette fonction : est apelée dans un timer fréquent ! 
         Dim params As String
         Dim webserv As String
-        Dim UserState As String
         webserv = "WSDTSFAO"
         params = "{""GRP1"":{""ZRET"":""""}}"
-        UserState = webserv
         X3WSC.RunAsync(webserv, params, SfaoTest)
     End Sub
 
@@ -885,7 +883,7 @@ Public Class X3WebServ
         Return ret
     End Function
 
-    'Web service qui contrôle si des matières ont été ajoutées à l'OF (avec màj de la situation matières si besoin)
+    'Web service qui contrôle un lot pour une matière utilisée
     Public Function WSCTRCPLOT(ByVal _site As String, ByVal _poste As String, ByVal _empnum As Integer, ByRef _art As String, ByRef _lot As String, ByRef _locatl As String, ByRef _locpst As String, ByRef _qte As Decimal, ByRef _retmsg As String) As Integer
         Dim par As Object
         Dim params As String
@@ -914,7 +912,7 @@ Public Class X3WebServ
     End Function
 
     'Web service qui renvoie le lot et le n° bobine fournisseur
-    Public Function WSGETLOTF(ByVal _art As String, ByVal _lot As String, ByRef _lotfrn As String, ByRef _bobfrn As String) As Integer
+    Public Function WSGETLOTF(ByVal _art As String, ByVal _lot As String, ByRef _lotfrn As String, ByRef _bobfrn As String, ByRef _retmsg As String) As Integer
         Dim par As Object
         Dim params As String
         Dim retxml As String = String.Empty
@@ -932,6 +930,7 @@ Public Class X3WebServ
             ret = 1
         Else
             ret = -1
+            _retmsg = MsgErrWs
         End If
 
         Return ret
@@ -953,10 +952,33 @@ Public Class X3WebServ
             json = JObject.Parse(retxml)
             ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
             _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
-            _lotfrn = json.SelectToken("GRP1").SelectToken("ZLOTFRN").ToString
-            _bobfrn = json.SelectToken("GRP1").SelectToken("ZBOBFRN").ToString
         Else
             ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
+    'Web service qui renvoie le lot et le n° bobine fournisseur
+    Public Function WSVCRNLOT(ByVal _art As String, ByVal _lot As String, ByRef _vcrnum As String, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZITMREF = _art, .ZLOTSLO = _lot, .ZVCRNUM = _vcrnum}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSVCRNLOT", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            _vcrnum = json.SelectToken("GRP1").SelectToken("ZVCRNUM").ToString
+            ret = 1
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
         End If
 
         Return ret
@@ -1046,6 +1068,119 @@ Public Class X3WebServ
         Return ret
     End Function
 
+    'Web service qui renvoie les quantités stock/conso d'un lot de matière
+    Public Function WSQTECPLOT(ByVal _site As String, ByVal _poste As String, ByVal _empnum As Integer, ByVal _evtnum As Integer, ByRef _art As String, ByVal _lot As String,
+                               ByVal _locmac As String, ByVal _locatl As String, ByRef _qtemac As Decimal, ByRef _qteatl As Decimal, ByRef _qtecso As Decimal, ByRef _qteori As Decimal,
+                               ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZEMPNUM = _empnum, .ZEVTNUM = _evtnum, .ZITMREF = _art, .ZLOTSLO = _lot,
+                                              .ZLOCPST = _locmac, .ZLOCATL = _locatl, .ZQTEMAC = _qtemac, .ZQTEATL = _qteatl, .ZQTECSO = _qtecso, .ZQTEORI = _qteori, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSQTECPLOT", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            _art = json.SelectToken("GRP1").SelectToken("ZITMREF").ToString
+            _qtemac = CDec(json.SelectToken("GRP1").SelectToken("ZQTEMAC"))
+            _qteatl = CDec(json.SelectToken("GRP1").SelectToken("ZQTEATL"))
+            _qtecso = CDec(json.SelectToken("GRP1").SelectToken("ZQTECSO"))
+            _qteori = CDec(json.SelectToken("GRP1").SelectToken("ZQTEORI"))
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
+    'Web service qui retourne le lot de matière
+    Public Function WSRETMAT(ByVal _site As String, ByVal _poste As String, ByVal _empnum As Integer, ByVal _art As String, ByVal _supgrp As String, ByVal _lot As String,
+                             ByVal _locmac As String, ByVal _locatl As String, ByVal _qteret As Decimal, ByVal _qtemac As Decimal, ByVal _qteatl As Decimal, ByVal _qtecso As Decimal,
+                             ByVal _unité As String, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZEMPNUM = _empnum, .ZITMREF = _art, .ZSUPGRP = _supgrp, .ZLOTSLO = _lot, .ZLOCPST = _locmac, .ZLOCATL = _locatl,
+                                              .ZQTERET = _qteret, .ZQTEMAC = _qtemac, .ZQTEATL = _qteatl, .ZQTECSO = _qtecso, .ZSTU = _unité, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSRETMAT", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
+    'Web service qui consomme manuellement le lot de matière
+    Public Function WSCONSO(ByVal _site As String, ByVal _poste As String, ByVal _empnum As Integer, ByVal _art As String, ByVal _supgrp As String, ByVal _lot As String,
+                             ByVal _locmac As String, ByVal _locatl As String, ByVal _qtecso As Decimal, ByVal _qteatl As Decimal, ByVal _unité As String,
+                             ByVal _lotfab As String, ByVal _trknum As String, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZFCY = _site, .ZPOSTE = _poste, .ZEMPNUM = _empnum, .ZITMREF = _art, .ZSUPGRP = _supgrp, .ZLOTSLO = _lot, .ZLOCPST = _locmac, .ZLOCATL = _locatl,
+                                              .ZQTECSO = _qtecso, .ZQTEATL = _qteatl, .ZSTU = _unité, .ZLOTFAB = _lotfab, .ZTRKNUM = _trknum, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSCONSO", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
+    'Web service qui récupère les infos de l'article
+    Public Function WSARTINFO(ByVal _art As String, ByRef _design As String, ByRef _categ As String, ByRef _unité As String, ByRef _retmsg As String) As Integer
+        Dim par As Object
+        Dim params As String
+        Dim retxml As String = String.Empty
+        Dim MsgErrWs As String = String.Empty
+        Dim json As JObject
+        Dim ret As Integer
+
+        par = New With {Key .GRP1 = New With {.ZITMREF = _art, .ZITMDES = _design, .ZTCLCOD = _categ, .ZSTU = _unité, .ZRET = 0, .ZMSG = ""}}
+        params = JsonConvert.SerializeObject(par)
+
+        If X3WSC.Run("WSARTINFO", params, retxml, MsgErrWs, True) = 1 Then
+            json = JObject.Parse(retxml)
+            ret = CInt(json.SelectToken("GRP1").SelectToken("ZRET"))
+            _retmsg = json.SelectToken("GRP1").SelectToken("ZMSG").ToString
+            _design = json.SelectToken("GRP1").SelectToken("ZITMDES").ToString
+            _categ = json.SelectToken("GRP1").SelectToken("ZTCLCOD").ToString
+            _unité = json.SelectToken("GRP1").SelectToken("ZSTU").ToString
+        Else
+            ret = -1
+            _retmsg = MsgErrWs
+        End If
+
+        Return ret
+    End Function
+
     '########################################################################################################################
     'Liste des classes utilisées pour les web services
     '########################################################################################################################
@@ -1083,7 +1218,7 @@ End Class
 Public Class X3WebServAsync
     Public Sub RunAsyncCompleted(ByVal UserState As String, ByVal Result As String)
         Dim json As JObject
-        Dim retour As String = ""
+        Dim retour As String
 
         Select Case UserState
             Case "WSDTSFAO"
@@ -1092,7 +1227,6 @@ Public Class X3WebServAsync
                     retour = json("GRP1")("ZRET").ToString
                     FenSfao.AnimRet(retour)
                 Catch ex As Exception
-                    retour = ""
                     FenSfao.X3Anim(0)
                 End Try
         End Select
